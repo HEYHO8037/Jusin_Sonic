@@ -1,6 +1,5 @@
 #pragma once
 #include "Obj.h"
-#include "Bullet.h"
 
 class CPlayer : public CObj
 {

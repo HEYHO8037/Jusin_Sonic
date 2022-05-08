@@ -25,9 +25,6 @@
     <Filter Include="01. Obj\00. Player">
       <UniqueIdentifier>{bc87a0ea-e5c3-4b9c-b118-23af02ef9935}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\01. Bullet">
-      <UniqueIdentifier>{c74ec3a3-edbe-48ed-97c3-c0e21c9225ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="98. Design">
       <UniqueIdentifier>{6d57fc6e-bce3-4072-95ca-66fdfe1f7d9b}</UniqueIdentifier>
     </Filter>
@@ -43,17 +40,8 @@
     <Filter Include="98. Design\CollisionMgr">
       <UniqueIdentifier>{fa05d23f-9bed-4d57-a264-a1373a4d93d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\04. Shield">
-      <UniqueIdentifier>{b37fefac-d240-4ede-b8d0-52e5a644078d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Obj\01. Bullet\00. ScrewBullet">
-      <UniqueIdentifier>{cbfea3ae-fe2b-4fef-87c4-fd8ace5f6f34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="98. Design\ObjMgr">
       <UniqueIdentifier>{b8f3e418-0ee7-45f4-878d-8c37d424702c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Obj\01. Bullet\01. GuideBullet">
-      <UniqueIdentifier>{d12b3d4b-93c0-4c53-b5f0-a89d4e1f69b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="98. Design\LineMgr">
       <UniqueIdentifier>{fec09d62-2538-43f5-8757-fd75139a1004}</UniqueIdentifier>
@@ -141,9 +129,6 @@
     <ClInclude Include="Player.h">
       <Filter>01. Obj\00. Player</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>01. Obj\01. Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractFactory.h">
       <Filter>98. Design\AbstractFactory</Filter>
     </ClInclude>
@@ -156,17 +141,8 @@
     <ClInclude Include="CollisionMgr.h">
       <Filter>98. Design\CollisionMgr</Filter>
     </ClInclude>
-    <ClInclude Include="Shield.h">
-      <Filter>01. Obj\04. Shield</Filter>
-    </ClInclude>
-    <ClInclude Include="ScrewBullet.h">
-      <Filter>01. Obj\01. Bullet\00. ScrewBullet</Filter>
-    </ClInclude>
     <ClInclude Include="ObjMgr.h">
       <Filter>98. Design\ObjMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="GuideBullet.h">
-      <Filter>01. Obj\01. Bullet\01. GuideBullet</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
       <Filter>98. Design\LineMgr\Line</Filter>
@@ -230,9 +206,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>01. Obj\00. Player</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>01. Obj\01. Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>01. Obj\02. Monster</Filter>
     </ClCompile>
@@ -242,17 +215,8 @@
     <ClCompile Include="CollisionMgr.cpp">
       <Filter>98. Design\CollisionMgr</Filter>
     </ClCompile>
-    <ClCompile Include="Shield.cpp">
-      <Filter>01. Obj\04. Shield</Filter>
-    </ClCompile>
-    <ClCompile Include="ScrewBullet.cpp">
-      <Filter>01. Obj\01. Bullet\00. ScrewBullet</Filter>
-    </ClCompile>
     <ClCompile Include="ObjMgr.cpp">
       <Filter>98. Design\ObjMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="GuideBullet.cpp">
-      <Filter>01. Obj\01. Bullet\01. GuideBullet</Filter>
     </ClCompile>
     <ClCompile Include="Line.cpp">
       <Filter>98. Design\LineMgr\Line</Filter>
