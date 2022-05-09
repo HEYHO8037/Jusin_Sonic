@@ -16,6 +16,11 @@ public:
 	void		Release();
 
 public:
+	void		Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption);
+	void		Save_Tile(void);
+	void		Load_Tile(void);
+
+public:
 	static		CTileMgr*		Get_Instance(void)
 	{
 		if (!m_pInstance)

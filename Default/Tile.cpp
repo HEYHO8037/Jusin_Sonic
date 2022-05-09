@@ -22,7 +22,7 @@ void CTile::Initialize(void)
 	m_iDrawID = 0;
 	m_iOption = 0;
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Edit/Tile.bmp", L"Tile");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomTile.bmp", L"Tile");
 }
 
 int CTile::Update(void)
@@ -48,15 +48,17 @@ void CTile::Render(HDC hDC)
 
 	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Tile");
 	
-	BitBlt(hDC, 
-		m_tRect.left + iScrollX,
-		m_tRect.top + iScrollY,
-		TILECX,
-		TILECY,
-		hMemDC,
-		TILECX * m_iDrawID,
-		0,
-		SRCCOPY);
+	GdiTransparentBlt(hDC,
+		int(m_tRect.left + iScrollX),	// 2,3 인자 :  복사받을 위치 X, Y
+		int(m_tRect.top + iScrollY),
+		int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
+		int(m_tInfo.fCY),
+		hMemDC,							// 비트맵을 가지고 있는 DC
+		(int)m_tInfo.fCX * m_iDrawID,								// 비트맵 출력 시작 좌표, X,Y
+		(int)m_tInfo.fCY * m_iOption,
+		(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
+		(int)m_tInfo.fCY,
+		RGB(255, 0, 255));
 }
 
 void CTile::Release(void)
