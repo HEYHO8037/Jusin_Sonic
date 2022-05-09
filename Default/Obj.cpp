@@ -32,7 +32,9 @@ void CObj::Move_Frame(void)
 		m_tFrame.dwTime = GetTickCount();
 
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+		{
 			m_tFrame.iFrameStart = 0;
+		}
 	}
 
 }

@@ -13,11 +13,12 @@ public:
 	{
 		m_tInfo.fX = _fX;
 		m_tInfo.fY = _fY;
-	}
+	} 
 	void		Set_Dir(DIRECTION eDir) { m_eDir = eDir; }
 	void		Set_Dead()				{ m_bDead = true; }
 	void		Set_Angle(float _fAngle) { m_fAngle = _fAngle; }
 	void		Set_Target(CObj* _pTarget) { m_pTarget = _pTarget; }
+	void		Set_Size(float fCX, float fCY) { m_tInfo.fCX = fCX;  m_tInfo.fCY = fCY; }
 
 	void		Set_PosX(float _fX) { m_tInfo.fX += _fX; }
 	void		Set_PosY(float _fY) { m_tInfo.fY += _fY; }
@@ -56,4 +57,3 @@ protected:
 	TCHAR*		m_pFrameKey;
 
 };
-

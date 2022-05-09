@@ -14,5 +14,9 @@ public:
 	virtual void Render(HDC hDC) override;
 	virtual void Release(void) override;
 
+private:
+	virtual void Move_Frame(void);
+	FRAME m_tFrame;
+
 };
 

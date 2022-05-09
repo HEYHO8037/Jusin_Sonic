@@ -14,5 +14,8 @@ public:
 	virtual void	Late_Update(void) PURE;
 	virtual void	Render(HDC hDC) PURE;
 	virtual void	Release(void) PURE;
+
+protected:
+	virtual void Move_Frame(void) PURE;
 };
 

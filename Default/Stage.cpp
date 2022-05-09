@@ -28,7 +28,7 @@ void CStage::Initialize(void)
 
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, CAbstractFactory<CPlayer>::Create());
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Ground");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
 }	
 
 
@@ -60,4 +60,8 @@ void CStage::Release(void)
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJ_MONSTER);
 	CObjMgr::Get_Instance()->Delete_ID(OBJ_BULLET);
+}
+
+void CStage::Move_Frame(void)
+{
 }
