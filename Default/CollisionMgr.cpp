@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CollisionMgr.h"
+#include "TileMgr.h"
 
 
 CCollisionMgr::CCollisionMgr()
@@ -118,4 +119,36 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dest, list<CObj*> _Sour)
 			}
 		}
 	}
+}
+
+void CCollisionMgr::Collision_Pixel(CObj* _Dest)
+{
+	int		x = _Dest->Get_Info().fX / TILECX;
+	int		y = _Dest->Get_Info().fY / TILECY;
+
+	int	iIndex = y * TILEX + x;
+
+	if (0 > iIndex || CTileMgr::Get_Instance()->Get_VecTile()->size() <= (size_t)iIndex)
+		return;
+
+	CTile* GetTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
+	
+	int X = TILECX * x;
+	int Y = TILECY * y;
+
+	const bool(*bCollider) = nullptr;
+	bCollider = GetTile->Get_bIsCollider();
+
+	bool bIsColl = 0;
+
+	for (int j = _Dest->Get_Rect().top; j < _Dest->Get_Rect().bottom; ++j)
+	{
+		for (int i = _Dest->Get_Rect().left; i < _Dest->Get_Rect().right; ++i)
+		{
+
+		}
+	}
+
+
+
 }

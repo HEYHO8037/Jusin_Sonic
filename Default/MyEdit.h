@@ -14,6 +14,7 @@ public:
 	virtual void Release(void) override;
 
 private:
+	virtual void Move_Frame(void) override;
 	void		Key_Input(void);
 
 private:

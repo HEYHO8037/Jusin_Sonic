@@ -30,6 +30,11 @@ void CLineMgr::Release(void)
 	m_LineList.clear();
 }
 
+void CLineMgr::Add_Line(CLine * pLine)
+{
+	m_LineList.push_back(pLine);
+}
+
 bool CLineMgr::Collision_Line(float& _fX, float* pY)
 {
 	// 직선의 방정식
@@ -48,6 +53,7 @@ bool CLineMgr::Collision_Line(float& _fX, float* pY)
 			_fX <= iter->Get_Info().tRPoint.fX)
 		{
 			pTarget = iter;
+			break;
 		}
 	}
 

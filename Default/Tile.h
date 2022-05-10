@@ -11,6 +11,7 @@ public:
 public:
 	const int& Get_DrawID(void) { return m_iDrawID; }
 	const int& Get_Option(void) { return m_iOption; }
+	const bool* Get_bIsCollider() { return *m_bIsCollider; }
 
 public:
 	void		Set_DrawID(int _iDrawID) { m_iDrawID = _iDrawID; }
@@ -24,6 +25,8 @@ public:
 	virtual void Release(void) override;
 
 private:
+	bool		m_bIsCheck;
+	bool		m_bIsCollider[TILECY][TILECX];
 	int			m_iDrawID;
 	int			m_iOption;
 

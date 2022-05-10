@@ -19,6 +19,7 @@ public:
 	void		Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption);
 	void		Save_Tile(void);
 	void		Load_Tile(void);
+	const vector<CObj*>* Get_VecTile();
 
 public:
 	static		CTileMgr*		Get_Instance(void)

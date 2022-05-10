@@ -25,10 +25,17 @@ CLine::~CLine()
 {
 }
 
+void CLine::Set_Info(LINEPOINT & tLeft, LINEPOINT & tRight)
+{
+	m_tInfo.tLPoint = tLeft;
+	m_tInfo.tRPoint = tRight;
+}
+
 void CLine::Render(HDC hDC)
 {
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 
 	MoveToEx(hDC, (int)m_tInfo.tLPoint.fX + iScrollX, (int)m_tInfo.tLPoint.fY, nullptr);
 	LineTo(hDC, (int)m_tInfo.tRPoint.fX + iScrollX, (int)m_tInfo.tRPoint.fY);
+
 }

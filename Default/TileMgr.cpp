@@ -2,6 +2,8 @@
 #include "TileMgr.h"
 #include "AbstractFactory.h"
 #include "ScrollMgr.h"
+#include "LineMgr.h"
+#include "Line.h"
 
 CTileMgr*	CTileMgr::m_pInstance = nullptr;
 
@@ -46,10 +48,6 @@ void CTileMgr::Late_Update()
 void CTileMgr::Render(HDC hDC)
 {
 
-	/*for (auto& iter : m_vecTile)
-		iter->Render(hDC);*/
-
-
 	// 가로 12개 세로 9개
 
 	int	iCullX = abs((int)CScrollMgr::Get_Instance()->Get_ScrollX() / TILECX);
@@ -93,6 +91,7 @@ void CTileMgr::Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption)
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_DrawID(_iDrawID);
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_Option(_iOption);
+
 }
 
 void CTileMgr::Save_Tile(void)
@@ -101,6 +100,8 @@ void CTileMgr::Save_Tile(void)
 
 	int		iDrawID = 0, iOption = 0;
 	DWORD	dwByte = 0;
+	bool	bIsGround;
+	LINE	TileLIne;
 
 	for (auto& iter : m_vecTile)
 	{
@@ -110,6 +111,7 @@ void CTileMgr::Save_Tile(void)
 		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
 		WriteFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
 		WriteFile(hFile, &iOption, sizeof(int), &dwByte, NULL);
+
 	}
 
 	CloseHandle(hFile);
@@ -118,10 +120,11 @@ void CTileMgr::Save_Tile(void)
 void CTileMgr::Load_Tile(void)
 {
 	HANDLE		hFile = CreateFile(L"../Data/Tile.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
 	INFO		tInfo{};
 	int			iDrawID = 0, iOption = 0;
 	DWORD		dwByte = 0;
+	bool		bIsGround;
+	LINE		TileLIne;
 
 	Release();
 	
@@ -137,8 +140,14 @@ void CTileMgr::Load_Tile(void)
 		CObj*		pObj = CAbstractFactory<CTile>::Create(tInfo.fX, tInfo.fY);
 		dynamic_cast<CTile*>(pObj)->Set_DrawID(iDrawID);
 		dynamic_cast<CTile*>(pObj)->Set_Option(iOption);
-
 		m_vecTile.push_back(pObj);
+
 	}
+
 	CloseHandle(hFile);
+}
+
+const vector<CObj*>* CTileMgr::Get_VecTile()
+{
+	return &m_vecTile;
 }

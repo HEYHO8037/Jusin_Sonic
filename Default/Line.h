@@ -12,6 +12,7 @@ public:
 
 public:
 	const LINE& Get_Info(void) const { return m_tInfo; }
+	void Set_Info(LINEPOINT& tLeft, LINEPOINT& tRight);
 
 public:
 	void	Render(HDC hDC);

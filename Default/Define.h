@@ -18,12 +18,19 @@
 #define		TILECY		128
 
 #define		TILEX		30
-#define		TILEY		20
+#define		TILEY		8
 
-#define ACC 0.46875 //가속력
+#define		FIXPIXEL	2 // 소닉이 2픽셀 띄어져 있어서 고정값
+
+#define		BACKGROUNDX 1024
+#define		BACKGROUNDY 768
+
+
+
+#define ACC 0.046875 //가속력
 #define DEC 0.5 // 감속력
-#define FRC 0.046875; // 마찰력
-#define TOPYSPEED 6 // 수직가속력 최대값
+#define FRC 0.046875 // 마찰력
+#define TOPXSPEED 6 // 수평가속력 최대값
 #define SLOPE 0.125 // 슬로프 걷기/뛰기 일반값
 #define ROLLINGUP 0.078125 // 슬로프 상승 값
 #define ROLLINGDOWN 0.3125 // 슬로프 하강 값

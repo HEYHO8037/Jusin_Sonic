@@ -10,6 +10,7 @@
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
 #include "SceneMgr.h"
+#include "TileMgr.h"
 
 
 CMainGame::CMainGame()
@@ -31,14 +32,13 @@ void CMainGame::Initialize(void)
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 
-	CSceneMgr::Get_Instance()->Scene_Change(SC_LOGO);
+	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGE);
 }
 
 void CMainGame::Update(void)
 {
-	
 	CSceneMgr::Get_Instance()->Update();
-
+	CScrollMgr::Get_Instance()->Scroll_Lock();
 }
 
 void CMainGame::Late_Update(void)
@@ -69,6 +69,7 @@ void CMainGame::Render(void)
 
 void CMainGame::Release(void)
 {
+	CTileMgr::Get_Instance()->Destroy_Instance();
 	CSceneMgr::Get_Instance()->Destroy_Instance();
 	CBmpMgr::Get_Instance()->Destroy_Instance();
 	CScrollMgr::Get_Instance()->Destroy_Instance();

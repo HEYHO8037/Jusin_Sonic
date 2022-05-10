@@ -13,6 +13,7 @@ public:
 	void		Render(HDC hDC);
 	void		Release(void);
 
+	void		Add_Line(CLine* pLine);
 	bool		Collision_Line(float& _fX, float* pY);
 	void		Load_Line();
 

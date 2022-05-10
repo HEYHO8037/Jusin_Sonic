@@ -20,39 +20,33 @@ CPlayer::~CPlayer()
 void CPlayer::Initialize(void)
 {
 	m_tInfo.fX = 100.f;
-	m_tInfo.fY = 300.f;
+	m_tInfo.fY = 10.f;
 
-	m_tInfo.fCX = 200.f;
-	m_tInfo.fCY = 200.f;
+	m_tInfo.fCX = 64.f;
+	m_tInfo.fCY = 64.f;
 
-	m_fSpeed = 5.f;
+	m_fSpeed = 0.f;
 
 	m_fDiagonal = 100.f;
 
 	m_bJump = false;
-	m_fJumpPower = 15.f;
+	m_fJumpPower = JUMP;
+	m_fFalling = 0.f;
 	m_fJumpTime = 0.f;
+	m_bFalling = true;
+	GroundY = -1.f;
 
-	// CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/maja2.bmp", L"Player");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR0.bmp", L"SonicR0");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL0.bmp", L"SonicL0");
 
-	/*CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_DOWN.bmp", L"Player_DOWN");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_UP.bmp", L"Player_UP");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LEFT.bmp", L"Player_LEFT");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_RIGHT.bmp", L"Player_RIGHT");
-	
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LU.bmp", L"Player_LU");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_RU.bmp", L"Player_RU");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LD.bmp", L"Player_LD");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_RD.bmp", L"Player_RD");*/
 
-	m_pFrameKey = L"Player_DOWN";
+	m_pFrameKey = L"SonicR0";
 
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 3;
-	m_tFrame.iMotion = 0;
+	m_tFrame.iFrameEnd = 7;
+	m_tFrame.iMotion = 1;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
-
 }
 
 int CPlayer::Update(void)
@@ -62,8 +56,17 @@ int CPlayer::Update(void)
 
 	// 연산을 진행
 	Key_Input();
-	Jumping();
+	//Jumping();
 	OffSet();
+	Falling();
+
+	bool bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_tInfo.fX, &GroundY);
+	if (bLineCol && (GroundY < m_tInfo.fY + FIXPIXEL + m_tInfo.fCY / 2))
+	{
+		m_bFalling = false;
+		m_bJump = false;
+		m_fJumpTime = 0.f;
+	}
 
 	
 
@@ -86,15 +89,6 @@ void CPlayer::Render(HDC hDC)
 
 	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 	
-	/*BitBlt(hDC,							// 복사 받을, 최종적으로 그림을 그릴 DC
-		int(m_tRect.left + iScrollX),	// 2,3 인자 :  복사받을 위치 X, Y
-		int(m_tRect.top), 
-		int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
-		int(m_tInfo.fCY), 
-		hMemDC,							// 비트맵을 가지고 있는 DC
-		0,								// 7, 8인자 : 비트맵을 출력할 시작 좌표, X,Y
-		0, 
-		SRCCOPY);*/						// 출력효과, 그대로 복사 출력
 
 	GdiTransparentBlt(hDC, 					// 복사 받을, 최종적으로 그림을 그릴 DC
 			int(m_tRect.left + iScrollX),	// 2,3 인자 :  복사받을 위치 X, Y
@@ -106,7 +100,7 @@ void CPlayer::Render(HDC hDC)
 			m_tFrame.iMotion * (int)m_tInfo.fCY,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
-			RGB(0, 0, 0));			// 제거하고자 하는 색상
+			RGB(255, 0, 255));			// 제거하고자 하는 색상
 				
 }
 void CPlayer::Release(void)
@@ -114,39 +108,67 @@ void CPlayer::Release(void)
 	
 }
 
+void CPlayer::Falling(void)
+{
+	if (m_bFalling)
+	{
+		m_fFalling += GRAVITY;
+
+		if (m_fFalling > 16)
+		{
+			m_fFalling = 16;
+		}
+
+		m_tInfo.fY += m_fFalling;
+
+		if (m_tInfo.fY  + FIXPIXEL + m_tInfo.fCY / 2 > GroundY && GroundY != -1)
+		{
+			m_fFalling = 0.f;
+			m_tRect.bottom = GroundY - FIXPIXEL - m_tInfo.fCY / 2;
+		}
+	}
+}
+
 void CPlayer::Key_Input(void)
 {
-	float	fY = 0.f;
-
 	// GetKeyState
 	if (GetAsyncKeyState(VK_LEFT))
 	{
-		m_tInfo.fX -= m_fSpeed;
-		m_pFrameKey = L"Player_LEFT";
-		m_eCurState = WALK;
+		m_pFrameKey = L"SonicL0";
+
+		if (m_fSpeed > 0) //스피드가 양수 즉 우측일때
+		{
+			m_fSpeed -= DEC;  // 가속
+			if (m_fSpeed <= 0)
+				m_fSpeed = -1.0;  //스피드가 남아있을경우 빠르게 감속을 시켜버림
+		}
+		else if (m_fSpeed > -TOPXSPEED) //스피드가 음수 즉 좌측
+		{
+			m_fSpeed -= ACC;  // 가속
+			m_eCurState = RUN;
+			if (m_fSpeed <= -TOPXSPEED)
+				m_fSpeed = -TOPXSPEED; //최고 속력까지만 움직이도록 함
+		}
 	}
 
-	else if (GetAsyncKeyState(VK_RIGHT))
+	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 	{
-		m_tInfo.fX += m_fSpeed;
-		m_pFrameKey = L"Player_RIGHT";
-		m_eCurState = WALK;
-	}
+		m_pFrameKey = L"SonicR0";
 
-	else if (GetAsyncKeyState(VK_UP))
-	{
-		m_tInfo.fY -= m_fSpeed;
-		m_pFrameKey = L"Player_UP";
-		m_eCurState = WALK;
+		if (m_fSpeed < 0) //위 코드의 반대
+		{
+			m_fSpeed += DEC; 
+			if (m_fSpeed >= 0)
+				m_fSpeed = 1.0; 
+		}
+		else if (m_fSpeed < TOPXSPEED) 
+		{
+			m_fSpeed += ACC; 
+			m_eCurState = RUN;
+			if (m_fSpeed >= TOPXSPEED)
+				m_fSpeed = TOPXSPEED; 
+		}
 	}
-
-	else if (GetAsyncKeyState(VK_DOWN))
-	{
-		m_tInfo.fY += m_fSpeed;
-		m_pFrameKey = L"Player_DOWN";
-		m_eCurState = WALK;
-	}
-
 	else if (CKeyMgr::Get_Instance()->Key_Up(VK_SPACE))
 	{
 		m_bJump = true;
@@ -154,15 +176,27 @@ void CPlayer::Key_Input(void)
 	}
 
 	else
-		m_eCurState = IDLE;
+	{
+		m_fSpeed -= fminf(fabsf(m_fSpeed), FRC) * sinf(m_fSpeed); // 키보드 입력을 안 받을시 감속
+		
+		if (abs(m_fSpeed) < 0.1)
+		{
+			m_eCurState = IDLE;
+		}
+		else
+		{
+			m_eCurState = STOPRUN;
+		}
+	}
 
+	m_tInfo.fX += m_fSpeed;
 }
 
 void CPlayer::Jumping(void)
 {
 	float		fY = 0.f;
 
-	bool		bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_tInfo.fX, &fY);
+	bool bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_tInfo.fX, &fY);
 
 	if (m_bJump)
 	{
@@ -188,20 +222,20 @@ void CPlayer::OffSet(void)
 	int		iOffSetY = WINCY >> 1;
 	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-	int		iItvX = 300;
-	int		iItvY = 200;
+	int		iItvX = 0;
+	int		iItvY = 0;
 
 	if (iOffSetX - iItvX > m_tInfo.fX + iScrollX)
-		CScrollMgr::Get_Instance()->Set_ScrollX(m_fSpeed);
+		CScrollMgr::Get_Instance()->Set_ScrollX(-m_fSpeed);
 
 	if (iOffSetX + iItvX < m_tInfo.fX + iScrollX)
 		CScrollMgr::Get_Instance()->Set_ScrollX(-m_fSpeed);
 	
 	if (iOffSetY - iItvY > m_tInfo.fY + iScrollY)
-		CScrollMgr::Get_Instance()->Set_ScrollY(m_fSpeed);
+		CScrollMgr::Get_Instance()->Set_ScrollY(m_fFalling);
 
 	if (iOffSetY + iItvY < m_tInfo.fY + iScrollY)
-		CScrollMgr::Get_Instance()->Set_ScrollY(-m_fSpeed);
+		CScrollMgr::Get_Instance()->Set_ScrollY(-m_fFalling);
 }
 
 void CPlayer::Motion_Change(void)
@@ -212,25 +246,58 @@ void CPlayer::Motion_Change(void)
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 3;
+			m_tFrame.iFrameEnd = 12;
 			m_tFrame.iMotion = 0;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
 
 			break;
 
-		case WALK:
+		case STARTRUN:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameEnd = 7;
 			m_tFrame.iMotion = 1;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
 			break;
 
-		case ATTACK:
+		case RUN:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iFrameEnd = 3;
 			m_tFrame.iMotion = 2;
+			m_tFrame.dwSpeed = 200;
+			m_tFrame.dwTime = GetTickCount();
+			break;
+
+		case ROLLSTART:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 1;
+			m_tFrame.iMotion = 7;
+			m_tFrame.dwSpeed = 200;
+			m_tFrame.dwTime = GetTickCount();
+			break;
+
+
+		case STOPRUN:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 3;
+			m_tFrame.iMotion = 9;
+			m_tFrame.dwSpeed = 200;
+			m_tFrame.dwTime = GetTickCount();
+			break;
+
+		case ROLLING:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 7;
+			m_tFrame.iMotion = 3;
+			m_tFrame.dwSpeed = 200;
+			m_tFrame.dwTime = GetTickCount();
+			break;
+
+		case ROLLEND:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 1;
+			m_tFrame.iMotion = 7;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
 			break;
@@ -238,7 +305,7 @@ void CPlayer::Motion_Change(void)
 		case HIT:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iMotion = 3;
+			m_tFrame.iMotion = 10;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
 			break;
