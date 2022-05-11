@@ -11,6 +11,7 @@ private:
 public:
 	void		Insert_Bmp(const TCHAR* pFilePath, const TCHAR* pImageKey);
 	HDC			Find_Image(const TCHAR* pImageKey);
+	CMyBmp*		Find_MyBmp(const TCHAR* pImageKey);
 	void		Release(void);
 
 public:

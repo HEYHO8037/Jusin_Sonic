@@ -3,6 +3,7 @@
 
 CMyBmp::CMyBmp()
 {
+	BmpData = nullptr;
 }
 
 CMyBmp::~CMyBmp()
@@ -19,7 +20,6 @@ void CMyBmp::Load_Bmp(const TCHAR * pFilePath)
 	
 	ReleaseDC(g_hWnd, hDC);
 
-
 	m_hBitMap = (HBITMAP)LoadImage(NULL,		// 프로그램 인스턴스 핸들, 이미지는 프로그램에서 얻어오는 것이 아니라 파일로부터 읽어 들이기 때문에 NULL값
 									pFilePath,  // 파일 경로
 									IMAGE_BITMAP, // 어떤 타입을 읽을 것인가
@@ -33,6 +33,42 @@ void CMyBmp::Load_Bmp(const TCHAR * pFilePath)
 	// 4. SelectObject는 gdi 오브젝트를 선택하기 전에 기존에 가지고 있던 오브젝트를 반환한다.
 
 	m_hOldMap = (HBITMAP)SelectObject(m_hMemDC, m_hBitMap);
+}
+
+void CMyBmp::Get_Bmp_Rgb(const TCHAR * pFilePath)
+{
+	HDC		hDC = GetDC(g_hWnd);
+
+	// 우선 getDC로 불러온 뒤, CreateCompatibleDC로 호환되는 dc를 할당한다.
+	m_hMemDC = CreateCompatibleDC(hDC);
+
+	m_hBitMap = (HBITMAP)LoadImage(NULL,		// 프로그램 인스턴스 핸들, 이미지는 프로그램에서 얻어오는 것이 아니라 파일로부터 읽어 들이기 때문에 NULL값
+		pFilePath,  // 파일 경로
+		IMAGE_BITMAP, // 어떤 타입을 읽을 것인가
+		0,			// 가로, 세로 사이즈
+		0,
+		LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// LR_LOADFROMFILE : 파일에서 이미지를 불러오는 옵션, LR_CREATEDIBSECTION : 읽어온 파일을 DIB 형태로 변환
+	
+	BITMAPINFOHEADER bmi = { 0 };
+	bmi.biSize = sizeof(BITMAPINFOHEADER);
+	bmi.biPlanes = 1;
+	bmi.biBitCount = 32;
+	bmi.biWidth = TOTALTILEX;
+	bmi.biHeight = -TOTALTILEY;
+	bmi.biCompression = BI_RGB;
+	bmi.biSizeImage = TOTALTILEX * TOTALTILEY;
+	SelectObject(m_hMemDC, m_hBitMap);
+
+	if (BmpData)
+	{
+		free(BmpData);
+	}
+
+	BmpData = (BYTE*)malloc(4 * TOTALTILEX * TOTALTILEY);
+
+	GetDIBits(m_hMemDC, m_hBitMap, 0, TOTALTILEY, BmpData, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
+
+	ReleaseDC(g_hWnd, hDC);
 
 }
 

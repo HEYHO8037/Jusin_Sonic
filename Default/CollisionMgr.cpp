@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CollisionMgr.h"
 #include "TileMgr.h"
+#include "Player.h"
 
 
 CCollisionMgr::CCollisionMgr()
@@ -132,23 +133,86 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		return;
 
 	CTile* GetTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
-	
-	int X = TILECX * x;
-	int Y = TILECY * y;
+	const bool(*bCollider)[TILECX] = nullptr;
 
-	const bool(*bCollider) = nullptr;
 	bCollider = GetTile->Get_bIsCollider();
 
-	bool bIsColl = 0;
+	float	fX = 0.f, fY = 0.f;
+	int		iSave = 0;
 
-	for (int j = _Dest->Get_Rect().top; j < _Dest->Get_Rect().bottom; ++j)
+	if (Check_Rect(_Dest, GetTile, &fX, &fY))
 	{
-		for (int i = _Dest->Get_Rect().left; i < _Dest->Get_Rect().right; ++i)
+		// 상하 충돌
+		if (fX >= fY)
 		{
+			// 상 충돌
+			if (_Dest->Get_Info().fY < GetTile->Get_Info().fY)
+			{
+				for (int i = 0; i < fY; ++i)
+				{
+					for (int j = 0; j < fX; ++j)
+					{
+						if (*(bCollider + i)[j] == true)
+						{
+							iSave = i;
+						}
+					}
+				}
+
+				if (_Dest->Get_Rect().bottom >= GetTile->Get_Rect().top + iSave && iSave != 0)
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
+				}
+
+			}
+			else // 하 충돌
+			{
+			/*	for (int i = 0; i < fY; ++i)
+				{
+					for (int j = 0; j < fX; ++j)
+					{
+						if (*(bCollider + i)[j] == true)
+						{
+							dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
+						}
+					}
+				}*/
+			}
 
 		}
+		// 좌우 충돌
+		else
+		{
+			// 좌 충돌
+			if (_Dest->Get_Info().fX < GetTile->Get_Info().fX)
+			{
+				for (int i = 0; i < fX; ++i)
+				{
+					for (int j = 0; j < fY; ++j)
+					{
+						if (*(bCollider + i)[j] == 1 )
+						{
+							//dynamic_cast<CPlayer*>(_Dest)->Set_PosY(GetTile->Get_Rect().bottom - j);
+						}
+					}
+				}
+			}
+
+			// 우 충돌
+			else
+			{
+				for (int i = 0; i < fX; ++i)
+				{
+					for (int j = 0; j < fY; ++j)
+					{
+						if (*(bCollider + i)[j] == 1)
+						{
+							//dynamic_cast<CPlayer*>(_Dest)->Set_PosX(GetTile->Get_Rect().right - i);
+						}
+					}
+				}
+			}
+		}
 	}
-
-
 
 }

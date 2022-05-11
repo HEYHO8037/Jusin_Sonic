@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Tile.h"
+#include "MyBmp.h"
 
 class CTileMgr
 {
@@ -44,5 +45,6 @@ public:
 private:
 	static CTileMgr*		m_pInstance;
 	vector<CObj*>			m_vecTile;
+	CMyBmp* m_BmpRGB;
 };
 

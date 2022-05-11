@@ -20,6 +20,9 @@
 #define		TILEX		30
 #define		TILEY		8
 
+#define		TOTALTILEX 1024
+#define		TOTALTILEY 1536
+
 #define		FIXPIXEL	2 // 소닉이 2픽셀 띄어져 있어서 고정값
 
 #define		BACKGROUNDX 1024
@@ -34,7 +37,7 @@
 #define SLOPE 0.125 // 슬로프 걷기/뛰기 일반값
 #define ROLLINGUP 0.078125 // 슬로프 상승 값
 #define ROLLINGDOWN 0.3125 // 슬로프 하강 값
-#define FALL 2.5; // 낙하속도
+#define FALL 2.5 // 낙하속도
 
 //Sonic's Airborne Speed Constants ( 공중 스피드 관련값 )
 #define AIR 0.09375 // 공기저항계수

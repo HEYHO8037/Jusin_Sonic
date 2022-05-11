@@ -21,11 +21,8 @@ void CBmpMgr::Insert_Bmp(const TCHAR * pFilePath, const TCHAR * pImageKey)
 	{
 		CMyBmp*		pBmp = new CMyBmp;
 		pBmp->Load_Bmp(pFilePath);
-
 		m_mapBit.emplace(pImageKey, pBmp);
 	}
-
-
 }
 
 HDC CBmpMgr::Find_Image(const TCHAR * pImageKey)
@@ -37,6 +34,17 @@ HDC CBmpMgr::Find_Image(const TCHAR * pImageKey)
 
 
 	return iter->second->Get_MemDC();
+}
+
+CMyBmp * CBmpMgr::Find_MyBmp(const TCHAR * pImageKey)
+{
+	auto		iter = find_if(m_mapBit.begin(), m_mapBit.end(), CTag_Finder(pImageKey));
+
+	if (iter == m_mapBit.end())
+		return nullptr;
+
+
+	return iter->second;
 }
 
 void CBmpMgr::Release(void)

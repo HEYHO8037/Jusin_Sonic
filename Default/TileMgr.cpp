@@ -4,6 +4,7 @@
 #include "ScrollMgr.h"
 #include "LineMgr.h"
 #include "Line.h"
+#include "BmpMgr.h"
 
 CTileMgr*	CTileMgr::m_pInstance = nullptr;
 
@@ -31,12 +32,19 @@ void CTileMgr::Initialize()
 		}
 	}
 
+	m_BmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"Tile");
+	m_BmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTile.bmp");
+
+
 }
 
 void CTileMgr::Update()
 {
 	for (auto& iter : m_vecTile)
+	{
+		dynamic_cast<CTile*>(iter)->Set_BmpRGB(m_BmpRGB);
 		iter->Update();
+	}
 }
 
 void CTileMgr::Late_Update()
@@ -47,26 +55,30 @@ void CTileMgr::Late_Update()
 
 void CTileMgr::Render(HDC hDC)
 {
-
 	// 가로 12개 세로 9개
 
-	int	iCullX = abs((int)CScrollMgr::Get_Instance()->Get_ScrollX() / TILECX);
-	int	iCullY = abs((int)CScrollMgr::Get_Instance()->Get_ScrollY() / TILECY);
-	
-	int	iCullWidth = WINCX / TILECX + iCullX + 2; 
-	int	iCullHeight = WINCY / TILECY + iCullY + 2;
+	//int	iCullX = abs((int)CScrollMgr::Get_Instance()->Get_ScrollX() / TILECX);
+	//int	iCullY = abs((int)CScrollMgr::Get_Instance()->Get_ScrollY() / TILECY);
+	//
+	//int	iCullWidth = WINCX / TILECX + iCullX + 2; 
+	//int	iCullHeight = WINCY / TILECY + iCullY + 2;
 
-	for (int i = iCullY; i < iCullHeight; ++i)
+	//for (int i = iCullY; i < iCullHeight; ++i)
+	//{
+	//	for (int j = iCullX; j < iCullWidth; ++j)
+	//	{
+	//		int	iIndex = i * TILEX + j;
+
+	//		if(0 > iIndex || m_vecTile.size() < (size_t)iIndex)
+	//			continue;
+
+	//		m_vecTile[iIndex]->Render(hDC);
+	//	}
+	//}
+
+	for (auto& iter : m_vecTile)
 	{
-		for (int j = iCullX; j < iCullWidth; ++j)
-		{
-			int	iIndex = i * TILEX + j;
-
-			if(0 > iIndex || m_vecTile.size() < (size_t)iIndex)
-				continue;
-
-			m_vecTile[iIndex]->Render(hDC);
-		}
+		iter->Render(hDC);
 	}
 
 
@@ -91,7 +103,7 @@ void CTileMgr::Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption)
 
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_DrawID(_iDrawID);
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_Option(_iOption);
-
+	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_IsCheck(false);
 }
 
 void CTileMgr::Save_Tile(void)
@@ -100,8 +112,6 @@ void CTileMgr::Save_Tile(void)
 
 	int		iDrawID = 0, iOption = 0;
 	DWORD	dwByte = 0;
-	bool	bIsGround;
-	LINE	TileLIne;
 
 	for (auto& iter : m_vecTile)
 	{
@@ -123,8 +133,6 @@ void CTileMgr::Load_Tile(void)
 	INFO		tInfo{};
 	int			iDrawID = 0, iOption = 0;
 	DWORD		dwByte = 0;
-	bool		bIsGround;
-	LINE		TileLIne;
 
 	Release();
 	
@@ -138,6 +146,7 @@ void CTileMgr::Load_Tile(void)
 			break;
 
 		CObj*		pObj = CAbstractFactory<CTile>::Create(tInfo.fX, tInfo.fY);
+		pObj->Initialize();
 		dynamic_cast<CTile*>(pObj)->Set_DrawID(iDrawID);
 		dynamic_cast<CTile*>(pObj)->Set_Option(iOption);
 		m_vecTile.push_back(pObj);
@@ -145,6 +154,10 @@ void CTileMgr::Load_Tile(void)
 	}
 
 	CloseHandle(hFile);
+
+	m_BmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"Tile");
+	m_BmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTile.bmp");
+
 }
 
 const vector<CObj*>* CTileMgr::Get_VecTile()

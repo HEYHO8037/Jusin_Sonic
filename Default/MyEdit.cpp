@@ -94,6 +94,18 @@ void CMyEdit::Key_Input(void)
 		CTileMgr::Get_Instance()->Picking_Tile(pt, 1, 0);
 	}
 
+	if (CKeyMgr::Get_Instance()->Key_Pressing('R'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 0, 1);
+	}
+
 
 	if (CKeyMgr::Get_Instance()->Key_Down('S'))
 		CTileMgr::Get_Instance()->Save_Tile();

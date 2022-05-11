@@ -34,7 +34,7 @@ void CPlayer::Initialize(void)
 	m_fFalling = 0.f;
 	m_fJumpTime = 0.f;
 	m_bFalling = true;
-	GroundY = -1.f;
+	m_fGroundY = -1.f;
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR0.bmp", L"SonicR0");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL0.bmp", L"SonicL0");
@@ -60,15 +60,6 @@ int CPlayer::Update(void)
 	OffSet();
 	Falling();
 
-	bool bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_tInfo.fX, &GroundY);
-	if (bLineCol && (GroundY < m_tInfo.fY + FIXPIXEL + m_tInfo.fCY / 2))
-	{
-		m_bFalling = false;
-		m_bJump = false;
-		m_fJumpTime = 0.f;
-	}
-
-	
 
 	// 모든 연산이 끝난 뒤에 최종적인 좌표를 완성
 	Update_Rect();
@@ -121,11 +112,15 @@ void CPlayer::Falling(void)
 
 		m_tInfo.fY += m_fFalling;
 
-		if (m_tInfo.fY  + FIXPIXEL + m_tInfo.fCY / 2 > GroundY && GroundY != -1)
+		if (m_tInfo.fY  + FIXPIXEL + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
 		{
 			m_fFalling = 0.f;
-			m_tRect.bottom = GroundY - FIXPIXEL - m_tInfo.fCY / 2;
+			m_tRect.bottom = m_fGroundY - FIXPIXEL - m_tInfo.fCY / 2;
 		}
+	}
+	else
+	{
+		m_fFalling = 0.f;
 	}
 }
 

@@ -13,7 +13,9 @@ CTile::CTile()
 CTile::~CTile()
 {
 	Release();
+	m_BmpRGB = nullptr;
 }
+
 
 void CTile::Initialize(void)
 {
@@ -23,7 +25,6 @@ void CTile::Initialize(void)
 	m_iDrawID = 0;
 	m_iOption = 0;
 	m_bIsCheck = false;
-
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomTile.bmp", L"Tile");
 }
@@ -41,7 +42,7 @@ int CTile::Update(void)
 
 void CTile::Late_Update(void)
 {
-	
+
 }
 
 void CTile::Render(HDC hDC)
@@ -49,8 +50,35 @@ void CTile::Render(HDC hDC)
 	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
+	if (!m_bIsCheck)
+	{
+		for (int i = 0; i < TILECY; ++i)
+		{
+			for (int j = 0; j < TILECX; ++j)
+			{
+				int x = (int)m_tInfo.fCX * m_iDrawID + j;
+				int y = (int)m_tInfo.fCY * m_iOption + i;
+
+				if ((m_BmpRGB->PosR(x, y) == 255) &&
+					(m_BmpRGB->PosG(x, y) == 0) &&
+					(m_BmpRGB->PosB(x, y) == 255))
+				{
+					m_bIsCollider[i][j] = false;
+				}
+				else
+				{
+					m_bIsCollider[i][j] = true;
+				}
+			}
+		}
+
+		m_bIsCheck = true;
+	}
+
+
 	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Tile");
 	
+
 	GdiTransparentBlt(hDC,
 		int(m_tRect.left + iScrollX),	// 2,3 인자 :  복사받을 위치 X, Y
 		int(m_tRect.top + iScrollY),
@@ -62,29 +90,6 @@ void CTile::Render(HDC hDC)
 		(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 		(int)m_tInfo.fCY,
 		RGB(255, 0, 255));
-
-	if (!m_bIsCheck)
-	{
-		for (int i = 0; i < TILECY; ++i)
-		{
-			for (int j = 0; j < TILECX; ++j)
-			{
-				if (GetPixel(hMemDC, (int)m_tInfo.fCX * m_iDrawID + j,								// 비트맵 출력 시작 좌표, X,Y
-					(int)m_tInfo.fCY * m_iOption + i) == RGB(225, 0, 255) || m_iDrawID == 0)
-				{
-					m_bIsCollider[i][j] = 0;
-				}
-				else
-				{
-					m_bIsCollider[i][j] = 1;
-				}
-			}
-		}
-
-		m_bIsCheck = true;
-	}
-
-
 
 }
 
