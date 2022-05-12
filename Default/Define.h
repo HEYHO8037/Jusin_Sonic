@@ -23,8 +23,6 @@
 #define		TOTALTILEX 1024
 #define		TOTALTILEY 1536
 
-#define		FIXPIXEL	2 // 소닉이 2픽셀 띄어져 있어서 고정값
-
 #define		BACKGROUNDX 1024
 #define		BACKGROUNDY 768
 

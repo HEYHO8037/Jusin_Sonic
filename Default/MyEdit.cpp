@@ -103,9 +103,33 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 0, 1);
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 1);
 	}
 
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing('E'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 6, 1);
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing('Q'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 4);
+	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down('S'))
 		CTileMgr::Get_Instance()->Save_Tile();

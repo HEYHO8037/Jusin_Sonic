@@ -78,6 +78,7 @@ void CTileMgr::Render(HDC hDC)
 
 	for (auto& iter : m_vecTile)
 	{
+		dynamic_cast<CTile*>(iter)->Set_bCollider(m_bTotalPixel);
 		iter->Render(hDC);
 	}
 
@@ -90,6 +91,11 @@ void CTileMgr::Release()
 	m_vecTile.clear();
 }
 
+
+bool(*CTileMgr::Get_TotalPixel(void))[TILECX * TILEX]
+{
+	return m_bTotalPixel;
+}
 
 void CTileMgr::Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption)
 {
@@ -112,15 +118,18 @@ void CTileMgr::Save_Tile(void)
 
 	int		iDrawID = 0, iOption = 0;
 	DWORD	dwByte = 0;
+	TILEID	eID;
 
 	for (auto& iter : m_vecTile)
 	{
 		iDrawID = dynamic_cast<CTile*>(iter)->Get_DrawID();
 		iOption = dynamic_cast<CTile*>(iter)->Get_Option();
+		eID = dynamic_cast<CTile*>(iter)->Get_TileID();
 
 		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
 		WriteFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
 		WriteFile(hFile, &iOption, sizeof(int), &dwByte, NULL);
+		WriteFile(hFile, &eID, sizeof(TILEID), &dwByte, NULL);
 
 	}
 
@@ -133,6 +142,7 @@ void CTileMgr::Load_Tile(void)
 	INFO		tInfo{};
 	int			iDrawID = 0, iOption = 0;
 	DWORD		dwByte = 0;
+	TILEID		eID = TILE_END;
 
 	Release();
 	
@@ -141,6 +151,7 @@ void CTileMgr::Load_Tile(void)
 		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
 		ReadFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
 		ReadFile(hFile, &iOption, sizeof(int), &dwByte, NULL);
+		ReadFile(hFile, &eID, sizeof(TILEID), &dwByte, NULL);
 
 		if (0 == dwByte)
 			break;
@@ -149,6 +160,8 @@ void CTileMgr::Load_Tile(void)
 		pObj->Initialize();
 		dynamic_cast<CTile*>(pObj)->Set_DrawID(iDrawID);
 		dynamic_cast<CTile*>(pObj)->Set_Option(iOption);
+		dynamic_cast<CTile*>(pObj)->Set_TileID(eID);
+
 		m_vecTile.push_back(pObj);
 
 	}
@@ -157,6 +170,8 @@ void CTileMgr::Load_Tile(void)
 
 	m_BmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"Tile");
 	m_BmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTile.bmp");
+
+
 
 }
 

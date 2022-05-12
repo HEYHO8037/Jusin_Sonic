@@ -22,14 +22,21 @@ public:
 
 	void		Set_PosX(float _fX) { m_tInfo.fX = _fX; }
 	void		Set_PosY(float _fY) { m_tInfo.fY = _fY; }
+	void		Set_PosAddX(float _fX) { m_tInfo.fX += _fX; }
+	void		Set_PosAddY(float _fY) { m_tInfo.fY += _fY; }
+
 
 	void		Set_FrameKey(TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
+
+	void		Set_Speed(float fSpeed) { m_fSpeed = fSpeed; }
+	float		Get_Speed() { return m_fSpeed; }
 
 	bool		Get_Dead() { return m_bDead; }
 
 
 	const INFO&		Get_Info(void) const { return m_tInfo; }
 	const RECT&		Get_Rect(void) const { return m_tRect; }
+
 
 public:
 	virtual		void	Initialize(void)	PURE;

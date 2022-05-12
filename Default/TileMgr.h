@@ -17,6 +17,7 @@ public:
 	void		Release();
 
 public:
+	bool		(*Get_TotalPixel(void))[TILECX * TILEX];
 	void		Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption);
 	void		Save_Tile(void);
 	void		Load_Tile(void);
@@ -45,6 +46,7 @@ public:
 private:
 	static CTileMgr*		m_pInstance;
 	vector<CObj*>			m_vecTile;
+	bool					m_bTotalPixel[TILECY * TILEY][TILECX * TILEX];
 	CMyBmp* m_BmpRGB;
 };
 

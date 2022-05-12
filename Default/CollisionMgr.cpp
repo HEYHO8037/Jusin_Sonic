@@ -3,6 +3,8 @@
 #include "TileMgr.h"
 #include "Player.h"
 
+int CCollisionMgr::CollisionBmpX = 0;
+int CCollisionMgr::CollisionBmpY = 0;
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -124,6 +126,85 @@ void CCollisionMgr::Collision_Sphere(list<CObj*> _Dest, list<CObj*> _Sour)
 
 void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 {
+	bool(*bIsPixel)[TILECX * TILEX] = nullptr;
+	bIsPixel = CTileMgr::Get_Instance()->Get_TotalPixel();
+	bool bIsGround = false;
+
+	int iBottom = _Dest->Get_Rect().bottom;
+	int iRight = _Dest->Get_Rect().right;
+	int iLeft = _Dest->Get_Rect().left;
+	int iMiddleX = _Dest->Get_Info().fX;
+
+	// 하단 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 0)
+		{
+			for (int i = _Dest->Get_Rect().top; i < iBottom; ++i)
+			{
+				if ((*(bIsPixel[i] + iMiddleX)) == true)
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
+					int c = _Dest->Get_Rect().bottom - i;
+					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-c);
+					break;
+				}
+				else
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+				}
+			}
+		}
+	}
+
+	//우측 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 0)
+		{
+			int iCount = 0;
+
+			for (int i = _Dest->Get_Rect().top; i < iBottom - 1; ++i)
+			{
+				if ((*(bIsPixel[i] + iRight)) == true)
+				{
+					iCount++;
+				}
+			}
+
+			if (iCount > 31)
+			{
+				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+			}
+		}
+	}
+
+	//좌측 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 0)
+		{
+			int iCount = 0;
+
+			for (int i = _Dest->Get_Rect().top; i < iBottom - 1; ++i)
+			{
+				if ((*(bIsPixel[i] + iLeft)) == true)
+				{
+					iCount++;
+				}
+			}
+
+			if (iCount > 31)
+			{
+				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+			}
+		}
+
+	}
+}
+
+void CCollisionMgr::Collision_Tile(CObj * _Dest)
+{
 	int		x = _Dest->Get_Info().fX / TILECX;
 	int		y = _Dest->Get_Info().fY / TILECY;
 
@@ -133,86 +214,6 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		return;
 
 	CTile* GetTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
-	const bool(*bCollider)[TILECX] = nullptr;
-
-	bCollider = GetTile->Get_bIsCollider();
-
-	float	fX = 0.f, fY = 0.f;
-	int		iSave = 0;
-
-	if (Check_Rect(_Dest, GetTile, &fX, &fY))
-	{
-		// 상하 충돌
-		if (fX >= fY)
-		{
-			// 상 충돌
-			if (_Dest->Get_Info().fY < GetTile->Get_Info().fY)
-			{
-				for (int i = 0; i < fY; ++i)
-				{
-					for (int j = 0; j < fX; ++j)
-					{
-						if (*(bCollider + i)[j] == true)
-						{
-							iSave = i;
-						}
-					}
-				}
-
-				if (_Dest->Get_Rect().bottom >= GetTile->Get_Rect().top + iSave && iSave != 0)
-				{
-					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
-				}
-
-			}
-			else // 하 충돌
-			{
-			/*	for (int i = 0; i < fY; ++i)
-				{
-					for (int j = 0; j < fX; ++j)
-					{
-						if (*(bCollider + i)[j] == true)
-						{
-							dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
-						}
-					}
-				}*/
-			}
-
-		}
-		// 좌우 충돌
-		else
-		{
-			// 좌 충돌
-			if (_Dest->Get_Info().fX < GetTile->Get_Info().fX)
-			{
-				for (int i = 0; i < fX; ++i)
-				{
-					for (int j = 0; j < fY; ++j)
-					{
-						if (*(bCollider + i)[j] == 1 )
-						{
-							//dynamic_cast<CPlayer*>(_Dest)->Set_PosY(GetTile->Get_Rect().bottom - j);
-						}
-					}
-				}
-			}
-
-			// 우 충돌
-			else
-			{
-				for (int i = 0; i < fX; ++i)
-				{
-					for (int j = 0; j < fY; ++j)
-					{
-						if (*(bCollider + i)[j] == 1)
-						{
-							//dynamic_cast<CPlayer*>(_Dest)->Set_PosX(GetTile->Get_Rect().right - i);
-						}
-					}
-				}
-			}
-		}
-	}
+	TILEID eID = dynamic_cast<CTile*>(GetTile)->Get_TileID();
 
 }

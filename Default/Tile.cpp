@@ -25,7 +25,6 @@ void CTile::Initialize(void)
 	m_iDrawID = 0;
 	m_iOption = 0;
 	m_bIsCheck = false;
-
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomTile.bmp", L"Tile");
 }
 
@@ -56,18 +55,22 @@ void CTile::Render(HDC hDC)
 		{
 			for (int j = 0; j < TILECX; ++j)
 			{
-				int x = (int)m_tInfo.fCX * m_iDrawID + j;
-				int y = (int)m_tInfo.fCY * m_iOption + i;
+				int x = ((int)m_tInfo.fCX * m_iDrawID) + j;
+				int y = ((int)m_tInfo.fCY * m_iOption) + i;
 
 				if ((m_BmpRGB->PosR(x, y) == 255) &&
 					(m_BmpRGB->PosG(x, y) == 0) &&
 					(m_BmpRGB->PosB(x, y) == 255))
 				{
-					m_bIsCollider[i][j] = false;
+					int Y = m_tRect.top + i;
+					int X = m_tRect.left + j;
+					*((m_bIsCollider[Y]) + X) = false;
 				}
 				else
 				{
-					m_bIsCollider[i][j] = true;
+					int Y = m_tRect.top + i;
+					int X = m_tRect.left + j;
+					*((m_bIsCollider[Y]) + X) = true;
 				}
 			}
 		}

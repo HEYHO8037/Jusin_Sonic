@@ -89,8 +89,8 @@ void CPlayer::Render(HDC hDC)
 			hMemDC,							// 비트맵을 가지고 있는 DC
 			m_tFrame.iFrameStart * (int)m_tInfo.fCX,								// 비트맵 출력 시작 좌표, X,Y
 			m_tFrame.iMotion * (int)m_tInfo.fCY,
-			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
-			(int)m_tInfo.fCY,
+			(int)m_tInfo.fCX - 13,				// 복사할 비트맵의 가로, 세로 길이
+			(int)m_tInfo.fCY - 13,
 			RGB(255, 0, 255));			// 제거하고자 하는 색상
 				
 }
@@ -112,15 +112,23 @@ void CPlayer::Falling(void)
 
 		m_tInfo.fY += m_fFalling;
 
-		if (m_tInfo.fY  + FIXPIXEL + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
+		if (m_tInfo.fY  + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
 		{
 			m_fFalling = 0.f;
-			m_tRect.bottom = m_fGroundY - FIXPIXEL - m_tInfo.fCY / 2;
+			m_bFalling = false;
+			m_tInfo.fY = m_fGroundY + m_tInfo.fCY / 2;
 		}
 	}
 	else
 	{
 		m_fFalling = 0.f;
+
+		if (m_tInfo.fY + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
+		{
+			m_fFalling = 0.f;
+			m_bFalling = false;
+			m_tInfo.fY = m_fGroundY +  m_tInfo.fCY / 2;
+		}
 	}
 }
 

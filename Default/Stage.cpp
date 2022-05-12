@@ -31,11 +31,12 @@ void CStage::Update(void)
 {
 	CTileMgr::Get_Instance()->Update();
 	CObjMgr::Get_Instance()->Update();	
+	CCollisionMgr::Collision_Pixel(CObjMgr::Get_Instance()->Get_Player());
+
 }
 
 void CStage::Late_Update(void)
 {
-	CCollisionMgr::Collision_Pixel(CObjMgr::Get_Instance()->Get_Player());
 	CTileMgr::Get_Instance()->Late_Update();
 	CObjMgr::Get_Instance()->Late_Update();
 
