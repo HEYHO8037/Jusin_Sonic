@@ -18,7 +18,6 @@ public:
 	static void		Collision_Tile(CObj* _Dest);
 
 private:
-	static int CollisionBmpX;
-	static int CollisionBmpY;
+	static TILEID	m_eID;
 };
 

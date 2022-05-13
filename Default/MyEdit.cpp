@@ -80,6 +80,15 @@ void CMyEdit::Key_Input(void)
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 0);
+		
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON))
@@ -92,6 +101,15 @@ void CMyEdit::Key_Input(void)
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		CTileMgr::Get_Instance()->Picking_Tile(pt, 1, 0);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing('R'))
@@ -104,6 +122,15 @@ void CMyEdit::Key_Input(void)
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 1);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+
 	}
 
 
@@ -117,6 +144,14 @@ void CMyEdit::Key_Input(void)
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		CTileMgr::Get_Instance()->Picking_Tile(pt, 6, 1);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing('Q'))
@@ -129,6 +164,15 @@ void CMyEdit::Key_Input(void)
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 4);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down('S'))

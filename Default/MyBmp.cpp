@@ -74,6 +74,11 @@ void CMyBmp::Get_Bmp_Rgb(const TCHAR * pFilePath)
 
 void CMyBmp::Release(void)
 {
+	if (BmpData)
+	{
+		free(BmpData);
+	}
+
 	SelectObject(m_hMemDC, m_hOldMap);
 	DeleteObject(m_hBitMap);
 	DeleteDC(m_hMemDC);

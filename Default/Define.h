@@ -43,4 +43,5 @@
 #define GRAVITY 0.21875 // Áß·Â°ª
 
 
+
 extern HWND			g_hWnd;

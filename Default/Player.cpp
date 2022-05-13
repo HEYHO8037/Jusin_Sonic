@@ -6,6 +6,7 @@
 #include "KeyMgr.h"
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
+#include "Camera.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(IDLE), m_ePreState(END)
@@ -31,13 +32,31 @@ void CPlayer::Initialize(void)
 
 	m_bJump = false;
 	m_fJumpPower = JUMP;
+	m_fPower = 2.5;
 	m_fFalling = 0.f;
 	m_fJumpTime = 0.f;
 	m_bFalling = true;
 	m_fGroundY = -1.f;
+	m_eGravity = DOWN_VERTICAL;
+	m_tPivot = POSITION(0.5, 0.5);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR0.bmp", L"SonicR0");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR45.bmp", L"SonicR45");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR90.bmp", L"SonicR90");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR135.bmp", L"SonicR135");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR180.bmp", L"SonicR180");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR225.bmp", L"SonicR225");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR270.bmp", L"SonicR270");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR315.bmp", L"SonicR315");
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL0.bmp", L"SonicL0");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL45.bmp", L"SonicL45");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL90.bmp", L"SonicL90");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL135.bmp", L"SonicL135");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL180.bmp", L"SonicL180");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL225.bmp", L"SonicL225");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL270.bmp", L"SonicL270");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL315.bmp", L"SonicL315");
 
 
 	m_pFrameKey = L"SonicR0";
@@ -56,8 +75,7 @@ int CPlayer::Update(void)
 
 	// 연산을 진행
 	Key_Input();
-	//Jumping();
-	OffSet();
+	Jumping();
 	Falling();
 
 
@@ -80,10 +98,38 @@ void CPlayer::Render(HDC hDC)
 
 	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_pFrameKey);
 	
+	POSITION tPos;
+	tPos.x = m_tInfo.fX - m_tInfo.fCX * m_tPivot.x;
+	tPos.y = m_tInfo.fY - m_tInfo.fCY * m_tPivot.y;
+	tPos -= CCamera::Get_Instance()->GetPos();
 
-	GdiTransparentBlt(hDC, 					// 복사 받을, 최종적으로 그림을 그릴 DC
-			int(m_tRect.left + iScrollX),	// 2,3 인자 :  복사받을 위치 X, Y
-			int(m_tRect.top + iScrollY),
+	RESOLUTION tClientRS = CCamera::Get_Instance()->GetClientRS();
+
+	bool bInClient = true;
+
+	if (tPos.x + m_tInfo.fX < 0)
+	{
+		bInClient = false;
+	}
+	else if (tPos.x > tClientRS.iW)
+	{
+		bInClient = false;
+	}
+	else if (tPos.y + m_tInfo.fY < 0)
+	{
+		bInClient = false;
+	}
+	else if (tPos.y > tClientRS.iH)
+	{
+		bInClient = false;
+	}
+
+	if (bInClient)
+	{
+
+		GdiTransparentBlt(hDC, 					// 복사 받을, 최종적으로 그림을 그릴 DC
+			tPos.x,	// 2,3 인자 :  복사받을 위치 X, Y
+			tPos.y,
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
@@ -92,7 +138,7 @@ void CPlayer::Render(HDC hDC)
 			(int)m_tInfo.fCX - 13,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY - 13,
 			RGB(255, 0, 255));			// 제거하고자 하는 색상
-				
+	}
 }
 void CPlayer::Release(void)
 {
@@ -110,7 +156,22 @@ void CPlayer::Falling(void)
 			m_fFalling = 16;
 		}
 
-		m_tInfo.fY += m_fFalling;
+		if (m_eGravity == DOWN_VERTICAL)
+		{
+			m_tInfo.fY += m_fFalling;
+		}
+		else if (m_eGravity == LEFT_HORIZIONAL)
+		{
+			m_tInfo.fX += m_fFalling;
+		}
+		else if (m_eGravity == RIGHT_HORIZIONAL)
+		{
+			m_tInfo.fX -= m_fFalling;
+		}
+		else if (m_eGravity == UP_VERTICAL)
+		{
+			m_tInfo.fY -= m_fFalling;
+		}
 
 		if (m_tInfo.fY  + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
 		{
@@ -126,8 +187,9 @@ void CPlayer::Falling(void)
 		if (m_tInfo.fY + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
 		{
 			m_fFalling = 0.f;
+			m_bJump = false;
 			m_bFalling = false;
-			m_tInfo.fY = m_fGroundY +  m_tInfo.fCY / 2;
+			m_tInfo.fY = m_fGroundY + m_tInfo.fCY / 2;
 		}
 	}
 }
@@ -138,7 +200,6 @@ void CPlayer::Key_Input(void)
 	if (GetAsyncKeyState(VK_LEFT))
 	{
 		m_pFrameKey = L"SonicL0";
-
 		if (m_fSpeed > 0) //스피드가 양수 즉 우측일때
 		{
 			m_fSpeed -= DEC;  // 가속
@@ -152,30 +213,32 @@ void CPlayer::Key_Input(void)
 			if (m_fSpeed <= -TOPXSPEED)
 				m_fSpeed = -TOPXSPEED; //최고 속력까지만 움직이도록 함
 		}
-	}
 
-	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
+
+	}
+	else if (GetAsyncKeyState(VK_RIGHT))
 	{
 		m_pFrameKey = L"SonicR0";
 
 		if (m_fSpeed < 0) //위 코드의 반대
 		{
-			m_fSpeed += DEC; 
+			m_fSpeed += DEC;
 			if (m_fSpeed >= 0)
-				m_fSpeed = 1.0; 
+				m_fSpeed = 1.0;
 		}
-		else if (m_fSpeed < TOPXSPEED) 
+		else if (m_fSpeed < TOPXSPEED)
 		{
-			m_fSpeed += ACC; 
+			m_fSpeed += ACC;
 			m_eCurState = RUN;
 			if (m_fSpeed >= TOPXSPEED)
-				m_fSpeed = TOPXSPEED; 
+				m_fSpeed = TOPXSPEED;
 		}
+
+	
 	}
-	else if (CKeyMgr::Get_Instance()->Key_Up(VK_SPACE))
+	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
 		m_bJump = true;
-		return;
 	}
 
 	else
@@ -197,48 +260,20 @@ void CPlayer::Key_Input(void)
 
 void CPlayer::Jumping(void)
 {
-	float		fY = 0.f;
-
-	bool bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_tInfo.fX, &fY);
-
 	if (m_bJump)
 	{
-		m_tInfo.fY -= m_fJumpPower * m_fJumpTime - 9.8f * m_fJumpTime * m_fJumpTime * 0.5f;
-		m_fJumpTime += 0.2f;
-
-		if (bLineCol && (fY < m_tInfo.fY))
+		if (m_fJumpPower >= m_fPower)
+		{
+			m_tInfo.fY -= m_fPower;
+			m_fJumpTime += 0.5f;
+		}
+		else
 		{
 			m_bJump = false;
-			m_fJumpTime = 0.f;
-			m_tInfo.fY = fY;
+			m_bFalling = true;
 		}
+
 	}
-	else if (bLineCol)
-	{
-		m_tInfo.fY = fY;
-	}
-}
-
-void CPlayer::OffSet(void)
-{
-	int		iOffSetX = WINCX >> 1;
-	int		iOffSetY = WINCY >> 1;
-	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-	int		iItvX = 0;
-	int		iItvY = 0;
-
-	if (iOffSetX - iItvX > m_tInfo.fX + iScrollX)
-		CScrollMgr::Get_Instance()->Set_ScrollX(-m_fSpeed);
-
-	if (iOffSetX + iItvX < m_tInfo.fX + iScrollX)
-		CScrollMgr::Get_Instance()->Set_ScrollX(-m_fSpeed);
-	
-	if (iOffSetY - iItvY > m_tInfo.fY + iScrollY)
-		CScrollMgr::Get_Instance()->Set_ScrollY(m_fFalling);
-
-	if (iOffSetY + iItvY < m_tInfo.fY + iScrollY)
-		CScrollMgr::Get_Instance()->Set_ScrollY(-m_fFalling);
 }
 
 void CPlayer::Motion_Change(void)

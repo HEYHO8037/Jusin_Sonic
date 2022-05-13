@@ -110,6 +110,7 @@ void CTileMgr::Picking_Tile(POINT _pt, const int& _iDrawID, const int& _iOption)
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_DrawID(_iDrawID);
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_Option(_iOption);
 	dynamic_cast<CTile*>(m_vecTile[iIndex])->Set_IsCheck(false);
+
 }
 
 void CTileMgr::Save_Tile(void)

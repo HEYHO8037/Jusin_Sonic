@@ -20,15 +20,19 @@ public:
 public:
 	void	Set_Falling(bool bFall) { m_bFalling = bFall; }
 	void	Set_Ground(float fY) { m_fGroundY = fY; }
+	void	Set_Jumping(bool bJump) { m_bJump = bJump; }
+	void	Set_Gravity(GRAVITY_STATE eGravity) { m_eGravity = eGravity; }
 
 public:
 	bool	Get_Falling() { return m_bFalling; }
+	float	Get_Ground() { return m_fGroundY; }
+
+
 
 private:
 	void		Falling(void);
 	void		Key_Input(void);
 	void		Jumping(void);
-	void		OffSet(void);
 	void		Motion_Change(void);
 
 private:
@@ -41,6 +45,7 @@ private:
 	float					m_fPower;
 	float					m_fGroundY;
 
+	GRAVITY_STATE			m_eGravity;
 	STATE					m_ePreState;
 	STATE					m_eCurState;
 

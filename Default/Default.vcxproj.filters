@@ -91,6 +91,9 @@
     <Filter Include="01. Obj\07. AnimateImage">
       <UniqueIdentifier>{0075b361-6805-4ad1-848a-c3727002dac6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Camera">
+      <UniqueIdentifier>{d5620ead-d503-448d-9feb-ec484466eb52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -195,6 +198,9 @@
     <ClInclude Include="AnimateImage.h">
       <Filter>01. Obj\07. AnimateImage</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>03. Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -271,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="AnimateImage.cpp">
       <Filter>01. Obj\07. AnimateImage</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>03. Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

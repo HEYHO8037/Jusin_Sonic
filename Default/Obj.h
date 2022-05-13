@@ -24,7 +24,7 @@ public:
 	void		Set_PosY(float _fY) { m_tInfo.fY = _fY; }
 	void		Set_PosAddX(float _fX) { m_tInfo.fX += _fX; }
 	void		Set_PosAddY(float _fY) { m_tInfo.fY += _fY; }
-
+	void		Set_Pivot(float x, float y) { m_tPivot.x = x; m_tPivot.y = y; }
 
 	void		Set_FrameKey(TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
 
@@ -32,11 +32,11 @@ public:
 	float		Get_Speed() { return m_fSpeed; }
 
 	bool		Get_Dead() { return m_bDead; }
-
+	POSITION	Get_Pivot() { return m_tPivot; }
 
 	const INFO&		Get_Info(void) const { return m_tInfo; }
 	const RECT&		Get_Rect(void) const { return m_tRect; }
-
+	const DIRECTION& Get_Direction() { return m_eDir; }
 
 public:
 	virtual		void	Initialize(void)	PURE;
@@ -60,6 +60,7 @@ protected:
 	DIRECTION	m_eDir;
 	bool		m_bDead;
 
+	POSITION	m_tPivot;
 	CObj*		m_pTarget;
 	TCHAR*		m_pFrameKey;
 

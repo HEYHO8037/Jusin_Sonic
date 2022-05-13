@@ -3,8 +3,7 @@
 #include "TileMgr.h"
 #include "Player.h"
 
-int CCollisionMgr::CollisionBmpX = 0;
-int CCollisionMgr::CollisionBmpY = 0;
+TILEID	CCollisionMgr::m_eID = TILE_END;
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -131,9 +130,10 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	bool bIsGround = false;
 
 	int iBottom = _Dest->Get_Rect().bottom;
+	int iTop = _Dest->Get_Rect().top;
 	int iRight = _Dest->Get_Rect().right;
 	int iLeft = _Dest->Get_Rect().left;
-	int iMiddleX = _Dest->Get_Info().fX;
+	int iMiddleX = (int)_Dest->Get_Info().fX;
 
 	// 하단 충돌
 	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
@@ -142,20 +142,54 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			for (int i = _Dest->Get_Rect().top; i < iBottom; ++i)
 			{
-				if ((*(bIsPixel[i] + iMiddleX)) == true)
+				if ((*(bIsPixel[i] + iLeft + 9)) == true && 
+				    (*(bIsPixel[i] + iMiddleX)) == true )
 				{
 					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
-					int c = _Dest->Get_Rect().bottom - i;
-					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-c);
+					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
+					float Floor = (float)_Dest->Get_Rect().bottom - i;
+					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-Floor);
+
+
+					break;
+				}
+				if ((*(bIsPixel[i] + iRight - 9)) == true &&
+					(*(bIsPixel[i] + iMiddleX)) == true)
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
+					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
+					float Floor = (float)_Dest->Get_Rect().bottom - i;
+					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-Floor);
 					break;
 				}
 				else
 				{
 					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
 				}
+
 			}
 		}
 	}
+
+	//상단 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 64)
+		{
+			for (int i = _Dest->Get_Rect().left; i < iRight; ++i)
+			{
+				if ((*(bIsPixel[iTop] + i)) == true)
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
+					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+
+					break;
+				}
+
+			}
+		}
+	}
+	float fAngle = 0;
 
 	//우측 충돌
 	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
@@ -164,17 +198,26 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			int iCount = 0;
 
-			for (int i = _Dest->Get_Rect().top; i < iBottom - 1; ++i)
+			for (int i = _Dest->Get_Rect().bottom; i > iTop - 1; --i)
 			{
 				if ((*(bIsPixel[i] + iRight)) == true)
 				{
-					iCount++;
-				}
-			}
+					if (iCount > 31 && m_eID == TILE_SLIDE)
+					{
+						int rX = i - _Dest->Get_Rect().bottom;
+						int rY = i - dynamic_cast<CPlayer*>(_Dest)->Get_Ground();
 
-			if (iCount > 31)
-			{
-				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+						fAngle = atan(rY / rX) * 180 / PI;
+						_Dest->Set_Angle(-fAngle);
+
+						dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(LEFT_HORIZIONAL);
+
+					}
+					else
+					{
+						iCount++;
+					}
+				}
 			}
 		}
 	}
@@ -186,7 +229,7 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			int iCount = 0;
 
-			for (int i = _Dest->Get_Rect().top; i < iBottom - 1; ++i)
+			for (int i = _Dest->Get_Rect().bottom; i < iTop - 1; --i)
 			{
 				if ((*(bIsPixel[i] + iLeft)) == true)
 				{
@@ -196,7 +239,14 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 
 			if (iCount > 31)
 			{
-				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+				if (m_eID == TILE_SLIDE)
+				{
+
+				}
+				else
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+				}
 			}
 		}
 
@@ -205,8 +255,8 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 
 void CCollisionMgr::Collision_Tile(CObj * _Dest)
 {
-	int		x = _Dest->Get_Info().fX / TILECX;
-	int		y = _Dest->Get_Info().fY / TILECY;
+	int		x = (int)_Dest->Get_Info().fX / TILECX;
+	int		y = (int)_Dest->Get_Info().fY / TILECY;
 
 	int	iIndex = y * TILEX + x;
 
@@ -214,6 +264,5 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 		return;
 
 	CTile* GetTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
-	TILEID eID = dynamic_cast<CTile*>(GetTile)->Get_TileID();
-
+	m_eID = dynamic_cast<CTile*>(GetTile)->Get_TileID();
 }

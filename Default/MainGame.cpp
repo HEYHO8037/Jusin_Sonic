@@ -29,10 +29,10 @@ CMainGame::~CMainGame()
 void CMainGame::Initialize(void)
 {
 	m_hDC = GetDC(g_hWnd);
-
+	
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 
-	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGE);
+	CSceneMgr::Get_Instance()->Scene_Change(SC_LOGO);
 }
 
 void CMainGame::Update(void)

@@ -26,6 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(476);
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -55,15 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	pMainGame->Initialize();
 
-    // 기본 메시지 루프입니다.
-   /* while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) // 메뉴 기능의 단축키가 제대로 작동하도록 검사하는 함수
-        {
-            TranslateMessage(&msg);	// 키보드 메세지를 가공하여 프로그램에서 쉽게 사용할 수 있도록 번역하는 함수
-            DispatchMessage(&msg);	// 시스템 메세지 큐에서 꺼낸 메세지를 프로그램에서 처리(WndProc 호출) 하도록 전달
-        }
-    }*/
+   
 
 	// 운영체제가 시작된 후로 흐른 시간을 정수 형태로 반환
 	// 1 / 1000초의 DWORD 정수값으로 반환(밀리 세컨드 단위)
