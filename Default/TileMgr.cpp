@@ -35,7 +35,8 @@ void CTileMgr::Initialize()
 	m_BmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"Tile");
 	m_BmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTile.bmp");
 
-
+	m_CollisionBmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"TileMask");	
+	m_CollisionBmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTileMask.bmp");
 }
 
 void CTileMgr::Update()
@@ -43,6 +44,8 @@ void CTileMgr::Update()
 	for (auto& iter : m_vecTile)
 	{
 		dynamic_cast<CTile*>(iter)->Set_BmpRGB(m_BmpRGB);
+		dynamic_cast<CTile*>(iter)->Set_CollisionBmpRGB(m_CollisionBmpRGB);
+
 		iter->Update();
 	}
 }
@@ -172,6 +175,8 @@ void CTileMgr::Load_Tile(void)
 	m_BmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"Tile");
 	m_BmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTile.bmp");
 
+	m_CollisionBmpRGB = CBmpMgr::Get_Instance()->Find_MyBmp(L"TileMask");
+	m_CollisionBmpRGB->Get_Bmp_Rgb(L"../Image/TileMap/MushroomTileMask.bmp");
 
 
 }

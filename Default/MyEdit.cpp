@@ -4,6 +4,7 @@
 #include "KeyMgr.h"
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
+#include "Camera.h"
 
 
 CMyEdit::CMyEdit()
@@ -171,9 +172,97 @@ void CMyEdit::Key_Input(void)
 		int	iIndex = y * TILEX + x;
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
 
 	}
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing('Y'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 4, 10);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing('U'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 7, 10);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing('I'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 0, 10);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+
+	}
+
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing('O'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 1, 10);
+
+		int		x = pt.x / TILECX;
+		int		y = pt.y / TILECY;
+
+		int	iIndex = y * TILEX + x;
+
+		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+
+	}
+
+
+
 
 	if (CKeyMgr::Get_Instance()->Key_Down('S'))
 		CTileMgr::Get_Instance()->Save_Tile();

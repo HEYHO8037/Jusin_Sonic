@@ -31,7 +31,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*> _Dest, list<CObj*> _Sour)
 		}
 	}
 }
-									// 고정되어 있는 물체  // 움직이는 물체		
+// 고정되어 있는 물체  // 움직이는 물체		
 void CCollisionMgr::Collision_RectEx(list<CObj*> _Dest, list<CObj*> _Sour)
 {
 	for (auto& Dest : _Dest)
@@ -42,16 +42,16 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dest, list<CObj*> _Sour)
 
 			if (Check_Rect(Dest, Sour, &fX, &fY))
 			{
- 			/*	Dest->Set_Dead();
- 				Sour->Set_Dead();*/
+				/*	Dest->Set_Dead();
+					Sour->Set_Dead();*/
 
-				// 상하 충돌
+					// 상하 충돌
 				if (fX > fY)
 				{
 					// 상 충돌
 					if (Dest->Get_Info().fY > Sour->Get_Info().fY)
 						Sour->Set_PosY(-fY);
-					
+
 					else // 하 충돌
 						Sour->Set_PosY(fY);
 
@@ -88,15 +88,15 @@ bool CCollisionMgr::Check_Rect(CObj* pDest, CObj* pSour, float *pX, float* pY)
 
 		return true;
 	}
-	
+
 	return false;
 }
 
 bool CCollisionMgr::Check_Sphere(CObj* pDest, CObj* pSour)
 {
-	
+
 	// abs : 절대값을 구해주는 함수
-	float	fWidth  = fabs(pDest->Get_Info().fX - pSour->Get_Info().fX);
+	float	fWidth = fabs(pDest->Get_Info().fX - pSour->Get_Info().fX);
 	float	fHeight = fabs(pDest->Get_Info().fY - pSour->Get_Info().fY);
 
 	// sqrt : 루트를 씌워주는 함수
@@ -140,33 +140,17 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	{
 		if (_Dest->Get_Rect().top > 0)
 		{
-			for (int i = _Dest->Get_Rect().top; i < iBottom; ++i)
+			for (int i = _Dest->Get_Rect().top + 16; i < iBottom; ++i)
 			{
-				if ((*(bIsPixel[i] + iLeft + 9)) == true && 
-				    (*(bIsPixel[i] + iMiddleX)) == true )
+				if ((*(bIsPixel[i] + iMiddleX)) == true)
 				{
 					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
 					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
 					float Floor = (float)_Dest->Get_Rect().bottom - i;
 					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-Floor);
 
-
-					break;
+					return;
 				}
-				if ((*(bIsPixel[i] + iRight - 9)) == true &&
-					(*(bIsPixel[i] + iMiddleX)) == true)
-				{
-					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
-					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
-					float Floor = (float)_Dest->Get_Rect().bottom - i;
-					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-Floor);
-					break;
-				}
-				else
-				{
-					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
-				}
-
 			}
 		}
 	}
@@ -178,12 +162,15 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			for (int i = _Dest->Get_Rect().left; i < iRight; ++i)
 			{
-				if ((*(bIsPixel[iTop] + i)) == true)
+				if (dynamic_cast<CPlayer*>(_Dest)->Get_Gravity() != UP_VERTICAL)
 				{
-					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
-					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+					if ((*(bIsPixel[iTop] + i)) == true)
+					{
+						dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
+						dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
 
-					break;
+						return;
+					}
 				}
 
 			}
@@ -198,25 +185,11 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			int iCount = 0;
 
-			for (int i = _Dest->Get_Rect().bottom; i > iTop - 1; --i)
+			for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
 			{
 				if ((*(bIsPixel[i] + iRight)) == true)
 				{
-					if (iCount > 31 && m_eID == TILE_SLIDE)
-					{
-						int rX = i - _Dest->Get_Rect().bottom;
-						int rY = i - dynamic_cast<CPlayer*>(_Dest)->Get_Ground();
-
-						fAngle = atan(rY / rX) * 180 / PI;
-						_Dest->Set_Angle(-fAngle);
-
-						dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(LEFT_HORIZIONAL);
-
-					}
-					else
-					{
-						iCount++;
-					}
+					_Dest->Set_PosX(_Dest->Get_Info().fX - 1);
 				}
 			}
 		}
@@ -251,6 +224,7 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		}
 
 	}
+
 }
 
 void CCollisionMgr::Collision_Tile(CObj * _Dest)
@@ -265,4 +239,56 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 
 	CTile* GetTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
 	m_eID = dynamic_cast<CTile*>(GetTile)->Get_TileID();
+
+	if (m_eID == TILE_NORMAL)
+	{
+		dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(DOWN_VERTICAL);
+		dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+
+	}
+	else if (m_eID == TILE_SLIDE)
+	{
+		dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+		dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(UP_VERTICAL);
+
+		iIndex = (y - 1) * TILEX + x;
+		CTile* GetUpTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
+
+
+	}
+	else if (m_eID == TILE_CIRCLE)
+	{
+
+	}
+	else
+	{
+		iIndex = (y + 1) * TILEX + x;
+		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
+
+		if (GetDownTile->Get_TileID() == TILE_SLIDE)
+		{
+			if (GetTile->Get_Operate() == false)
+			{
+				dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+				dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(UP_VERTICAL);
+			}
+			else
+			{
+				dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(DOWN_VERTICAL);
+				dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+
+			}
+		}
+		else
+		{
+			if (GetDownTile->Get_Operate() == false)
+			{
+				GetDownTile->Set_Operate(true);
+			}
+
+			dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(DOWN_VERTICAL);
+			dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+		}
+
+	}
 }

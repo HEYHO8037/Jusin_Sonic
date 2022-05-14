@@ -26,7 +26,7 @@ public:
 public:
 	bool	Get_Falling() { return m_bFalling; }
 	float	Get_Ground() { return m_fGroundY; }
-
+	GRAVITY_STATE Get_Gravity() { return m_eGravity; }
 
 
 private:

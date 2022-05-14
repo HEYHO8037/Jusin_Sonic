@@ -26,6 +26,7 @@ public:
 	void SetClientResolution(float x, float y);
 	void SetWorldResolution(const RESOLUTION& tRS);
 	void SetWorldResolution(float x, float y);
+	void Scroll(float x, float y);
 
 public:
 	POSITION GetPos() const;
@@ -52,6 +53,11 @@ public:
 		{
 			delete m_pInst;
 		}
+	}
+
+	static CCamera*	Show_Instance()
+	{
+		return m_pInst;
 	}
 };
 

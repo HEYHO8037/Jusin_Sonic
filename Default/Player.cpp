@@ -173,7 +173,7 @@ void CPlayer::Falling(void)
 			m_tInfo.fY -= m_fFalling;
 		}
 
-		if (m_tInfo.fY  + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
+		if (m_tInfo.fY  + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1 && m_eGravity == DOWN_VERTICAL)
 		{
 			m_fFalling = 0.f;
 			m_bFalling = false;
@@ -184,7 +184,7 @@ void CPlayer::Falling(void)
 	{
 		m_fFalling = 0.f;
 
-		if (m_tInfo.fY + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1)
+		if (m_tInfo.fY + m_tInfo.fCY / 2 >= m_fGroundY && m_fGroundY != -1 && m_eGravity == DOWN_VERTICAL)
 		{
 			m_fFalling = 0.f;
 			m_bJump = false;
@@ -199,7 +199,16 @@ void CPlayer::Key_Input(void)
 	// GetKeyState
 	if (GetAsyncKeyState(VK_LEFT))
 	{
-		m_pFrameKey = L"SonicL0";
+
+		if (m_eGravity == UP_VERTICAL)
+		{
+			m_pFrameKey = L"SonicL90";
+		}
+		else
+		{
+			m_pFrameKey = L"SonicL0";
+		}
+
 		if (m_fSpeed > 0) //스피드가 양수 즉 우측일때
 		{
 			m_fSpeed -= DEC;  // 가속
@@ -218,7 +227,17 @@ void CPlayer::Key_Input(void)
 	}
 	else if (GetAsyncKeyState(VK_RIGHT))
 	{
-		m_pFrameKey = L"SonicR0";
+
+		if (m_eGravity == UP_VERTICAL)
+		{
+			m_pFrameKey = L"SonicR90";
+		}
+		else
+		{
+			m_pFrameKey = L"SonicR0";
+
+		}
+
 
 		if (m_fSpeed < 0) //위 코드의 반대
 		{

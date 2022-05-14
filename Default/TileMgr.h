@@ -48,5 +48,6 @@ private:
 	vector<CObj*>			m_vecTile;
 	bool					m_bTotalPixel[TILECY * TILEY][TILECX * TILEX];
 	CMyBmp* m_BmpRGB;
+	CMyBmp* m_CollisionBmpRGB;
 };
 

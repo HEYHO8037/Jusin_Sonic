@@ -23,7 +23,7 @@
 #define		TOTALTILEX 1024
 #define		TOTALTILEY 1536
 
-#define		BACKGROUNDX 1024
+#define		BACKGROUNDX 4036
 #define		BACKGROUNDY 768
 
 
