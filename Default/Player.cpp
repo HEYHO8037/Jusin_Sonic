@@ -38,7 +38,12 @@ void CPlayer::Initialize(void)
 	m_bFalling = true;
 	m_fGroundY = -1.f;
 	m_eGravity = DOWN_VERTICAL;
+	m_bIsCircle = false;
 	m_tPivot = POSITION(0.5, 0.5);
+	m_fAngle = 90.f;
+
+	m_fCircleX = 0;
+	m_fCircleY = 0;
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR0.bmp", L"SonicR0");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR45.bmp", L"SonicR45");
@@ -77,6 +82,11 @@ int CPlayer::Update(void)
 	Key_Input();
 	Jumping();
 	Falling();
+
+	if (m_fCircleX)
+	{
+		Circling();
+	}
 
 
 	// 모든 연산이 끝난 뒤에 최종적인 좌표를 완성
@@ -193,6 +203,67 @@ void CPlayer::Falling(void)
 		}
 	}
 }
+
+void CPlayer::Circling(void)
+{
+	if (m_fAngle >= 45 && m_fAngle < 90)
+	{
+		m_pFrameKey = L"SonicR45";
+		m_eCurState = RUN;
+	}
+	else if (m_fAngle >= 90 && m_fAngle < 135)
+	{
+		m_pFrameKey = L"SonicR90";
+		m_eCurState = RUN;
+	}
+	else if (m_fAngle >= 135 && m_fAngle < 180)
+	{
+		m_pFrameKey = L"SonicR135";
+		m_eCurState = RUN;
+	}
+	else if (m_fAngle >= 180 && m_fAngle < 225)
+	{
+		m_pFrameKey = L"SonicR180";
+		m_eCurState = RUN;
+
+	}
+	else if (m_fAngle >= 225 && m_fAngle < 270)
+	{
+		m_pFrameKey = L"SonicR225";
+		m_eCurState = RUN;
+
+	}
+	else if (m_fAngle >= 270 && m_fAngle < 315)
+	{
+		m_pFrameKey = L"SonicR270";
+		m_eCurState = RUN;
+	}
+	else if (m_fAngle >= 315 && m_fAngle < 415)
+	{
+		m_pFrameKey = L"SonicR315";
+		m_eCurState = RUN;
+	}
+	else
+	{
+		m_pFrameKey = L"SonicR0";
+	}
+
+	m_tInfo.fX += 7 * sinf(RADIAN * m_fAngle);
+	m_tInfo.fY += 6 * cosf(RADIAN * m_fAngle);
+
+
+	m_fAngle += 5;
+
+	if ((int)m_fAngle % 450 == 0)
+	{
+		m_fAngle = 0.f;
+		m_fCircleX = 0.f;
+		m_fCircleY = 0.f;
+	}
+
+
+}
+
 
 void CPlayer::Key_Input(void)
 {

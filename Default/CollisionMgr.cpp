@@ -4,6 +4,8 @@
 #include "Player.h"
 
 TILEID	CCollisionMgr::m_eID = TILE_END;
+bool	CCollisionMgr::m_bCircleCircle = false;
+CTile*  CCollisionMgr::saveTile = nullptr;
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -135,6 +137,8 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	int iLeft = _Dest->Get_Rect().left;
 	int iMiddleX = (int)_Dest->Get_Info().fX;
 
+
+
 	// 하단 충돌
 	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
 	{
@@ -142,14 +146,22 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			for (int i = _Dest->Get_Rect().top + 16; i < iBottom; ++i)
 			{
-				if ((*(bIsPixel[i] + iMiddleX)) == true)
+				if (dynamic_cast<CPlayer*>(_Dest)->Get_CirclePosX() != 0)
 				{
-					dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
-					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
-					float Floor = (float)_Dest->Get_Rect().bottom - i;
-					dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-Floor);
-
 					return;
+				}
+				else
+				{
+
+					if ((*(bIsPixel[i] + iMiddleX)) == true)
+					{
+						dynamic_cast<CPlayer*>(_Dest)->Set_Falling(false);
+						dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(false);
+						float Floor = (float)_Dest->Get_Rect().bottom - i;
+						dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-Floor);
+
+						return;
+					}
 				}
 			}
 		}
@@ -258,6 +270,28 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 	}
 	else if (m_eID == TILE_CIRCLE)
 	{
+
+		iIndex = (y + 1) * TILEX + x;
+		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
+
+		if (saveTile != GetDownTile)
+		{
+			saveTile = nullptr;
+
+			if (GetDownTile->Get_TileID() == TILE_CIRCLE && saveTile == nullptr)
+			{
+				bool bMask = GetDownTile->Get_Mask();
+				saveTile = GetDownTile;
+				GetDownTile->Set_Mask(!bMask);
+			}
+		}
+
+		if (GetTile->Get_Mask() == false && m_bCircleCircle == false)
+		{
+			_Dest->Set_Speed(0.f);
+			dynamic_cast<CPlayer*>(_Dest)->Set_CirclePos(GetTile->Get_Rect().left, GetTile->Get_Rect().top);
+			m_bCircleCircle = true;
+		}
 
 	}
 	else

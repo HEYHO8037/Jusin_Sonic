@@ -29,7 +29,7 @@ public:
 	{
 		return BmpData[4 * ((y*TOTALTILEX) + x) + 2];
 	}
-
+	
 private:
 	BYTE*		BmpData;
 	HDC			m_hMemDC;

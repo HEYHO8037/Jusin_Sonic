@@ -26,6 +26,9 @@
 #define		BACKGROUNDX 4036
 #define		BACKGROUNDY 768
 
+#define		RADIAN		PI / 180
+
+
 
 
 #define ACC 0.046875 //°¡¼Ó·Â

@@ -28,6 +28,8 @@ public:
 	
 	void		Set_Mask(bool bIsMask) { m_bIsCheck = false;  m_bIsMask = bIsMask; }
 	bool		Get_Mask() { return m_bIsMask; }
+
+
 public:
 	const TILEID		Get_TileID() { return m_eTileID; }
 

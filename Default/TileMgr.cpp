@@ -123,18 +123,20 @@ void CTileMgr::Save_Tile(void)
 	int		iDrawID = 0, iOption = 0;
 	DWORD	dwByte = 0;
 	TILEID	eID;
+	bool	bIsMask = false;
 
 	for (auto& iter : m_vecTile)
 	{
 		iDrawID = dynamic_cast<CTile*>(iter)->Get_DrawID();
 		iOption = dynamic_cast<CTile*>(iter)->Get_Option();
 		eID = dynamic_cast<CTile*>(iter)->Get_TileID();
+		bIsMask = dynamic_cast<CTile*>(iter)->Get_Mask();
 
 		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
 		WriteFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
 		WriteFile(hFile, &iOption, sizeof(int), &dwByte, NULL);
 		WriteFile(hFile, &eID, sizeof(TILEID), &dwByte, NULL);
-
+		WriteFile(hFile, &bIsMask, sizeof(bool), &dwByte, NULL);
 	}
 
 	CloseHandle(hFile);
@@ -147,6 +149,7 @@ void CTileMgr::Load_Tile(void)
 	int			iDrawID = 0, iOption = 0;
 	DWORD		dwByte = 0;
 	TILEID		eID = TILE_END;
+	bool	bIsMask = false;
 
 	Release();
 	
@@ -156,6 +159,7 @@ void CTileMgr::Load_Tile(void)
 		ReadFile(hFile, &iDrawID, sizeof(int), &dwByte, NULL);
 		ReadFile(hFile, &iOption, sizeof(int), &dwByte, NULL);
 		ReadFile(hFile, &eID, sizeof(TILEID), &dwByte, NULL);
+		ReadFile(hFile, &bIsMask, sizeof(bool), &dwByte, NULL);
 
 		if (0 == dwByte)
 			break;
@@ -165,6 +169,7 @@ void CTileMgr::Load_Tile(void)
 		dynamic_cast<CTile*>(pObj)->Set_DrawID(iDrawID);
 		dynamic_cast<CTile*>(pObj)->Set_Option(iOption);
 		dynamic_cast<CTile*>(pObj)->Set_TileID(eID);
+		dynamic_cast<CTile*>(pObj)->Set_Mask(bIsMask);
 
 		m_vecTile.push_back(pObj);
 

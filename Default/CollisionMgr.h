@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Obj.h"
+#include "Tile.h"
 
 class CCollisionMgr
 {
@@ -19,5 +20,7 @@ public:
 
 private:
 	static TILEID	m_eID;
+	static bool		m_bCircleCircle;
+	static CTile*	saveTile;
 };
 
