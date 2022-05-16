@@ -10,6 +10,7 @@ private:
 
 public:
 	CObj*		Get_Player() { return m_ObjList[OBJ_PLAYER].front(); }
+	list<CObj*>* Get_OBJType(OBJID eID) { return &m_ObjList[eID]; }
 	CObj*		Get_Target(OBJID eID, CObj* pObj);
 
 public:

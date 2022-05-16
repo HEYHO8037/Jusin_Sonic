@@ -42,7 +42,7 @@
 
 //Sonic's Airborne Speed Constants ( 공중 스피드 관련값 )
 #define AIR 0.09375 // 공기저항계수
-#define JUMP 6.5 // 점프력
+#define JUMP 15 // 점프력
 #define GRAVITY 0.21875 // 중력값
 
 

@@ -89,6 +89,7 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 
@@ -110,6 +111,7 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 
@@ -131,6 +133,7 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 
@@ -153,6 +156,8 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
+
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing('Q'))
@@ -172,7 +177,8 @@ void CMyEdit::Key_Input(void)
 		int	iIndex = y * TILEX + x;
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
+		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDEUP);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 
@@ -194,6 +200,7 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 
@@ -236,6 +243,7 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 
@@ -258,6 +266,7 @@ void CMyEdit::Key_Input(void)
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
 		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
 	}
 

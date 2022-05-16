@@ -94,6 +94,18 @@
     <Filter Include="03. Camera">
       <UniqueIdentifier>{d5620ead-d503-448d-9feb-ec484466eb52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\08. Ring">
+      <UniqueIdentifier>{9268796d-39dd-4eb9-addc-6e38a7d25cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\09. Spike">
+      <UniqueIdentifier>{ebd8201c-e404-4726-aee8-f929bd62cec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\10. Spring">
+      <UniqueIdentifier>{08458968-8afc-4b01-95d3-44fce99bf345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\11. Goal">
+      <UniqueIdentifier>{c8f735ac-9a87-4806-a1fe-c68b400753e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -201,6 +213,18 @@
     <ClInclude Include="Camera.h">
       <Filter>03. Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Ring.h">
+      <Filter>01. Obj\08. Ring</Filter>
+    </ClInclude>
+    <ClInclude Include="Spike.h">
+      <Filter>01. Obj\09. Spike</Filter>
+    </ClInclude>
+    <ClInclude Include="Spring.h">
+      <Filter>01. Obj\10. Spring</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>01. Obj\11. Goal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -280,6 +304,18 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>03. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Ring.cpp">
+      <Filter>01. Obj\08. Ring</Filter>
+    </ClCompile>
+    <ClCompile Include="Spike.cpp">
+      <Filter>01. Obj\09. Spike</Filter>
+    </ClCompile>
+    <ClCompile Include="Spring.cpp">
+      <Filter>01. Obj\10. Spring</Filter>
+    </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>01. Obj\11. Goal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

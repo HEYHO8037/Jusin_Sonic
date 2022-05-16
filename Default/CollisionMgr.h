@@ -16,7 +16,13 @@ public:
 	static void		Collision_RectEx(list<CObj*> _Dest, list<CObj*> _Sour);
 	static void		Collision_Sphere(list<CObj*> _Dest, list<CObj*> _Sour);
 	static void		Collision_Pixel(CObj* _Dest);
+	
+public:
 	static void		Collision_Tile(CObj* _Dest);
+	static void		Collision_Player_Ring(CObj* _Dest, list<CObj*>* _Sour);
+	static void		Collision_Player_Spike(CObj* _Dest, list<CObj*>* _Sour);
+	static void		Collision_Player_Spring(CObj* _Dest, list<CObj*>* _Sour);
+	static void		Collision_Player_Point(CObj* _Dest, list<CObj*>* _Sour);
 
 private:
 	static TILEID	m_eID;

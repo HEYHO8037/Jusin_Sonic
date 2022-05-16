@@ -8,7 +8,10 @@
 #include "TileMgr.h"
 #include "CollisionMgr.h"
 #include "Camera.h"
-
+#include "Ring.h"
+#include "Spike.h"
+#include "Goal.h"
+#include "Spring.h"
 
 CStage::CStage()
 {
@@ -24,8 +27,12 @@ void CStage::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
 	CTileMgr::Get_Instance()->Load_Tile();
+	
 	CObj* pPlayer = CAbstractFactory<CPlayer>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, pPlayer);
+	
+	CObj* pRing = CAbstractFactory<CRing>::Create();
+	CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
 
 	CCamera::Get_Instance()->SetTarget(pPlayer);
 	CCamera::Get_Instance()->SetPivot(0.8f, 0.3f);
@@ -40,6 +47,12 @@ void CStage::Update(void)
 	CObjMgr::Get_Instance()->Update();
 	CCollisionMgr::Collision_Tile(CObjMgr::Get_Instance()->Get_Player());
 	CCollisionMgr::Collision_Pixel(CObjMgr::Get_Instance()->Get_Player());
+	CCollisionMgr::Collision_Player_Ring(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_ITEM));
+	CCollisionMgr::Collision_Player_Spike(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_SPIKE));
+	CCollisionMgr::Collision_Player_Spring(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_SPRING));
+	CCollisionMgr::Collision_Player_Point(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_POINT));
+
+	
 	CCamera::Get_Instance()->Update();
 
 }

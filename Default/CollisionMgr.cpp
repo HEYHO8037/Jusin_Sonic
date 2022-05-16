@@ -2,6 +2,7 @@
 #include "CollisionMgr.h"
 #include "TileMgr.h"
 #include "Player.h"
+#include "Spring.h"
 
 TILEID	CCollisionMgr::m_eID = TILE_END;
 bool	CCollisionMgr::m_bCircleCircle = false;
@@ -195,8 +196,6 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	{
 		if (_Dest->Get_Rect().top > 0)
 		{
-			int iCount = 0;
-
 			for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
 			{
 				if ((*(bIsPixel[i] + iRight)) == true)
@@ -212,31 +211,18 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	{
 		if (_Dest->Get_Rect().top > 0)
 		{
-			int iCount = 0;
-
-			for (int i = _Dest->Get_Rect().bottom; i < iTop - 1; --i)
+			if (m_eID == TILE_SLIDE)
 			{
-				if ((*(bIsPixel[i] + iLeft)) == true)
+				for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
 				{
-					iCount++;
-				}
-			}
-
-			if (iCount > 31)
-			{
-				if (m_eID == TILE_SLIDE)
-				{
-
-				}
-				else
-				{
-					dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+					if ((*(bIsPixel[i] + iRight)) == true)
+					{
+						_Dest->Set_PosX(_Dest->Get_Info().fX - 1);
+					}
 				}
 			}
 		}
-
 	}
-
 }
 
 void CCollisionMgr::Collision_Tile(CObj * _Dest)
@@ -260,17 +246,17 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 	}
 	else if (m_eID == TILE_SLIDE)
 	{
+		_Dest->Set_Speed(0.f);
+		dynamic_cast<CPlayer*>(_Dest)->Set_QuatorCircle(true);
+	}
+	else if (m_eID == TILE_SLIDEUP)
+	{
 		dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
 		dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(UP_VERTICAL);
-
-		iIndex = (y - 1) * TILEX + x;
-		CTile* GetUpTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
-
 
 	}
 	else if (m_eID == TILE_CIRCLE)
 	{
-
 		iIndex = (y + 1) * TILEX + x;
 		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
 
@@ -299,7 +285,7 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 		iIndex = (y + 1) * TILEX + x;
 		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
 
-		if (GetDownTile->Get_TileID() == TILE_SLIDE)
+		if (GetDownTile->Get_TileID() == TILE_SLIDEUP)
 		{
 			if (GetTile->Get_Operate() == false)
 			{
@@ -325,4 +311,83 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 		}
 
 	}
+}
+
+void CCollisionMgr::Collision_Player_Ring(CObj * _Dest, list<CObj*>* _Sour)
+{
+	RECT rc{};
+
+	list<CObj*>::iterator iter = _Sour->begin();
+	list<CObj*>::iterator iterEnd = _Sour->end();
+
+	for (iter = _Sour->begin(); iter != iterEnd; ++iter)
+	{
+		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
+		{
+			dynamic_cast<CPlayer*>(_Dest)->Add_Ring();
+			(*iter)->Set_Dead();
+		}
+	}
+
+}
+
+void CCollisionMgr::Collision_Player_Spike(CObj * _Dest, list<CObj*>* _Sour)
+{
+	RECT rc{};
+
+	list<CObj*>::iterator iter = _Sour->begin();
+	list<CObj*>::iterator iterEnd = _Sour->end();
+
+	for (iter = _Sour->begin(); iter != iterEnd; ++iter)
+	{
+		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
+		{
+			dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+			dynamic_cast<CPlayer*>(_Dest)->Set_PosAddX(-50.f);
+			dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-20.f);
+
+		}
+	}
+
+}
+
+void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
+{
+	RECT rc{};
+
+	list<CObj*>::iterator iter = _Sour->begin();
+	list<CObj*>::iterator iterEnd = _Sour->end();
+
+	for (iter = _Sour->begin(); iter != iterEnd; ++iter)
+	{
+		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
+		{
+			dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
+			dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+			dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
+
+		}
+		else
+		{
+			dynamic_cast<CSpring*>(*iter)->Reset_iDrawID();
+		}
+	}
+}
+
+void CCollisionMgr::Collision_Player_Point(CObj * _Dest, list<CObj*>* _Sour)
+{
+	RECT rc{};
+
+	list<CObj*>::iterator iter = _Sour->begin();
+	list<CObj*>::iterator iterEnd = _Sour->end();
+
+	for (iter = _Sour->begin(); iter != iterEnd; ++iter)
+	{
+		if (_Dest->Get_Info().fX > (*iter)->Get_Info().fX)
+		{
+			dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
+			dynamic_cast<CPlayer*>(_Dest)->Set_IsGetPoint(true);
+		}
+	}
+
 }

@@ -21,7 +21,7 @@ CPlayer::~CPlayer()
 void CPlayer::Initialize(void)
 {
 	m_tInfo.fX = 100.f;
-	m_tInfo.fY = 10.f;
+	m_tInfo.fY = 500.f;
 
 	m_tInfo.fCX = 64.f;
 	m_tInfo.fCY = 64.f;
@@ -41,6 +41,13 @@ void CPlayer::Initialize(void)
 	m_bIsCircle = false;
 	m_tPivot = POSITION(0.5, 0.5);
 	m_fAngle = 90.f;
+
+	m_bIsGetPoint = false;
+	m_bIsRunStart = false;
+	m_bIsRollingStart = false;
+	m_bIsRolling = false;
+	m_bIsQuatorCircle = false;
+
 
 	m_fCircleX = 0;
 	m_fCircleY = 0;
@@ -71,6 +78,8 @@ void CPlayer::Initialize(void)
 	m_tFrame.iMotion = 1;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
+
+	m_iRing = 0;
 }
 
 int CPlayer::Update(void)
@@ -78,10 +87,20 @@ int CPlayer::Update(void)
 	if (m_bDead)
 		return OBJ_DEAD;
 
+	if (m_bIsGetPoint)
+	{
+		return OBJ_NOEVENT;
+	}
+
 	// 연산을 진행
 	Key_Input();
 	Jumping();
 	Falling();
+
+	if (m_bIsQuatorCircle)
+	{
+		QuaterCircling();
+	}
 
 	if (m_fCircleX)
 	{
@@ -204,48 +223,229 @@ void CPlayer::Falling(void)
 	}
 }
 
-void CPlayer::Circling(void)
+void CPlayer::QuaterCircling(void)
 {
 	if (m_fAngle >= 45 && m_fAngle < 90)
 	{
 		m_pFrameKey = L"SonicR45";
-		m_eCurState = RUN;
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 	}
 	else if (m_fAngle >= 90 && m_fAngle < 135)
 	{
 		m_pFrameKey = L"SonicR90";
-		m_eCurState = RUN;
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 	}
 	else if (m_fAngle >= 135 && m_fAngle < 180)
 	{
 		m_pFrameKey = L"SonicR135";
-		m_eCurState = RUN;
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 	}
 	else if (m_fAngle >= 180 && m_fAngle < 225)
 	{
 		m_pFrameKey = L"SonicR180";
-		m_eCurState = RUN;
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 
 	}
 	else if (m_fAngle >= 225 && m_fAngle < 270)
 	{
 		m_pFrameKey = L"SonicR225";
-		m_eCurState = RUN;
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 
 	}
 	else if (m_fAngle >= 270 && m_fAngle < 315)
 	{
 		m_pFrameKey = L"SonicR270";
-		m_eCurState = RUN;
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 	}
 	else if (m_fAngle >= 315 && m_fAngle < 415)
 	{
 		m_pFrameKey = L"SonicR315";
-		m_eCurState = RUN;
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 	}
 	else
 	{
 		m_pFrameKey = L"SonicR0";
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+	}
+
+	m_tInfo.fX += 2 * sinf(RADIAN * m_fAngle);
+	m_tInfo.fY += 3 * cosf(RADIAN * m_fAngle);
+
+
+	m_fAngle += 5;
+
+	if ((int)m_fAngle % 180 == 0)
+	{
+		m_fAngle = 90.f;
+		m_bIsQuatorCircle = false;
+	}
+
+
+}
+
+void CPlayer::Circling(void)
+{
+	if (m_fAngle >= 45 && m_fAngle < 90)
+	{
+		m_pFrameKey = L"SonicR45";
+		
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+	}
+	else if (m_fAngle >= 90 && m_fAngle < 135)
+	{
+		m_pFrameKey = L"SonicR90";
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+	}
+	else if (m_fAngle >= 135 && m_fAngle < 180)
+	{
+		m_pFrameKey = L"SonicR135";
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+	}
+	else if (m_fAngle >= 180 && m_fAngle < 225)
+	{
+		m_pFrameKey = L"SonicR180";
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+
+	}
+	else if (m_fAngle >= 225 && m_fAngle < 270)
+	{
+		m_pFrameKey = L"SonicR225";
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+
+	}
+	else if (m_fAngle >= 270 && m_fAngle < 315)
+	{
+		m_pFrameKey = L"SonicR270";
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+	}
+	else if (m_fAngle >= 315 && m_fAngle < 415)
+	{
+		m_pFrameKey = L"SonicR315";
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
+	}
+	else
+	{
+		m_pFrameKey = L"SonicR0";
+
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else
+		{
+			m_eCurState = RUN;
+		}
 	}
 
 	m_tInfo.fX += 7 * sinf(RADIAN * m_fAngle);
@@ -256,12 +456,10 @@ void CPlayer::Circling(void)
 
 	if ((int)m_fAngle % 450 == 0)
 	{
-		m_fAngle = 0.f;
+		m_fAngle = 90.f;
 		m_fCircleX = 0.f;
 		m_fCircleY = 0.f;
 	}
-
-
 }
 
 
@@ -286,7 +484,7 @@ void CPlayer::Key_Input(void)
 			if (m_fSpeed <= 0)
 				m_fSpeed = -1.0;  //스피드가 남아있을경우 빠르게 감속을 시켜버림
 		}
-		else if (m_fSpeed > -TOPXSPEED) //스피드가 음수 즉 좌측
+		else if (m_fSpeed > -TOPXSPEED && m_eCurState != ROLLING) //스피드가 음수 즉 좌측
 		{
 			m_fSpeed -= ACC;  // 가속
 			m_eCurState = RUN;
@@ -294,7 +492,10 @@ void CPlayer::Key_Input(void)
 				m_fSpeed = -TOPXSPEED; //최고 속력까지만 움직이도록 함
 		}
 
-
+		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
+		{
+			m_bJump = true;
+		}
 	}
 	else if (GetAsyncKeyState(VK_RIGHT))
 	{
@@ -306,9 +507,7 @@ void CPlayer::Key_Input(void)
 		else
 		{
 			m_pFrameKey = L"SonicR0";
-
 		}
-
 
 		if (m_fSpeed < 0) //위 코드의 반대
 		{
@@ -316,12 +515,17 @@ void CPlayer::Key_Input(void)
 			if (m_fSpeed >= 0)
 				m_fSpeed = 1.0;
 		}
-		else if (m_fSpeed < TOPXSPEED)
+		else if (m_fSpeed < TOPXSPEED && m_eCurState != ROLLING)
 		{
 			m_fSpeed += ACC;
 			m_eCurState = RUN;
 			if (m_fSpeed >= TOPXSPEED)
 				m_fSpeed = TOPXSPEED;
+		}
+
+		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
+		{
+			m_bJump = true;
 		}
 
 	
@@ -331,6 +535,22 @@ void CPlayer::Key_Input(void)
 		m_bJump = true;
 	}
 
+	else if (GetAsyncKeyState(VK_DOWN))
+	{
+		if (!m_bIsRollingStart)
+		{
+			m_eCurState = ROLLSTART;
+			if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
+			{
+				m_bIsRollingStart = true;;
+			}
+		}
+		else if (m_bIsRollingStart)
+		{
+			m_eCurState = ROLLING;
+		}
+
+	}
 	else
 	{
 		m_fSpeed -= fminf(fabsf(m_fSpeed), FRC) * sinf(m_fSpeed); // 키보드 입력을 안 받을시 감속
@@ -339,13 +559,19 @@ void CPlayer::Key_Input(void)
 		{
 			m_eCurState = IDLE;
 		}
+		else if(m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
 		else
 		{
-			m_eCurState = STOPRUN;
+			m_eCurState = RUN;
 		}
 	}
 
+
 	m_tInfo.fX += m_fSpeed;
+
 }
 
 void CPlayer::Jumping(void)
@@ -355,10 +581,12 @@ void CPlayer::Jumping(void)
 		if (m_fJumpPower >= m_fPower)
 		{
 			m_tInfo.fY -= m_fPower;
-			m_fJumpTime += 0.5f;
+			m_fPower += 0.5f;
 		}
 		else
 		{
+			m_fJumpPower = JUMP;
+			m_fPower = 0;
 			m_bJump = false;
 			m_bFalling = true;
 		}
@@ -378,7 +606,6 @@ void CPlayer::Motion_Change(void)
 			m_tFrame.iMotion = 0;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
-
 			break;
 
 		case STARTRUN:
@@ -410,6 +637,14 @@ void CPlayer::Motion_Change(void)
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 3;
 			m_tFrame.iMotion = 9;
+			m_tFrame.dwSpeed = 200;
+			m_tFrame.dwTime = GetTickCount();
+			break;
+
+		case CHARGEROLLING:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.iMotion = 4;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
 			break;
