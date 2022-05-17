@@ -4,9 +4,6 @@
 class CPlayer : public CObj
 {
 public:
-	enum STATE  { IDLE, STARTRUN, RUN, STOPRUN, ROLLSTART, CHARGEROLLING, ROLLING, ROLLEND, HIT, DEAD, END };
-
-public:
 	CPlayer();
 	virtual ~CPlayer();
 
@@ -29,6 +26,7 @@ public:
 	void	Set_JumpPower(float fPower) { m_fJumpPower = fPower; }
 	void	Set_QuatorCircle(bool bCircle) { m_bIsQuatorCircle = bCircle; }
 	void	Set_SaveSpeed() { m_fSaveSpeed = m_fSpeed; }
+	void	Set_CurState(STATE eState) { m_eCurState = eState; }
 
 public:
 	bool	Get_QuatorCircle() { return m_bIsQuatorCircle; }
@@ -38,7 +36,7 @@ public:
 	GRAVITY_STATE Get_Gravity() { return m_eGravity; }
 	float	Get_CirclePosX() { return m_fCircleX;  }
 	int		Get_Ring() { return m_iRing; }
-	float	Get_SaveSpeed() { return m_fSaveSpeed;  }
+	void	Get_SaveSpeed() { m_fSpeed = m_fSaveSpeed;  }
 
 private:
 	void		QuaterCircling(void);

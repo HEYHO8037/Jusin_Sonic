@@ -17,8 +17,8 @@ void CSpike::Initialize(void)
 	m_tInfo.fCX = 31.f;
 	m_tInfo.fCY = 31.f;
 
-	m_tInfo.fX = 200;
-	m_tInfo.fY = 550;
+	m_tInfo.fX = 300;
+	m_tInfo.fY = 450;
 
 	m_tPivot = POSITION(0.5, 0.5);
 

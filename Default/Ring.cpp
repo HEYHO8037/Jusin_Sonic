@@ -19,7 +19,7 @@ void CRing::Initialize(void)
 	m_tInfo.fCY = 16.f;
 
 	m_tInfo.fX = 200;
-	m_tInfo.fY = 500;
+	m_tInfo.fY = 400;
 
 	m_tPivot = POSITION(0.5, 0.5);
 

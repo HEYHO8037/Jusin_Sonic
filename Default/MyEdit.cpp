@@ -5,6 +5,9 @@
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
 #include "Camera.h"
+#include "ObjMgr.h"
+#include "AbstractFactory.h"
+#include "Ring.h"
 
 
 CMyEdit::CMyEdit()
@@ -21,18 +24,20 @@ void CMyEdit::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
 	CTileMgr::Get_Instance()->Initialize();
+
 }
 
 void CMyEdit::Update(void)
 {
 	CTileMgr::Get_Instance()->Update();
-
+	CObjMgr::Get_Instance()->Update();
 	Key_Input();
 }
 
 void CMyEdit::Late_Update(void)
 {
 	CTileMgr::Get_Instance()->Late_Update();
+	CObjMgr::Get_Instance()->Late_Update();
 }
 
 void CMyEdit::Render(HDC hDC)
@@ -46,11 +51,13 @@ void CMyEdit::Render(HDC hDC)
 
 	
 	CTileMgr::Get_Instance()->Render(hDC);
+	CObjMgr::Get_Instance()->Render(hDC);
 }
 
 void CMyEdit::Release(void)
 {
 	CTileMgr::Get_Instance()->Destroy_Instance();
+	CObjMgr::Get_Instance()->Destroy_Instance();
 }
 
 void CMyEdit::Move_Frame(void)
@@ -270,6 +277,20 @@ void CMyEdit::Key_Input(void)
 
 	}
 
+
+	if (CKeyMgr::Get_Instance()->Key_Down('1'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pRing = CAbstractFactory<CRing>::Create(pt.x, pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
+
+	}
 
 
 

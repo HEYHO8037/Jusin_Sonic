@@ -17,8 +17,8 @@ void CSpring::Initialize(void)
 	m_tInfo.fCX = 32.f;
 	m_tInfo.fCY = 32.f;
 
-	m_tInfo.fX = 200;
-	m_tInfo.fY = 550;
+	m_tInfo.fX = 500;
+	m_tInfo.fY = 450;
 
 	m_iDrawID = 0;
 	m_iOption = 0;

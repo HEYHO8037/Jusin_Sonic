@@ -34,6 +34,16 @@ void CStage::Initialize(void)
 	CObj* pRing = CAbstractFactory<CRing>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
 
+	//pRing = CAbstractFactory<CSpring>::Create();
+	//CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pRing);
+
+	pRing = CAbstractFactory<CSpike>::Create();
+	CObjMgr::Get_Instance()->Add_Object(OBJ_SPIKE, pRing);
+
+	//pRing = CAbstractFactory<CGoal>::Create();
+	//CObjMgr::Get_Instance()->Add_Object(OBJ_POINT, pRing);
+
+
 	CCamera::Get_Instance()->SetTarget(pPlayer);
 	CCamera::Get_Instance()->SetPivot(0.8f, 0.3f);
 	CCamera::Get_Instance()->SetClientResolution(WINCX, WINCY);

@@ -456,6 +456,7 @@ void CPlayer::Circling(void)
 
 	if ((int)m_fAngle % 450 == 0)
 	{
+		m_fSpeed = m_fSaveSpeed;
 		m_fAngle = 90.f;
 		m_fCircleX = 0.f;
 		m_fCircleY = 0.f;
@@ -480,9 +481,9 @@ void CPlayer::Key_Input(void)
 
 		if (m_fSpeed > 0) //스피드가 양수 즉 우측일때
 		{
-			m_fSpeed -= DEC;  // 가속
+			m_fSpeed -= DEC;  // 감속
 			if (m_fSpeed <= 0)
-				m_fSpeed = -1.0;  //스피드가 남아있을경우 빠르게 감속을 시켜버림
+				m_fSpeed = 0.0;  //스피드가 남아있을경우 빠르게 감속을 시켜버림
 		}
 		else if (m_fSpeed > -TOPXSPEED && m_eCurState != ROLLING) //스피드가 음수 즉 좌측
 		{
@@ -513,7 +514,7 @@ void CPlayer::Key_Input(void)
 		{
 			m_fSpeed += DEC;
 			if (m_fSpeed >= 0)
-				m_fSpeed = 1.0;
+				m_fSpeed = 0.0;
 		}
 		else if (m_fSpeed < TOPXSPEED && m_eCurState != ROLLING)
 		{
@@ -559,14 +560,16 @@ void CPlayer::Key_Input(void)
 		{
 			m_eCurState = IDLE;
 		}
-		else if(m_eCurState == ROLLING)
-		{
-			m_eCurState = ROLLING;
-		}
 		else
 		{
 			m_eCurState = RUN;
 		}
+		
+		if(m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+
 	}
 
 

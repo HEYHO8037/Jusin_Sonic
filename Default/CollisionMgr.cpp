@@ -198,8 +198,9 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 		{
 			for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
 			{
-				if ((*(bIsPixel[i] + iRight)) == true)
+				if ((*(bIsPixel[i] + (iRight - 13))) == true)
 				{
+					_Dest->Set_Speed(0.f);
 					_Dest->Set_PosX(_Dest->Get_Info().fX - 1);
 				}
 			}
@@ -211,16 +212,16 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	{
 		if (_Dest->Get_Rect().top > 0)
 		{
-			if (m_eID == TILE_SLIDE)
+
+			for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
 			{
-				for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
+				if ((*(bIsPixel[i] + (iLeft + 13))) == true)
 				{
-					if ((*(bIsPixel[i] + iRight)) == true)
-					{
-						_Dest->Set_PosX(_Dest->Get_Info().fX - 1);
-					}
+					_Dest->Set_Speed(0.f);
+					_Dest->Set_PosX(_Dest->Get_Info().fX);
 				}
 			}
+
 		}
 	}
 }
@@ -274,6 +275,7 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 
 		if (GetTile->Get_Mask() == false && m_bCircleCircle == false)
 		{
+			dynamic_cast<CPlayer*>(_Dest)->Set_SaveSpeed();
 			_Dest->Set_Speed(0.f);
 			dynamic_cast<CPlayer*>(_Dest)->Set_CirclePos(GetTile->Get_Rect().left, GetTile->Get_Rect().top);
 			m_bCircleCircle = true;
@@ -342,10 +344,8 @@ void CCollisionMgr::Collision_Player_Spike(CObj * _Dest, list<CObj*>* _Sour)
 	{
 		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
 		{
-			dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
-			dynamic_cast<CPlayer*>(_Dest)->Set_PosAddX(-50.f);
-			dynamic_cast<CPlayer*>(_Dest)->Set_PosAddY(-20.f);
-
+			float fSpeed = dynamic_cast<CPlayer*>(_Dest)->Get_Speed();
+			dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 2));
 		}
 	}
 
