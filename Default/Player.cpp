@@ -336,6 +336,7 @@ void CPlayer::QuaterCircling(void)
 
 	if ((int)m_fAngle % 180 == 0)
 	{
+		m_fSpeed = (m_fSaveSpeed / 2);
 		m_fAngle = 90.f;
 		m_bIsQuatorCircle = false;
 	}

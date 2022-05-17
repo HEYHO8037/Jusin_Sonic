@@ -1,55 +1,53 @@
 #include "stdafx.h"
-#include "Goal.h"
+#include "Mushroom.h"
 #include "Camera.h"
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
 
-
-CGoal::CGoal()
+CMushroom::CMushroom()
 {
 }
 
-CGoal::~CGoal()
+
+CMushroom::~CMushroom()
 {
 }
 
-void CGoal::Initialize(void)
+void CMushroom::Initialize(void)
 {
 	m_tInfo.fY -= 62;
 
-	m_tInfo.fCX = 47.f;
-	m_tInfo.fCY = 47.f;
+	m_tInfo.fCX = 60.f;
+	m_tInfo.fCY = 60.f;
 
 	m_tPivot = POSITION(0.5, 0.5);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Sign.bmp", L"Sign");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Spring.bmp", L"Mushroom");
 
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 8;
+	m_tFrame.iFrameEnd = 11;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
 
 }
 
-int CGoal::Update(void)
+int CMushroom::Update(void)
 {
-	
 	Update_Rect();
 	return 0;
 }
 
-void CGoal::Late_Update(void)
+void CMushroom::Late_Update(void)
 {
-	Move_Frame();
 }
 
-void CGoal::Render(HDC hDC)
+void CMushroom::Render(HDC hDC)
 {
 	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Sign");
+	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Mushroom");
 
 	if (CCamera::Show_Instance() != nullptr)
 	{
@@ -64,8 +62,8 @@ void CGoal::Render(HDC hDC)
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
-			(int)m_tInfo.fCX * m_tFrame.iFrameStart,								// 비트맵 출력 시작 좌표, X,Y
-			(int)m_tInfo.fCY * m_tFrame.iMotion,
+			(int)m_tInfo.fCX,								// 비트맵 출력 시작 좌표, X,Y
+			(int)m_tInfo.fCY,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255));
@@ -78,15 +76,15 @@ void CGoal::Render(HDC hDC)
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
-			(int)m_tInfo.fCX * m_tFrame.iFrameStart,								// 비트맵 출력 시작 좌표, X,Y
-			(int)m_tInfo.fCY * m_tFrame.iMotion,
+			(int)m_tInfo.fCX,								// 비트맵 출력 시작 좌표, X,Y
+			(int)m_tInfo.fCY,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255));
-	}
 
+	}
 }
 
-void CGoal::Release(void)
+void CMushroom::Release(void)
 {
 }

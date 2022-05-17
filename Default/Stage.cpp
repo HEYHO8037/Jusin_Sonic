@@ -27,18 +27,19 @@ void CStage::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
 	CTileMgr::Get_Instance()->Load_Tile();
+	CObjMgr::Get_Instance()->Load_Obj();
 	
 	CObj* pPlayer = CAbstractFactory<CPlayer>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, pPlayer);
 	
-	CObj* pRing = CAbstractFactory<CRing>::Create();
-	CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
+	//CObj* pRing = CAbstractFactory<CRing>::Create();
+	//CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
 
 	//pRing = CAbstractFactory<CSpring>::Create();
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pRing);
 
-	pRing = CAbstractFactory<CSpike>::Create();
-	CObjMgr::Get_Instance()->Add_Object(OBJ_SPIKE, pRing);
+	//pRing = CAbstractFactory<CSpike>::Create();
+	//CObjMgr::Get_Instance()->Add_Object(OBJ_SPIKE, pRing);
 
 	//pRing = CAbstractFactory<CGoal>::Create();
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_POINT, pRing);

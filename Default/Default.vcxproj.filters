@@ -106,6 +106,12 @@
     <Filter Include="01. Obj\11. Goal">
       <UniqueIdentifier>{c8f735ac-9a87-4806-a1fe-c68b400753e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Obj\12. Mushroom">
+      <UniqueIdentifier>{1f0d993d-5f01-47ab-b162-258c870ed18d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\13. InGameStartEnd">
+      <UniqueIdentifier>{6746d425-76e7-4041-b823-ddc963118731}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -225,6 +231,12 @@
     <ClInclude Include="Goal.h">
       <Filter>01. Obj\11. Goal</Filter>
     </ClInclude>
+    <ClInclude Include="InGameStartEnd.h">
+      <Filter>01. Obj\13. InGameStartEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>01. Obj\12. Mushroom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -305,9 +317,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>03. Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Ring.cpp">
-      <Filter>01. Obj\08. Ring</Filter>
-    </ClCompile>
     <ClCompile Include="Spike.cpp">
       <Filter>01. Obj\09. Spike</Filter>
     </ClCompile>
@@ -316,6 +325,15 @@
     </ClCompile>
     <ClCompile Include="Goal.cpp">
       <Filter>01. Obj\11. Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>01. Obj\12. Mushroom</Filter>
+    </ClCompile>
+    <ClCompile Include="Ring.cpp">
+      <Filter>01. Obj\08. Ring</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameStartEnd.cpp">
+      <Filter>01. Obj\13. InGameStartEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

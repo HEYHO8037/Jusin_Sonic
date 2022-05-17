@@ -56,7 +56,7 @@ void CCamera::SetClientResolution(const RESOLUTION & tRS)
 
 void CCamera::SetClientResolution(float x, float y)
 {
-	m_tClientRS = RESOLUTION(x, y);
+	m_tClientRS = RESOLUTION((int)x, (int)y);
 }
 
 void CCamera::SetWorldResolution(const RESOLUTION & tRS)
@@ -66,7 +66,7 @@ void CCamera::SetWorldResolution(const RESOLUTION & tRS)
 
 void CCamera::SetWorldResolution(float x, float y)
 {
-	m_tWorldRS = RESOLUTION(x, y);
+	m_tWorldRS = RESOLUTION((int)x, (int)y);
 }
 
 POSITION CCamera::GetPos() const
@@ -122,7 +122,7 @@ void CCamera::Update()
 		}
 		else if (tPos.x >= m_tWorldRS.iW - fRightArea)
 		{
-			m_tPos.x = m_tWorldRS.iW - m_tClientRS.iW;
+			m_tPos.x = (float)(m_tWorldRS.iW - m_tClientRS.iW);
 		}
 		else
 		{
@@ -135,11 +135,11 @@ void CCamera::Update()
 		}
 		else if (tPos.y >= m_tWorldRS.iH - fBottomArea)
 		{
-			m_tPos.y = m_tWorldRS.iH - m_tClientRS.iH;
+			m_tPos.y = (float)(m_tWorldRS.iH - m_tClientRS.iH);
 		}
 		else
 		{
-			m_tPos.y = tPos.y - m_tClientRS.iH * m_tPivot.y;
+			m_tPos.y = (float)(tPos.y - m_tClientRS.iH * m_tPivot.y);
 		}
 
 	}
@@ -156,7 +156,7 @@ void CCamera::Scroll(float x, float y)
 	}
 	else if (m_tPos.x > m_tClientRS.iW)
 	{
-		m_tPos.x - m_tClientRS.iW;
+		m_tPos.x -= m_tClientRS.iW;
 	}
 
 	if (m_tPos.y < 0)
@@ -165,7 +165,7 @@ void CCamera::Scroll(float x, float y)
 	}
 	else if (m_tPos.y > m_tClientRS.iH)
 	{
-		m_tPos.y - m_tClientRS.iH;
+		m_tPos.y -= m_tClientRS.iH;
 	}
 
 }

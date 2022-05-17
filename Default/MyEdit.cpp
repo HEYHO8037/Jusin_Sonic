@@ -24,6 +24,7 @@ void CMyEdit::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
 	CTileMgr::Get_Instance()->Initialize();
+	CObjMgr::Get_Instance();
 
 }
 
@@ -42,8 +43,8 @@ void CMyEdit::Late_Update(void)
 
 void CMyEdit::Render(HDC hDC)
 {
-	int ScrollX = CScrollMgr::Get_Instance()->Get_ScrollX();
-	int ScrollY = CScrollMgr::Get_Instance()->Get_ScrollY();
+	float ScrollX = CScrollMgr::Get_Instance()->Get_ScrollX();
+	float ScrollY = CScrollMgr::Get_Instance()->Get_ScrollY();
 
 
 	HDC backHdc = CBmpMgr::Get_Instance()->Find_Image(L"Ground");
@@ -287,7 +288,7 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CObj* pRing = CAbstractFactory<CRing>::Create(pt.x, pt.y);
+		CObj* pRing = CAbstractFactory<CRing>::Create((float)pt.x, (float)pt.y);
 		CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
 
 	}
@@ -295,9 +296,15 @@ void CMyEdit::Key_Input(void)
 
 
 	if (CKeyMgr::Get_Instance()->Key_Down('S'))
+	{
 		CTileMgr::Get_Instance()->Save_Tile();
+		CObjMgr::Get_Instance()->Save_Obj();
+	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down('A'))
+	{
 		CTileMgr::Get_Instance()->Load_Tile();
+		CObjMgr::Get_Instance()->Load_Obj();
+	}
 
 }

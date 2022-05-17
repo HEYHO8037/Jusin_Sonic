@@ -252,6 +252,7 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 	}
 	else if (m_eID == TILE_SLIDEUP)
 	{
+		dynamic_cast<CPlayer*>(_Dest)->Set_SaveSpeed();
 		dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
 		dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(UP_VERTICAL);
 

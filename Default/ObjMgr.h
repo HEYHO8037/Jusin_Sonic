@@ -22,6 +22,11 @@ public:
 
 	void		Delete_ID(OBJID eID);
 
+public:
+	void Load_Obj(void);
+
+	void Save_Obj(void);
+
 private:
 	list<CObj*>	m_ObjList[OBJ_END];
 

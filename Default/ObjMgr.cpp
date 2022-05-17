@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "ObjMgr.h"
 #include "CollisionMgr.h"
+#include "Ring.h"
+#include "Spike.h"
+#include "Spring.h"
+#include "Goal.h"
+#include "AbstractFactory.h"
 
 CObjMgr* CObjMgr::m_pInstance = nullptr;
 
@@ -84,9 +89,6 @@ void CObjMgr::Late_Update(void)
 				break;
 		}
 	}
-
-	//CCollisionMgr::Collision_RectEx(m_ObjList[OBJ_PLAYER], m_ObjList[OBJ_MONSTER]);
-	CCollisionMgr::Collision_Sphere(m_ObjList[OBJ_MONSTER], m_ObjList[OBJ_BULLET]);
 }
 
 void CObjMgr::Render(HDC hDC)
@@ -116,3 +118,106 @@ void CObjMgr::Delete_ID(OBJID eID)
 
 	m_ObjList[eID].clear();
 }
+
+
+void CObjMgr::Save_Obj(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Obj.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD		dwByte = 0;
+
+
+	for (auto& iter : m_ObjList[OBJ_ITEM])
+	{
+		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
+	}
+
+	for (auto& iter : m_ObjList[OBJ_SPRING])
+	{
+		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
+	}
+
+	for (auto& iter : m_ObjList[OBJ_SPIKE])
+	{
+		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
+	}
+
+	for (auto& iter : m_ObjList[OBJ_POINT])
+	{
+		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
+	}
+
+	CloseHandle(hFile);
+}
+
+
+
+void CObjMgr::Load_Obj(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Obj.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	INFO		tInfo{};
+	FRAME		tFrame{};
+	DWORD		dwByte = 0;
+
+	Release();
+
+	while (true)
+	{
+		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
+
+		if (0 == dwByte)
+			break;
+
+		CObj*		pObj = CAbstractFactory<CRing>::Create(tInfo.fX, tInfo.fY);
+		pObj->Initialize();
+
+		m_ObjList[OBJ_ITEM].push_back(pObj);
+
+	}
+
+	while (true)
+	{
+		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
+
+		if (0 == dwByte)
+			break;
+
+		CObj*		pObj = CAbstractFactory<CSpring>::Create(tInfo.fX, tInfo.fY);
+		pObj->Initialize();
+
+		m_ObjList[OBJ_SPRING].push_back(pObj);
+
+	}
+
+	while (true)
+	{
+		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
+
+		if (0 == dwByte)
+			break;
+
+		CObj*		pObj = CAbstractFactory<CSpike>::Create(tInfo.fX, tInfo.fY);
+		pObj->Initialize();
+
+		m_ObjList[OBJ_SPIKE].push_back(pObj);
+
+	}
+
+
+	while (true)
+	{
+		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
+
+		if (0 == dwByte)
+			break;
+
+		CObj*		pObj = CAbstractFactory<CGoal>::Create(tInfo.fX, tInfo.fY);
+		pObj->Initialize();
+
+		m_ObjList[OBJ_POINT].push_back(pObj);
+
+	}
+
+	CloseHandle(hFile);
+
+}
+

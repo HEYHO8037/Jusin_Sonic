@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Obj.h"
-
+#include "Camera.h"
 
 CObj::CObj()
 	: m_fSpeed(0.f), m_eDir(DIR_END), m_bDead(false), m_fAngle(0.f)

@@ -27,7 +27,7 @@ void CTile::Initialize(void)
 	m_tInfo.fCX = TILECX;
 	m_tInfo.fCY = TILECY;
 
-	m_tPivot = POSITION(0.5,0.5);
+	m_tPivot = POSITION(0.5, 0.5);
 
 	m_iDrawID = 0;
 	m_iOption = 0;
@@ -146,8 +146,8 @@ void CTile::Render(HDC hDC)
 	}
 	else
 	{
-		int ScrollX = CScrollMgr::Get_Instance()->Get_ScrollX();
-		int ScrollY = CScrollMgr::Get_Instance()->Get_ScrollY();
+		float ScrollX = CScrollMgr::Get_Instance()->Get_ScrollX();
+		float ScrollY = CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
