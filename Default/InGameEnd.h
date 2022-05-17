@@ -1,11 +1,11 @@
 #pragma once
 #include "Obj.h"
-class CMushroom :
+class InGameEnd :
 	public CObj
 {
 public:
-	CMushroom();
-	virtual ~CMushroom();
+	InGameEnd();
+	virtual ~InGameEnd();
 
 public:
 	virtual void Initialize(void) override;
@@ -13,5 +13,5 @@ public:
 	virtual	void Late_Update(void);
 	virtual void Render(HDC hDC) override;
 	virtual void Release(void) override;
-
 };
+

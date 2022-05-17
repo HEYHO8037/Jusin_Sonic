@@ -243,18 +243,21 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 	{
 		dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(DOWN_VERTICAL);
 		dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
+		m_bCircleCircle = false;
 
 	}
 	else if (m_eID == TILE_SLIDE)
 	{
 		_Dest->Set_Speed(0.f);
 		dynamic_cast<CPlayer*>(_Dest)->Set_QuatorCircle(true);
+		m_bCircleCircle = false;
 	}
 	else if (m_eID == TILE_SLIDEUP)
 	{
 		dynamic_cast<CPlayer*>(_Dest)->Set_SaveSpeed();
 		dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
 		dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(UP_VERTICAL);
+		m_bCircleCircle = false;
 
 	}
 	else if (m_eID == TILE_CIRCLE)
@@ -312,6 +315,9 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 			dynamic_cast<CPlayer*>(_Dest)->Set_Gravity(DOWN_VERTICAL);
 			dynamic_cast<CPlayer*>(_Dest)->Set_Falling(true);
 		}
+
+
+		m_bCircleCircle = false;
 
 	}
 }

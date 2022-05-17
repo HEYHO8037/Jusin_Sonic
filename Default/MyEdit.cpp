@@ -8,6 +8,10 @@
 #include "ObjMgr.h"
 #include "AbstractFactory.h"
 #include "Ring.h"
+#include "Spike.h"
+#include "Spring.h"
+#include "Goal.h"
+#include "Mushroom.h"
 
 
 CMyEdit::CMyEdit()
@@ -288,23 +292,86 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CObj* pRing = CAbstractFactory<CRing>::Create((float)pt.x, (float)pt.y);
-		CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
+		CObj* pObj = CAbstractFactory<CRing>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pObj);
 
 	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down('2'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CSpike>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_SPIKE, pObj);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down('3'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CSpring>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pObj);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down('4'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CGoal>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_POINT, pObj);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down('5'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CMushroom>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pObj);
+
+	}
+
 
 
 
 	if (CKeyMgr::Get_Instance()->Key_Down('S'))
 	{
 		CTileMgr::Get_Instance()->Save_Tile();
-		CObjMgr::Get_Instance()->Save_Obj();
+		CObjMgr::Get_Instance()->Save_Ring();
+		CObjMgr::Get_Instance()->Save_Spring();
+		CObjMgr::Get_Instance()->Save_Spike();
+		CObjMgr::Get_Instance()->Save_Point();
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down('A'))
 	{
 		CTileMgr::Get_Instance()->Load_Tile();
-		CObjMgr::Get_Instance()->Load_Obj();
+		CObjMgr::Get_Instance()->Load_Ring();
+		CObjMgr::Get_Instance()->Load_Spring();
+		CObjMgr::Get_Instance()->Load_Spike();
+		CObjMgr::Get_Instance()->Load_Point();
 	}
 
 }

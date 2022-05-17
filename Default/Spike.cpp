@@ -6,6 +6,7 @@
 
 CSpike::CSpike()
 {
+
 }
 
 
@@ -15,7 +16,13 @@ CSpike::~CSpike()
 
 void CSpike::Initialize(void)
 {
-	m_tInfo.fY -= 62;
+	if (CCamera::Show_Instance() != nullptr)
+	{
+		m_tInfo.fY -= 62;
+		m_tInfo.fX -= 62;
+	}
+	
+
 
 	m_tInfo.fCX = 31.f;
 	m_tInfo.fCY = 31.f;
@@ -75,6 +82,7 @@ void CSpike::Render(HDC hDC)
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
 			int(m_tInfo.fY) + iScrollY,
+
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC

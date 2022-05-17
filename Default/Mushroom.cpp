@@ -15,20 +15,25 @@ CMushroom::~CMushroom()
 
 void CMushroom::Initialize(void)
 {
-	m_tInfo.fY -= 62;
+	if (CCamera::Show_Instance() != nullptr)
+	{
+		m_tInfo.fY -= 62;
+		m_tInfo.fX -= 62;
+	}
 
-	m_tInfo.fCX = 60.f;
+	m_tInfo.fCX = 70.f;
 	m_tInfo.fCY = 60.f;
 
 	m_tPivot = POSITION(0.5, 0.5);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Spring.bmp", L"Mushroom");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Mushroom.bmp", L"Mushroom");
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 11;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
+
 
 }
 
@@ -70,6 +75,7 @@ void CMushroom::Render(HDC hDC)
 	}
 	else
 	{
+
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
 			int(m_tInfo.fY) + iScrollY,

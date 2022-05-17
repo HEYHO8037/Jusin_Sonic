@@ -26,12 +26,24 @@ CStage::~CStage()
 void CStage::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
+	
+	CCamera::Get_Instance()->SetClientResolution(WINCX, WINCY);
+	CCamera::Get_Instance()->SetWorldResolution(BACKGROUNDX, BACKGROUNDY);
+
 	CTileMgr::Get_Instance()->Load_Tile();
-	CObjMgr::Get_Instance()->Load_Obj();
+
+	CObjMgr::Get_Instance()->Load_Ring();
+	CObjMgr::Get_Instance()->Load_Spring();
+	CObjMgr::Get_Instance()->Load_Spike();
+	CObjMgr::Get_Instance()->Load_Point();
 	
 	CObj* pPlayer = CAbstractFactory<CPlayer>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, pPlayer);
 	
+	CCamera::Get_Instance()->SetTarget(pPlayer);
+	CCamera::Get_Instance()->SetPivot(0.8f, 0.3f);
+
+
 	//CObj* pRing = CAbstractFactory<CRing>::Create();
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
 
@@ -45,10 +57,6 @@ void CStage::Initialize(void)
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_POINT, pRing);
 
 
-	CCamera::Get_Instance()->SetTarget(pPlayer);
-	CCamera::Get_Instance()->SetPivot(0.8f, 0.3f);
-	CCamera::Get_Instance()->SetClientResolution(WINCX, WINCY);
-	CCamera::Get_Instance()->SetWorldResolution(BACKGROUNDX, BACKGROUNDY);
 }	
 
 

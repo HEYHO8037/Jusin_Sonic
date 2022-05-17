@@ -1,11 +1,11 @@
 #pragma once
 #include "Obj.h"
-class InGameStartEnd :
+class InGameStart :
 	public CObj
 {
 public:
-	InGameStartEnd();
-	virtual ~InGameStartEnd();
+	InGameStart();
+	virtual ~InGameStart();
 
 public:
 	virtual void Initialize(void) override;

@@ -16,7 +16,11 @@ CRing::~CRing()
 
 void CRing::Initialize(void)
 {
-	m_tInfo.fY -= 62;
+	if (CCamera::Show_Instance() != nullptr)
+	{
+		m_tInfo.fY -= 62;
+		m_tInfo.fX -= 62;
+	}
 
 	m_tInfo.fCX = 16.f;
 	m_tInfo.fCY = 16.f;
@@ -30,6 +34,7 @@ void CRing::Initialize(void)
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
+
 }
 
 int CRing::Update(void)
@@ -77,6 +82,7 @@ void CRing::Render(HDC hDC)
 	}
 	else
 	{
+
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
 			int(m_tInfo.fY) + iScrollY,

@@ -15,9 +15,14 @@ CGoal::~CGoal()
 
 void CGoal::Initialize(void)
 {
-	m_tInfo.fY -= 62;
+	if (CCamera::Show_Instance() != nullptr)
+	{
+		m_tInfo.fY -= 62;
+		m_tInfo.fX -= 62;
+	}
 
-	m_tInfo.fCX = 47.f;
+
+	m_tInfo.fCX = 48.f;
 	m_tInfo.fCY = 47.f;
 
 	m_tPivot = POSITION(0.5, 0.5);
@@ -72,6 +77,7 @@ void CGoal::Render(HDC hDC)
 	}
 	else
 	{
+
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
 			int(m_tInfo.fY) + iScrollY,

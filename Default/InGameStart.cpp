@@ -1,36 +1,36 @@
 #include "stdafx.h"
-#include "InGameStartEnd.h"
+#include "InGameStart.h"
 #include "BmpMgr.h"
 #include "Camera.h"
 
 
-InGameStartEnd::InGameStartEnd()
+InGameStart::InGameStart()
 {
 }
 
 
-InGameStartEnd::~InGameStartEnd()
+InGameStart::~InGameStart()
 {
 }
 
-void InGameStartEnd::Initialize(void)
+void InGameStart::Initialize(void)
 {
-	m_tInfo.fCX = 16.f;
-	m_tInfo.fCY = 16.f;
+	m_tInfo.fCX = WINCX;
+	m_tInfo.fCY = WINCY;
 
 	m_tPivot = POSITION(0.5, 0.5);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Ring2.bmp", L"Ring");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/Start1.bmp", L"Start");
 
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 15;
+	m_tFrame.iFrameEnd = 2;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
 
 }
 
-int InGameStartEnd::Update(void)
+int InGameStart::Update(void)
 {
 	if (m_bDead)
 	{
@@ -42,24 +42,18 @@ int InGameStartEnd::Update(void)
 	return OBJ_NOEVENT;
 }
 
-void InGameStartEnd::Late_Update(void)
+void InGameStart::Late_Update(void)
 {
 	Move_Frame();
 }
 
-void InGameStartEnd::Render(HDC hDC)
+void InGameStart::Render(HDC hDC)
 {
-	POSITION tPos;
-
-	tPos.x = m_tInfo.fX - m_tInfo.fCX * m_tPivot.x;
-	tPos.y = m_tInfo.fY - m_tInfo.fCY * m_tPivot.y;
-	tPos -= CCamera::Get_Instance()->GetPos();
-
-	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Ring");
+	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Start");
 
 	GdiTransparentBlt(hDC,
-		tPos.x,	// 2,3 인자 :  복사받을 위치 X, Y
-		tPos.y,
+		0,	// 2,3 인자 :  복사받을 위치 X, Y
+		0,
 		int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 		int(m_tInfo.fCY),
 		hMemDC,							// 비트맵을 가지고 있는 DC
@@ -69,8 +63,19 @@ void InGameStartEnd::Render(HDC hDC)
 		(int)m_tInfo.fCY,
 		RGB(255, 0, 255));
 
+	if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
+	{
+		m_tFrame.iMotion++;
+
+		if (m_tFrame.iMotion > 4)
+		{
+			m_bDead = true;
+		}
+	}
+
 }
 
-void InGameStartEnd::Release(void)
+void InGameStart::Release(void)
 {
+
 }

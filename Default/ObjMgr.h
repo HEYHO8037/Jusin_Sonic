@@ -23,9 +23,16 @@ public:
 	void		Delete_ID(OBJID eID);
 
 public:
-	void Load_Obj(void);
+	void Save_Ring(void);
+	void Save_Spring(void);
+	void Save_Spike(void);
+	void Save_Point(void);
 
-	void Save_Obj(void);
+	void Load_Ring(void);
+	void Load_Spring(void);
+	void Load_Spike(void);
+	void Load_Point(void);
+
 
 private:
 	list<CObj*>	m_ObjList[OBJ_END];

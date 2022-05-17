@@ -120,9 +120,9 @@ void CObjMgr::Delete_ID(OBJID eID)
 }
 
 
-void CObjMgr::Save_Obj(void)
+void CObjMgr::Save_Ring(void)
 {
-	HANDLE		hFile = CreateFile(L"../Data/Obj.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE		hFile = CreateFile(L"../Data/Ring.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	DWORD		dwByte = 0;
 
 
@@ -131,15 +131,40 @@ void CObjMgr::Save_Obj(void)
 		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
 	}
 
+	CloseHandle(hFile);
+}
+
+
+void CObjMgr::Save_Spring(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Spring.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD		dwByte = 0;
+
 	for (auto& iter : m_ObjList[OBJ_SPRING])
 	{
 		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
 	}
 
+	CloseHandle(hFile);
+}
+
+void CObjMgr::Save_Spike(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Spike.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD		dwByte = 0;
+
 	for (auto& iter : m_ObjList[OBJ_SPIKE])
 	{
 		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
 	}
+
+	CloseHandle(hFile);
+}
+
+void CObjMgr::Save_Point(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Point.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD		dwByte = 0;
 
 	for (auto& iter : m_ObjList[OBJ_POINT])
 	{
@@ -151,14 +176,13 @@ void CObjMgr::Save_Obj(void)
 
 
 
-void CObjMgr::Load_Obj(void)
+void CObjMgr::Load_Ring(void)
 {
-	HANDLE		hFile = CreateFile(L"../Data/Obj.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE		hFile = CreateFile(L"../Data/Ring.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	INFO		tInfo{};
-	FRAME		tFrame{};
 	DWORD		dwByte = 0;
 
-	Release();
+	Delete_ID(OBJ_ITEM);
 
 	while (true)
 	{
@@ -174,6 +198,17 @@ void CObjMgr::Load_Obj(void)
 
 	}
 
+	CloseHandle(hFile);
+}
+
+void CObjMgr::Load_Spring(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Spring.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	INFO		tInfo{};
+	DWORD		dwByte = 0;
+
+	Delete_ID(OBJ_SPRING);
+
 	while (true)
 	{
 		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
@@ -187,6 +222,18 @@ void CObjMgr::Load_Obj(void)
 		m_ObjList[OBJ_SPRING].push_back(pObj);
 
 	}
+
+	CloseHandle(hFile);
+}
+
+
+void CObjMgr::Load_Spike(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Spike.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	INFO		tInfo{};
+	DWORD		dwByte = 0;
+
+	Delete_ID(OBJ_SPIKE);
 
 	while (true)
 	{
@@ -202,6 +249,17 @@ void CObjMgr::Load_Obj(void)
 
 	}
 
+	CloseHandle(hFile);
+
+}
+
+void CObjMgr::Load_Point(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Point.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	INFO		tInfo{};
+	DWORD		dwByte = 0;
+
+	Delete_ID(OBJ_POINT);
 
 	while (true)
 	{
@@ -220,4 +278,3 @@ void CObjMgr::Load_Obj(void)
 	CloseHandle(hFile);
 
 }
-

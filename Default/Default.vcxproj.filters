@@ -231,11 +231,14 @@
     <ClInclude Include="Goal.h">
       <Filter>01. Obj\11. Goal</Filter>
     </ClInclude>
-    <ClInclude Include="InGameStartEnd.h">
+    <ClInclude Include="InGameStart.h">
       <Filter>01. Obj\13. InGameStartEnd</Filter>
     </ClInclude>
     <ClInclude Include="Mushroom.h">
       <Filter>01. Obj\12. Mushroom</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameEnd.h">
+      <Filter>01. Obj\13. InGameStartEnd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -332,7 +335,10 @@
     <ClCompile Include="Ring.cpp">
       <Filter>01. Obj\08. Ring</Filter>
     </ClCompile>
-    <ClCompile Include="InGameStartEnd.cpp">
+    <ClCompile Include="InGameStart.cpp">
+      <Filter>01. Obj\13. InGameStartEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameEnd.cpp">
       <Filter>01. Obj\13. InGameStartEnd</Filter>
     </ClCompile>
   </ItemGroup>
