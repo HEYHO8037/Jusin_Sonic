@@ -112,6 +112,12 @@
     <Filter Include="01. Obj\13. InGameStartEnd">
       <UniqueIdentifier>{6746d425-76e7-4041-b823-ddc963118731}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. Design\SoundMgr">
+      <UniqueIdentifier>{6dd9880a-7326-4864-a2e5-fc3f740219d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\14. BackGroundObj">
+      <UniqueIdentifier>{55036ab8-819d-48be-94b0-ee4240a6423a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -155,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="AbstractFactory.h">
       <Filter>98. Design\AbstractFactory</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>01. Obj\02. Monster</Filter>
     </ClInclude>
     <ClInclude Include="Mouse.h">
       <Filter>01. Obj\03. Mouse</Filter>
@@ -239,6 +242,15 @@
     </ClInclude>
     <ClInclude Include="InGameEnd.h">
       <Filter>01. Obj\13. InGameStartEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>98. Design\SoundMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>01. Obj\03. Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGroundObj.h">
+      <Filter>01. Obj\14. BackGroundObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +352,12 @@
     </ClCompile>
     <ClCompile Include="InGameEnd.cpp">
       <Filter>01. Obj\13. InGameStartEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>98. Design\SoundMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGroundObj.cpp">
+      <Filter>01. Obj\14. BackGroundObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,7 @@
 #include "Spring.h"
 #include "Goal.h"
 #include "Mushroom.h"
+#include "SoundMgr.h"
 
 
 CMyEdit::CMyEdit()
@@ -29,6 +30,8 @@ void CMyEdit::Initialize(void)
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
 	CTileMgr::Get_Instance()->Initialize();
 	CObjMgr::Get_Instance();
+	CSoundMgr::Get_Instance()->PlayBGM(L"MushRoomBGM.mp3", 1.f);
+
 
 }
 
@@ -349,7 +352,7 @@ void CMyEdit::Key_Input(void)
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		CObj* pObj = CAbstractFactory<CMushroom>::Create((float)pt.x, (float)pt.y);
-		CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pObj);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MUSHROOM, pObj);
 
 	}
 
@@ -363,6 +366,7 @@ void CMyEdit::Key_Input(void)
 		CObjMgr::Get_Instance()->Save_Spring();
 		CObjMgr::Get_Instance()->Save_Spike();
 		CObjMgr::Get_Instance()->Save_Point();
+		CObjMgr::Get_Instance()->Save_MushRoom();
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down('A'))
@@ -372,6 +376,7 @@ void CMyEdit::Key_Input(void)
 		CObjMgr::Get_Instance()->Load_Spring();
 		CObjMgr::Get_Instance()->Load_Spike();
 		CObjMgr::Get_Instance()->Load_Point();
+		CObjMgr::Get_Instance()->Load_MushRoom();
 	}
 
 }

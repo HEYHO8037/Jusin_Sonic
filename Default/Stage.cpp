@@ -12,6 +12,8 @@
 #include "Spike.h"
 #include "Goal.h"
 #include "Spring.h"
+#include "SoundMgr.h"
+#include "InGameStart.h"
 
 CStage::CStage()
 {
@@ -26,7 +28,8 @@ CStage::~CStage()
 void CStage::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/TileMap/MushroomBack.bmp", L"Ground");
-	
+	CSoundMgr::Get_Instance()->PlayBGM(L"MushRoomBGM.mp3", 1.f);
+
 	CCamera::Get_Instance()->SetClientResolution(WINCX, WINCY);
 	CCamera::Get_Instance()->SetWorldResolution(BACKGROUNDX, BACKGROUNDY);
 
@@ -36,6 +39,8 @@ void CStage::Initialize(void)
 	CObjMgr::Get_Instance()->Load_Spring();
 	CObjMgr::Get_Instance()->Load_Spike();
 	CObjMgr::Get_Instance()->Load_Point();
+	CObjMgr::Get_Instance()->Load_MushRoom();
+
 	
 	CObj* pPlayer = CAbstractFactory<CPlayer>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, pPlayer);
@@ -44,8 +49,8 @@ void CStage::Initialize(void)
 	CCamera::Get_Instance()->SetPivot(0.8f, 0.3f);
 
 
-	//CObj* pRing = CAbstractFactory<CRing>::Create();
-	//CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pRing);
+	CObj* pUI = CAbstractFactory<InGameStart>::Create();
+	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, pUI);
 
 	//pRing = CAbstractFactory<CSpring>::Create();
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pRing);
@@ -70,7 +75,7 @@ void CStage::Update(void)
 	CCollisionMgr::Collision_Player_Spike(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_SPIKE));
 	CCollisionMgr::Collision_Player_Spring(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_SPRING));
 	CCollisionMgr::Collision_Player_Point(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_POINT));
-
+	CCollisionMgr::Collision_Player_MushRoom(CObjMgr::Get_Instance()->Get_Player(), CObjMgr::Get_Instance()->Get_OBJType(OBJ_MUSHROOM));
 	
 	CCamera::Get_Instance()->Update();
 
@@ -110,7 +115,6 @@ void CStage::Release(void)
 {
 	CCamera::Destroy_Instance();
 	CObjMgr::Get_Instance()->Delete_ID(OBJ_MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJ_BULLET);
 }
 
 void CStage::Move_Frame(void)

@@ -23,8 +23,11 @@ public:
 	static void		Collision_Player_Spike(CObj* _Dest, list<CObj*>* _Sour);
 	static void		Collision_Player_Spring(CObj* _Dest, list<CObj*>* _Sour);
 	static void		Collision_Player_Point(CObj* _Dest, list<CObj*>* _Sour);
+	static void		Collision_Player_MushRoom(CObj* _Dest, list<CObj*>* _Sour);
+
 
 private:
+	static DWORD    CollisionTime;
 	static TILEID	m_eID;
 	static bool		m_bCircleCircle;
 	static CTile*	saveTile;

@@ -27,11 +27,15 @@ public:
 	void Save_Spring(void);
 	void Save_Spike(void);
 	void Save_Point(void);
+	void Save_MushRoom(void);
+	void Save_BackGroundObj(void);
 
 	void Load_Ring(void);
 	void Load_Spring(void);
 	void Load_Spike(void);
 	void Load_Point(void);
+	void Load_MushRoom(void);
+	void Load_BackGroundObj(void);
 
 
 private:

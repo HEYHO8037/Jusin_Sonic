@@ -44,7 +44,25 @@ int InGameStart::Update(void)
 
 void InGameStart::Late_Update(void)
 {
-	Move_Frame();
+
+	if (m_tFrame.dwTime + m_tFrame.dwSpeed < GetTickCount())
+	{
+		m_tFrame.iFrameStart++;
+
+		m_tFrame.dwTime = GetTickCount();
+
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+		{
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iMotion++;
+		}
+	}
+
+
+	if (m_tFrame.iMotion > 4)
+	{
+		m_bDead = true;
+	}
 }
 
 void InGameStart::Render(HDC hDC)
@@ -63,15 +81,6 @@ void InGameStart::Render(HDC hDC)
 		(int)m_tInfo.fCY,
 		RGB(255, 0, 255));
 
-	if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
-	{
-		m_tFrame.iMotion++;
-
-		if (m_tFrame.iMotion > 4)
-		{
-			m_bDead = true;
-		}
-	}
 
 }
 

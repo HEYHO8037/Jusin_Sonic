@@ -7,6 +7,7 @@
 #include "ScrollMgr.h"
 #include "BmpMgr.h"
 #include "Camera.h"
+#include "SoundMgr.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(IDLE), m_ePreState(END)
@@ -80,6 +81,7 @@ void CPlayer::Initialize(void)
 	m_tFrame.dwTime = GetTickCount();
 
 	m_iRing = 0;
+	m_fSoundVol = 1.f;
 }
 
 int CPlayer::Update(void)
@@ -528,6 +530,8 @@ void CPlayer::Key_Input(void)
 		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 		{
 			m_bJump = true;
+
+			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
 		}
 
 	
@@ -585,7 +589,7 @@ void CPlayer::Jumping(void)
 		if (m_fJumpPower >= m_fPower)
 		{
 			m_tInfo.fY -= m_fPower;
-			m_fPower += 0.5f;
+			m_fPower += 0.7f;
 		}
 		else
 		{

@@ -22,13 +22,9 @@ void CSpike::Initialize(void)
 		m_tInfo.fX -= 62;
 	}
 	
-
-
 	m_tInfo.fCX = 31.f;
 	m_tInfo.fCY = 31.f;
 
-	m_tInfo.fX = 300;
-	m_tInfo.fY = 450;
 
 	m_tPivot = POSITION(0.5, 0.5);
 
@@ -41,6 +37,7 @@ void CSpike::Initialize(void)
 
 int CSpike::Update(void)
 {
+
 	Update_Rect();
 	return 0;
 }
@@ -82,7 +79,6 @@ void CSpike::Render(HDC hDC)
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
 			int(m_tInfo.fY) + iScrollY,
-
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC

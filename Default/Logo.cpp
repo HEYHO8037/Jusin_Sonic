@@ -2,6 +2,7 @@
 #include "Logo.h"
 #include "BmpMgr.h"
 #include "KeyMgr.h"
+#include "SoundMgr.h"
 #include "SceneMgr.h"
 
 
@@ -23,6 +24,9 @@ void CLogo::Initialize(void)
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 100;
 	m_tFrame.dwTime = GetTickCount();
+
+	CSoundMgr::Get_Instance()->PlayBGM(L"TitleBGM.mp3", 1.f);
+
 }
 
 void CLogo::Update(void)

@@ -74,6 +74,8 @@ private:
 
 	int						m_iRing; // ¸µ °³¼ö
 
+	float					m_fSoundVol;
+
 	GRAVITY_STATE			m_eGravity;
 	STATE					m_ePreState;
 	STATE					m_eCurState;

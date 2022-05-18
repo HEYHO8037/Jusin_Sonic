@@ -40,11 +40,13 @@ void CMushroom::Initialize(void)
 int CMushroom::Update(void)
 {
 	Update_Rect();
+
 	return 0;
 }
 
 void CMushroom::Late_Update(void)
 {
+	Move_Frame();
 }
 
 void CMushroom::Render(HDC hDC)
@@ -67,23 +69,22 @@ void CMushroom::Render(HDC hDC)
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
-			(int)m_tInfo.fCX,								// 비트맵 출력 시작 좌표, X,Y
-			(int)m_tInfo.fCY,
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,								// 비트맵 출력 시작 좌표, X,Y
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255));
 	}
 	else
 	{
-
 		GdiTransparentBlt(hDC,
 			int(m_tInfo.fX) + iScrollX,	// 2,3 인자 :  복사받을 위치 X, Y
 			int(m_tInfo.fY) + iScrollY,
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
-			(int)m_tInfo.fCX,								// 비트맵 출력 시작 좌표, X,Y
-			(int)m_tInfo.fCY,
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,								// 비트맵 출력 시작 좌표, X,Y
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255));

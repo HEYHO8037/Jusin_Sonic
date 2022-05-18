@@ -5,6 +5,7 @@
 #include "Spike.h"
 #include "Spring.h"
 #include "Goal.h"
+#include "Mushroom.h"
 #include "AbstractFactory.h"
 
 CObjMgr* CObjMgr::m_pInstance = nullptr;
@@ -174,6 +175,23 @@ void CObjMgr::Save_Point(void)
 	CloseHandle(hFile);
 }
 
+void CObjMgr::Save_MushRoom(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Mushroom.dat", GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD		dwByte = 0;
+
+	for (auto& iter : m_ObjList[OBJ_MUSHROOM])
+	{
+		WriteFile(hFile, &iter->Get_Info(), sizeof(INFO), &dwByte, NULL);
+	}
+
+	CloseHandle(hFile);
+}
+
+void CObjMgr::Save_BackGroundObj(void)
+{
+}
+
 
 
 void CObjMgr::Load_Ring(void)
@@ -278,3 +296,34 @@ void CObjMgr::Load_Point(void)
 	CloseHandle(hFile);
 
 }
+
+void CObjMgr::Load_MushRoom(void)
+{
+	HANDLE		hFile = CreateFile(L"../Data/Mushroom.dat", GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	INFO		tInfo{};
+	DWORD		dwByte = 0;
+
+	Delete_ID(OBJ_POINT);
+
+	while (true)
+	{
+		ReadFile(hFile, &tInfo, sizeof(INFO), &dwByte, NULL);
+
+		if (0 == dwByte)
+			break;
+
+		CObj*		pObj = CAbstractFactory<CMushroom>::Create(tInfo.fX, tInfo.fY);
+		pObj->Initialize();
+
+		m_ObjList[OBJ_MUSHROOM].push_back(pObj);
+
+	}
+
+	CloseHandle(hFile);
+
+}
+
+void CObjMgr::Load_BackGroundObj(void)
+{
+}
+

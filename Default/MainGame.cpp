@@ -11,6 +11,7 @@
 #include "BmpMgr.h"
 #include "SceneMgr.h"
 #include "TileMgr.h"
+#include "SoundMgr.h"
 
 
 CMainGame::CMainGame()
@@ -30,8 +31,10 @@ void CMainGame::Initialize(void)
 {
 	m_hDC = GetDC(g_hWnd);
 	
+	CSoundMgr::Get_Instance()->Initialize();
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 	CSceneMgr::Get_Instance()->Scene_Change(SC_LOGO);
+
 }
 
 void CMainGame::Update(void)
@@ -68,6 +71,7 @@ void CMainGame::Render(void)
 
 void CMainGame::Release(void)
 {
+	CSoundMgr::Get_Instance()->Destroy_Instance();
 	CTileMgr::Get_Instance()->Destroy_Instance();
 	CSceneMgr::Get_Instance()->Destroy_Instance();
 	CBmpMgr::Get_Instance()->Destroy_Instance();

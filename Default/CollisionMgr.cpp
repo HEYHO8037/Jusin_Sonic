@@ -3,7 +3,9 @@
 #include "TileMgr.h"
 #include "Player.h"
 #include "Spring.h"
+#include "SoundMgr.h"
 
+DWORD	CCollisionMgr::CollisionTime = 0;
 TILEID	CCollisionMgr::m_eID = TILE_END;
 bool	CCollisionMgr::m_bCircleCircle = false;
 CTile*  CCollisionMgr::saveTile = nullptr;
@@ -334,6 +336,8 @@ void CCollisionMgr::Collision_Player_Ring(CObj * _Dest, list<CObj*>* _Sour)
 		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
 		{
 			dynamic_cast<CPlayer*>(_Dest)->Add_Ring();
+			CSoundMgr::Get_Instance()->PlaySound(L"ring.mp3", SOUND_EFFECT, 1.f);
+
 			(*iter)->Set_Dead();
 		}
 	}
@@ -351,11 +355,27 @@ void CCollisionMgr::Collision_Player_Spike(CObj * _Dest, list<CObj*>* _Sour)
 	{
 		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
 		{
-			float fSpeed = dynamic_cast<CPlayer*>(_Dest)->Get_Speed();
-			dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 2));
+			if (CollisionTime)
+			{
+				DWORD CheckTime = GetTickCount() - CollisionTime;
+
+				if (CheckTime > 500)
+				{
+					CollisionTime = GetTickCount();
+					float fSpeed = dynamic_cast<CPlayer*>(_Dest)->Get_Speed();
+					dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 2));
+					CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
+				}
+			}
+			else
+			{
+				CollisionTime = GetTickCount();
+				float fSpeed = dynamic_cast<CPlayer*>(_Dest)->Get_Speed();
+				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 2));
+				CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
+			}
 		}
 	}
-
 }
 
 void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
@@ -369,10 +389,27 @@ void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
 	{
 		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
 		{
-			dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
-			dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
-			dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
+			if (CollisionTime)
+			{
+				DWORD CheckTime = GetTickCount() - CollisionTime;
 
+				if (CheckTime > 500)
+				{
+					CollisionTime = GetTickCount();
+					dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
+					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+					dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
+					CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
+				}
+			}
+			else
+			{
+				CollisionTime = GetTickCount();
+				dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
+				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+				dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
+				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
+			}
 		}
 		else
 		{
@@ -394,7 +431,46 @@ void CCollisionMgr::Collision_Player_Point(CObj * _Dest, list<CObj*>* _Sour)
 		{
 			dynamic_cast<CPlayer*>(_Dest)->Set_Speed(0.f);
 			dynamic_cast<CPlayer*>(_Dest)->Set_IsGetPoint(true);
+			dynamic_cast<CPlayer*>(_Dest)->Set_CurState(IDLE);
+
 		}
 	}
 
+}
+
+void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
+{
+	RECT rc{};
+
+	list<CObj*>::iterator iter = _Sour->begin();
+	list<CObj*>::iterator iterEnd = _Sour->end();
+
+	for (iter = _Sour->begin(); iter != iterEnd; ++iter)
+	{
+		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
+		{
+			if (CollisionTime)
+			{
+				DWORD CheckTime = GetTickCount() - CollisionTime;
+
+				if (CheckTime > 500)
+				{
+					CollisionTime = GetTickCount();
+					dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
+					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+					CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
+				}
+			}
+			else
+			{
+				CollisionTime = GetTickCount();
+				dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
+				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
+			}
+		}
+		else
+		{
+		}
+	}
 }

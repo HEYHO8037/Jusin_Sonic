@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="AnimateImage.h" />
+    <ClInclude Include="BackGroundObj.h" />
     <ClInclude Include="BmpMgr.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionMgr.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="ScrollMgr.h" />
+    <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="Spike.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="Stage.h" />
@@ -191,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimateImage.cpp" />
+    <ClCompile Include="BackGroundObj.cpp" />
     <ClCompile Include="BmpMgr.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
@@ -217,6 +220,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="ScrollMgr.cpp" />
+    <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="Spike.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="Stage.cpp" />
