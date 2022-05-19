@@ -1,11 +1,11 @@
 #pragma once
 #include "Obj.h"
-class CBackGroundObj :
+class CBGMushroom_2 :
 	public CObj
 {
 public:
-	CBackGroundObj();
-	virtual ~CBackGroundObj();
+	CBGMushroom_2();
+	virtual ~CBGMushroom_2();
 
 public:
 	virtual void Initialize(void) override;

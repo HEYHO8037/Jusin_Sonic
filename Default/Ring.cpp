@@ -26,14 +26,22 @@ void CRing::Initialize(void)
 	m_tInfo.fCY = 16.f;
 
 	m_tPivot = POSITION(0.5, 0.5);
+	
+	m_fAngle = 101.25f;
+	m_fSpeed = 4.f;
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Ring2.bmp", L"Ring");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/ShineEffect.bmp", L"Shine");
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 15;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 200;
 	m_tFrame.dwTime = GetTickCount();
+
+	m_bIsLosing = false;
+	m_fGroundY = 0;
+	m_bIsContact = false;
 
 }
 
@@ -43,6 +51,20 @@ int CRing::Update(void)
 	{
 		return OBJ_DEAD;
 	}
+
+	if (m_bIsLosing)
+	{
+		DWORD time = GetTickCount() - m_FallingTime;
+		if (time > 500)
+		{
+			Falling();
+		}
+		else
+		{
+			MoveRing();
+		}
+	}
+
 
 	Update_Rect();
 
@@ -101,3 +123,37 @@ void CRing::Render(HDC hDC)
 void CRing::Release(void)
 {
 }
+
+void CRing::MoveRing()
+{
+	//ring's X Speed = cos(ring_angle) * speed
+	//ring's Y Speed = -sin(ring_angle) * speed
+
+	m_tInfo.fX += cos(m_fAngle * RADIAN) * m_fSpeed;
+	m_tInfo.fY += -sin(m_fAngle * RADIAN) * m_fSpeed;
+
+	if (!m_bIsContact)
+	{
+		m_FallingTime = GetTickCount();
+		m_bIsContact = true;
+	}
+}
+
+void CRing::ToggleSpeed()
+{
+	m_fSpeed = m_fSpeed * -1;
+}
+
+void CRing::Falling()
+{
+	if (m_tInfo.fY >= m_fGroundY)
+	{
+		m_tInfo.fY = m_fGroundY;
+		m_bIsLosing = false;
+	}
+	else
+	{
+		m_tInfo.fY += 10.f;
+	}
+}
+

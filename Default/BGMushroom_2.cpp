@@ -1,57 +1,60 @@
 #include "stdafx.h"
-#include "Spike.h"
-#include "BmpMgr.h"
+#include "BGMushroom_2.h"
 #include "Camera.h"
+#include "BmpMgr.h"
 #include "ScrollMgr.h"
 
-CSpike::CSpike()
-{
-
-}
-
-
-CSpike::~CSpike()
+CBGMushroom_2::CBGMushroom_2()
 {
 }
 
-void CSpike::Initialize(void)
+
+CBGMushroom_2::~CBGMushroom_2()
+{
+}
+
+void CBGMushroom_2::Initialize(void)
 {
 	if (CCamera::Show_Instance() != nullptr)
 	{
-		m_tInfo.fY -= 50;
+		m_tInfo.fY -= 45;
 		m_tInfo.fX -= 62;
 	}
-	
-	m_tInfo.fCX = 31.f;
-	m_tInfo.fCY = 31.f;
+
+	m_tInfo.fCX = 16.f;
+	m_tInfo.fCY = 27.f;
 
 
 	m_tPivot = POSITION(0.5, 0.5);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/Spike.bmp", L"Spike");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Obj/BGMushroom2.bmp", L"BGMushroom2");
 
-	m_iDrawID = 0;
-	m_iOption = 0;
+	m_tFrame.iFrameStart = 0;
+	m_tFrame.iFrameEnd = 13;
+	m_tFrame.iMotion = 0;
+	m_tFrame.dwSpeed = 200;
+	m_tFrame.dwTime = GetTickCount();
 
 }
 
-int CSpike::Update(void)
+int CBGMushroom_2::Update(void)
 {
-
 	Update_Rect();
+
 	return 0;
 }
 
-void CSpike::Late_Update(void)
+void CBGMushroom_2::Late_Update(void)
 {
+	Move_Frame();
 }
 
-void CSpike::Render(HDC hDC)
+void CBGMushroom_2::Render(HDC hDC)
 {
 	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"Spike");
+	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Image(L"BGMushroom2");
 
 	if (CCamera::Show_Instance() != nullptr)
 	{
@@ -67,8 +70,8 @@ void CSpike::Render(HDC hDC)
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
-			(int)m_tInfo.fCX * m_iDrawID,								// 비트맵 출력 시작 좌표, X,Y
-			(int)m_tInfo.fCY * m_iOption,
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,								// 비트맵 출력 시작 좌표, X,Y
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255));
@@ -82,15 +85,14 @@ void CSpike::Render(HDC hDC)
 			int(m_tInfo.fCX),				// 4,5 인자 : 복사받을 가로, 세로 길이
 			int(m_tInfo.fCY),
 			hMemDC,							// 비트맵을 가지고 있는 DC
-			(int)m_tInfo.fCX * m_iDrawID,								// 비트맵 출력 시작 좌표, X,Y
-			(int)m_tInfo.fCY * m_iOption,
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,								// 비트맵 출력 시작 좌표, X,Y
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
 			(int)m_tInfo.fCX,				// 복사할 비트맵의 가로, 세로 길이
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255));
 	}
-
 }
 
-void CSpike::Release(void)
+void CBGMushroom_2::Release(void)
 {
 }

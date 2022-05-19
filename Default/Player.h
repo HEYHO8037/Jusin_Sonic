@@ -37,6 +37,7 @@ public:
 	float	Get_CirclePosX() { return m_fCircleX;  }
 	int		Get_Ring() { return m_iRing; }
 	void	Get_SaveSpeed() { m_fSpeed = m_fSaveSpeed;  }
+	void	Reset_Ring() { m_iRing = 0; }
 
 private:
 	void		QuaterCircling(void);

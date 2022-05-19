@@ -14,6 +14,9 @@
 #include "Spring.h"
 #include "SoundMgr.h"
 #include "InGameStart.h"
+#include "UIScore.h"
+#include "UILife.h"
+#include "UINum.h"
 
 CStage::CStage()
 {
@@ -40,6 +43,9 @@ void CStage::Initialize(void)
 	CObjMgr::Get_Instance()->Load_Spike();
 	CObjMgr::Get_Instance()->Load_Point();
 	CObjMgr::Get_Instance()->Load_MushRoom();
+	CObjMgr::Get_Instance()->Load_BackGroundObj_1();
+	CObjMgr::Get_Instance()->Load_BackGroundObj_2();
+	CObjMgr::Get_Instance()->Load_BackGroundObj_3();
 
 	
 	CObj* pPlayer = CAbstractFactory<CPlayer>::Create();
@@ -52,14 +58,15 @@ void CStage::Initialize(void)
 	CObj* pUI = CAbstractFactory<InGameStart>::Create();
 	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, pUI);
 
-	//pRing = CAbstractFactory<CSpring>::Create();
-	//CObjMgr::Get_Instance()->Add_Object(OBJ_SPRING, pRing);
+	pUI = CAbstractFactory<CUILife>::Create();
+	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, pUI);
 
-	//pRing = CAbstractFactory<CSpike>::Create();
-	//CObjMgr::Get_Instance()->Add_Object(OBJ_SPIKE, pRing);
 
-	//pRing = CAbstractFactory<CGoal>::Create();
-	//CObjMgr::Get_Instance()->Add_Object(OBJ_POINT, pRing);
+	pUI = CAbstractFactory<CUIScore>::Create();
+	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, pUI);
+
+
+
 
 
 }	
@@ -102,10 +109,10 @@ void CStage::Render(HDC hDC)
 	tPos.y = 0 - BACKGROUNDY * 0;
 
 	POSITION tCamPos = CCamera::Get_Instance()->GetPos();
-
-	BitBlt(hDC, tPos.x, tPos.y,
+	
+	BitBlt(hDC, (int)tPos.x, (int)tPos.y,
 		WINCX, WINCY, hGroundMemDC,
-		tCamPos.x, tCamPos.y, SRCCOPY);
+		(int)tCamPos.x, (int)tCamPos.y, SRCCOPY);
 
 	CTileMgr::Get_Instance()->Render(hDC);
 	CObjMgr::Get_Instance()->Render(hDC);
@@ -114,7 +121,12 @@ void CStage::Render(HDC hDC)
 void CStage::Release(void)
 {
 	CCamera::Destroy_Instance();
-	CObjMgr::Get_Instance()->Delete_ID(OBJ_MONSTER);
+	CObjMgr::Get_Instance()->Delete_ID(OBJ_ITEM);
+	CObjMgr::Get_Instance()->Delete_ID(OBJ_SPIKE);
+	CObjMgr::Get_Instance()->Delete_ID(OBJ_POINT);
+	CObjMgr::Get_Instance()->Delete_ID(OBJ_SPRING);
+	CObjMgr::Get_Instance()->Delete_ID(OBJ_PLAYER);
+	CObjMgr::Get_Instance()->Delete_ID(OBJ_MUSHROOM);
 }
 
 void CStage::Move_Frame(void)

@@ -149,7 +149,9 @@
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="AnimateImage.h" />
-    <ClInclude Include="BackGroundObj.h" />
+    <ClInclude Include="BGMushroom_1.h" />
+    <ClInclude Include="BGMushroom_2.h" />
+    <ClInclude Include="BGMushroom_3.h" />
     <ClInclude Include="BmpMgr.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionMgr.h" />
@@ -190,10 +192,15 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMgr.h" />
+    <ClInclude Include="UILife.h" />
+    <ClInclude Include="UINum.h" />
+    <ClInclude Include="UIScore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimateImage.cpp" />
-    <ClCompile Include="BackGroundObj.cpp" />
+    <ClCompile Include="BGMushroom_1.cpp" />
+    <ClCompile Include="BGMushroom_2.cpp" />
+    <ClCompile Include="BGMushroom_3.cpp" />
     <ClCompile Include="BmpMgr.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
@@ -232,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMgr.cpp" />
+    <ClCompile Include="UILife.cpp" />
+    <ClCompile Include="UINum.cpp" />
+    <ClCompile Include="UIScore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Default.rc" />

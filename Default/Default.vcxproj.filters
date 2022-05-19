@@ -118,6 +118,9 @@
     <Filter Include="01. Obj\14. BackGroundObj">
       <UniqueIdentifier>{55036ab8-819d-48be-94b0-ee4240a6423a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI">
+      <UniqueIdentifier>{ef3a15a8-1dea-4b28-9417-fe0b0dc640a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -249,7 +252,22 @@
     <ClInclude Include="Monster.h">
       <Filter>01. Obj\03. Mouse</Filter>
     </ClInclude>
-    <ClInclude Include="BackGroundObj.h">
+    <ClInclude Include="UIScore.h">
+      <Filter>04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UILife.h">
+      <Filter>04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UINum.h">
+      <Filter>04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BGMushroom_1.h">
+      <Filter>01. Obj\14. BackGroundObj</Filter>
+    </ClInclude>
+    <ClInclude Include="BGMushroom_2.h">
+      <Filter>01. Obj\14. BackGroundObj</Filter>
+    </ClInclude>
+    <ClInclude Include="BGMushroom_3.h">
       <Filter>01. Obj\14. BackGroundObj</Filter>
     </ClInclude>
   </ItemGroup>
@@ -356,7 +374,22 @@
     <ClCompile Include="SoundMgr.cpp">
       <Filter>98. Design\SoundMgr</Filter>
     </ClCompile>
-    <ClCompile Include="BackGroundObj.cpp">
+    <ClCompile Include="UIScore.cpp">
+      <Filter>04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UILife.cpp">
+      <Filter>04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UINum.cpp">
+      <Filter>04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BGMushroom_1.cpp">
+      <Filter>01. Obj\14. BackGroundObj</Filter>
+    </ClCompile>
+    <ClCompile Include="BGMushroom_2.cpp">
+      <Filter>01. Obj\14. BackGroundObj</Filter>
+    </ClCompile>
+    <ClCompile Include="BGMushroom_3.cpp">
       <Filter>01. Obj\14. BackGroundObj</Filter>
     </ClCompile>
   </ItemGroup>

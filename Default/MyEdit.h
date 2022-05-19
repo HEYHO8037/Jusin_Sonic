@@ -19,6 +19,8 @@ private:
 
 private:
 	float		m_fSpeed = 5.f;
+	int m_fX;
+	int m_fY;
 
 };
 

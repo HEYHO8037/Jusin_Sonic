@@ -27,6 +27,10 @@ public:
 
 
 private:
+	static bool		bIsPoint;
+	static float	fRingAngle;
+	static int		iRingCount;
+	static bool		bFlip;
 	static DWORD    CollisionTime;
 	static TILEID	m_eID;
 	static bool		m_bCircleCircle;

@@ -13,6 +13,9 @@
 #include "Goal.h"
 #include "Mushroom.h"
 #include "SoundMgr.h"
+#include "BGMushroom_1.h"
+#include "BGMushroom_2.h"
+#include "BGMushroom_3.h"
 
 
 CMyEdit::CMyEdit()
@@ -31,7 +34,8 @@ void CMyEdit::Initialize(void)
 	CTileMgr::Get_Instance()->Initialize();
 	CObjMgr::Get_Instance();
 	CSoundMgr::Get_Instance()->PlayBGM(L"MushRoomBGM.mp3", 1.f);
-
+	m_fX = 0;
+	m_fY = 0;
 
 }
 
@@ -86,7 +90,7 @@ void CMyEdit::Key_Input(void)
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
 		CScrollMgr::Get_Instance()->Set_ScrollY(-m_fSpeed);
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 	{
 		POINT		pt;
 		GetCursorPos(&pt);
@@ -95,7 +99,7 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 0);
+		CTileMgr::Get_Instance()->Picking_Tile(pt, 0, 0);
 		
 		int		x = pt.x / TILECX;
 		int		y = pt.y / TILECY;
@@ -130,8 +134,16 @@ void CMyEdit::Key_Input(void)
 
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing('R'))
+	if (CKeyMgr::Get_Instance()->Key_Down('Q'))
 	{
+
+		m_fX++;
+		if (m_fX > 7)
+		{
+			m_fX = 0;
+		}
+
+
 		POINT		pt;
 		GetCursorPos(&pt);
 		ScreenToClient(g_hWnd, &pt);
@@ -139,7 +151,7 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 1);
+		CTileMgr::Get_Instance()->Picking_Tile(pt, m_fX, m_fY);
 
 		int		x = pt.x / TILECX;
 		int		y = pt.y / TILECY;
@@ -147,14 +159,47 @@ void CMyEdit::Key_Input(void)
 		int	iIndex = y * TILEX + x;
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
+		
+		if(m_fY == 10)
+		{ 
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		}
+		else if(m_fX == 6 && m_fY == 1)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
+		}
+		else if (m_fY == 4)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDEUP);
+		}
+		else
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+		}
+
+
+		if (m_fY == 10 && m_fX == 6)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_Mask(false);
+		}
+		else
+		{
+			dynamic_cast<CTile*>(pTile)->Set_Mask(true);
+		}
+
 
 	}
 
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing('E'))
+	if (CKeyMgr::Get_Instance()->Key_Down('W'))
 	{
+
+		m_fY++;
+
+		if (m_fY > 11)
+		{
+			m_fY = 0;
+		}
+
 		POINT		pt;
 		GetCursorPos(&pt);
 		ScreenToClient(g_hWnd, &pt);
@@ -162,7 +207,7 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 6, 1);
+		CTileMgr::Get_Instance()->Picking_Tile(pt, m_fX, m_fY);
 
 		int		x = pt.x / TILECX;
 		int		y = pt.y / TILECY;
@@ -170,120 +215,39 @@ void CMyEdit::Key_Input(void)
 		int	iIndex = y * TILEX + x;
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 
-	}
+		if (m_fY == 10)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		}
+		else if (m_fX == 6 && m_fY == 1)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDE);
+		}
+		else if (m_fY == 4)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDEUP);
+		}
+		else
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
+		}
+		
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing('Q'))
-	{
-		POINT		pt;
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
-
-		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 3, 4);
-
-		int		x = pt.x / TILECX;
-		int		y = pt.y / TILECY;
-
-		int	iIndex = y * TILEX + x;
-
-		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDEUP);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
-
-	}
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing('Y'))
-	{
-		POINT		pt;
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
-
-		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 4, 10);
-
-		int		x = pt.x / TILECX;
-		int		y = pt.y / TILECY;
-
-		int	iIndex = y * TILEX + x;
-
-		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
-
-	}
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing('U'))
-	{
-		POINT		pt;
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
-
-		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 6, 10);
-
-		int		x = pt.x / TILECX;
-		int		y = pt.y / TILECY;
-
-		int	iIndex = y * TILEX + x;
-
-		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(false);
-	}
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing('I'))
-	{
-		POINT		pt;
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
-
-		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 0, 10);
-
-		int		x = pt.x / TILECX;
-		int		y = pt.y / TILECY;
-
-		int	iIndex = y * TILEX + x;
-
-		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
+		if (m_fY == 10 && m_fX == 6)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_Mask(false);
+		}
+		else
+		{
+			dynamic_cast<CTile*>(pTile)->Set_Mask(true);
+		}
 
 	}
 
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing('O'))
-	{
-		POINT		pt;
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
 
-		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 1, 10);
-
-		int		x = pt.x / TILECX;
-		int		y = pt.y / TILECY;
-
-		int	iIndex = y * TILEX + x;
-
-		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-		dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
-		dynamic_cast<CTile*>(pTile)->Set_Mask(true);
-
-	}
 
 
 	if (CKeyMgr::Get_Instance()->Key_Down('1'))
@@ -356,10 +320,52 @@ void CMyEdit::Key_Input(void)
 
 	}
 
+	if (CKeyMgr::Get_Instance()->Key_Down('6'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CBGMushroom_1>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_BG1, pObj);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down('7'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CBGMushroom_2>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_BG2, pObj);
+
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down('8'))
+	{
+		POINT		pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+
+		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
+		CObj* pObj = CAbstractFactory<CBGMushroom_3>::Create((float)pt.x, (float)pt.y);
+		CObjMgr::Get_Instance()->Add_Object(OBJ_BG3, pObj);
+
+	}
 
 
 
-	if (CKeyMgr::Get_Instance()->Key_Down('S'))
+
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_TAB))
 	{
 		CTileMgr::Get_Instance()->Save_Tile();
 		CObjMgr::Get_Instance()->Save_Ring();
@@ -367,9 +373,12 @@ void CMyEdit::Key_Input(void)
 		CObjMgr::Get_Instance()->Save_Spike();
 		CObjMgr::Get_Instance()->Save_Point();
 		CObjMgr::Get_Instance()->Save_MushRoom();
+		CObjMgr::Get_Instance()->Save_BackGroundObj_1();
+		CObjMgr::Get_Instance()->Save_BackGroundObj_2();
+		CObjMgr::Get_Instance()->Save_BackGroundObj_3();
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Down('A'))
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_LSHIFT))
 	{
 		CTileMgr::Get_Instance()->Load_Tile();
 		CObjMgr::Get_Instance()->Load_Ring();
@@ -377,6 +386,9 @@ void CMyEdit::Key_Input(void)
 		CObjMgr::Get_Instance()->Load_Spike();
 		CObjMgr::Get_Instance()->Load_Point();
 		CObjMgr::Get_Instance()->Load_MushRoom();
+		CObjMgr::Get_Instance()->Load_BackGroundObj_1();
+		CObjMgr::Get_Instance()->Load_BackGroundObj_2();
+		CObjMgr::Get_Instance()->Load_BackGroundObj_3();
 	}
 
 }

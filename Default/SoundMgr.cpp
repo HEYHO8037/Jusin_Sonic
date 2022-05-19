@@ -42,6 +42,8 @@ void CSoundMgr::Release()
 
 void CSoundMgr::PlaySound(TCHAR * pSoundKey, CHANNELID eID, float fVolume)
 {
+	StopSound(eID);
+
 	map<TCHAR*, FMOD_SOUND*>::iterator iter; 
 
 	// iter = find_if(m_mapSound.begin(), m_mapSound.end(), CTag_Finder(pSoundKey));

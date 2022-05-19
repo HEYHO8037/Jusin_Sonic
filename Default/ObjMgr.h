@@ -28,14 +28,18 @@ public:
 	void Save_Spike(void);
 	void Save_Point(void);
 	void Save_MushRoom(void);
-	void Save_BackGroundObj(void);
+	void Save_BackGroundObj_1(void);
+	void Save_BackGroundObj_2(void);
+	void Save_BackGroundObj_3(void);
 
 	void Load_Ring(void);
 	void Load_Spring(void);
 	void Load_Spike(void);
 	void Load_Point(void);
 	void Load_MushRoom(void);
-	void Load_BackGroundObj(void);
+	void Load_BackGroundObj_1(void);
+	void Load_BackGroundObj_2(void);
+	void Load_BackGroundObj_3(void);
 
 
 private:

@@ -17,8 +17,8 @@
 #define		TILECX		128
 #define		TILECY		128
 
-#define		TILEX		30
-#define		TILEY		8
+#define		TILEX		40
+#define		TILEY		10
 
 #define		TOTALTILEX 1024
 #define		TOTALTILEY 1536

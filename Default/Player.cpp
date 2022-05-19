@@ -565,10 +565,7 @@ void CPlayer::Key_Input(void)
 		{
 			m_eCurState = IDLE;
 		}
-		else
-		{
-			m_eCurState = RUN;
-		}
+
 		
 		if(m_eCurState == ROLLING)
 		{
@@ -666,6 +663,14 @@ void CPlayer::Motion_Change(void)
 			break;
 
 		case ROLLEND:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 1;
+			m_tFrame.iMotion = 7;
+			m_tFrame.dwSpeed = 200;
+			m_tFrame.dwTime = GetTickCount();
+			break;
+
+		case JUMPING:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 1;
 			m_tFrame.iMotion = 7;
