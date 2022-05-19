@@ -70,6 +70,8 @@ void CPlayer::Initialize(void)
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL225.bmp", L"SonicL225");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL270.bmp", L"SonicL270");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicL315.bmp", L"SonicL315");
+	
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Sonic/SonicR.bmp", L"SonicR");
 
 
 	m_pFrameKey = L"SonicR0";
@@ -499,6 +501,9 @@ void CPlayer::Key_Input(void)
 		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 		{
 			m_bJump = true;
+			m_eCurState = ROLLING;
+			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
+
 		}
 	}
 	else if (GetAsyncKeyState(VK_RIGHT))
@@ -530,7 +535,7 @@ void CPlayer::Key_Input(void)
 		if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 		{
 			m_bJump = true;
-
+			m_eCurState = ROLLING;
 			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
 		}
 
@@ -539,38 +544,51 @@ void CPlayer::Key_Input(void)
 	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
 		m_bJump = true;
+		m_eCurState = ROLLING;
+		CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
+
 	}
 
-	else if (GetAsyncKeyState(VK_DOWN))
+	else if (CKeyMgr::Get_Instance()->Key_Down(VK_DOWN))
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"spindash_1.mp3", SOUND_EFFECT, 1.f);
+	}
+	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
 	{
 		if (!m_bIsRollingStart)
 		{
 			m_eCurState = ROLLSTART;
+
 			if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
 			{
-				m_bIsRollingStart = true;;
+				m_bIsRollingStart = true;
+
 			}
 		}
 		else if (m_bIsRollingStart)
 		{
-			m_eCurState = ROLLING;
+			m_eCurState = CHARGEROLLING;
 		}
+	}
+	else if (CKeyMgr::Get_Instance()->Key_Up(VK_DOWN))
+	{
 
 	}
 	else
 	{
 		m_fSpeed -= fminf(fabsf(m_fSpeed), FRC) * sinf(m_fSpeed); // 키보드 입력을 안 받을시 감속
 		
-		if (abs(m_fSpeed) < 0.1)
+		if (m_eCurState == ROLLING)
+		{
+			m_eCurState = ROLLING;
+		}
+		else if (abs(m_fSpeed) < 0.1)
 		{
 			m_eCurState = IDLE;
 		}
 
 		
-		if(m_eCurState == ROLLING)
-		{
-			m_eCurState = ROLLING;
-		}
+
 
 	}
 
@@ -590,6 +608,7 @@ void CPlayer::Jumping(void)
 		}
 		else
 		{
+			m_eCurState = RUN;
 			m_fJumpPower = JUMP;
 			m_fPower = 0;
 			m_bJump = false;
@@ -672,8 +691,8 @@ void CPlayer::Motion_Change(void)
 
 		case JUMPING:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 1;
-			m_tFrame.iMotion = 7;
+			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iMotion = 0;
 			m_tFrame.dwSpeed = 200;
 			m_tFrame.dwTime = GetTickCount();
 			break;

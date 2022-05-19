@@ -494,6 +494,8 @@ void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
 					CollisionTime = GetTickCount();
 					dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+					dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
 					dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
 					CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 
@@ -505,6 +507,8 @@ void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
 				CollisionTime = GetTickCount();
 				dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+				dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
+				dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
 				dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
 				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 			}
@@ -565,6 +569,8 @@ void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
 					CollisionTime = GetTickCount();
 					dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+					dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
 					CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 				}
 			}
@@ -573,6 +579,8 @@ void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
 				CollisionTime = GetTickCount();
 				dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
+				dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
+				dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
 				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 			}
 		}
