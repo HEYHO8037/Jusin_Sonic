@@ -511,7 +511,7 @@ void CPlayer::Key_Input(void)
 		{
 			m_bJump = true;
 			m_eCurState = ROLLING;
-			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
+			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_PLAYER, 1.f);
 
 		}
 	}
@@ -553,7 +553,7 @@ void CPlayer::Key_Input(void)
 		{
 			m_bJump = true;
 			m_eCurState = ROLLING;
-			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
+			CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_PLAYER, 1.f);
 		}
 
 	
@@ -562,13 +562,13 @@ void CPlayer::Key_Input(void)
 	{
 		m_bJump = true;
 		m_eCurState = ROLLING;
-		CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_EFFECT, 1.f);
+		CSoundMgr::Get_Instance()->PlaySound(L"jump.mp3", SOUND_PLAYER, 1.f);
 
 	}
 
 	else if (CKeyMgr::Get_Instance()->Key_Down(VK_DOWN))
 	{
-		CSoundMgr::Get_Instance()->PlaySound(L"spindash_1.mp3", SOUND_EFFECT, 1.f);
+		CSoundMgr::Get_Instance()->PlaySound(L"spindash_1.mp3", SOUND_PLAYER, 1.f);
 		m_fSpeed = 0.f;
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))

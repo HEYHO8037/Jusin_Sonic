@@ -707,6 +707,8 @@ void CCollisionMgr::Collision_Player_Boss()
 					dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
 					dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
 					dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
+					CSoundMgr::Get_Instance()->PlaySound(L"crash.mp3", SOUND_PLAYER, 1.f);
+
 
 				}
 				else
@@ -716,7 +718,7 @@ void CCollisionMgr::Collision_Player_Boss()
 					dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
 					dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
 					dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
-					CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
+					CSoundMgr::Get_Instance()->PlaySound(L"death.mp3", SOUND_MONSTER, 1.f);
 
 					int iRing = dynamic_cast<CPlayer*>(Player)->Get_Ring();
 					float fX = Player->Get_Info().fX;
@@ -768,6 +770,7 @@ void CCollisionMgr::Collision_Player_Boss()
 				dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
 				dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
 				dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
+				CSoundMgr::Get_Instance()->PlaySound(L"crash.mp3", SOUND_PLAYER, 1.f);
 
 			}
 			else
@@ -778,7 +781,7 @@ void CCollisionMgr::Collision_Player_Boss()
 				dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
 				dynamic_cast<CPlayer*>(Player)->Set_PosAddX(-2);
 				dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
-				CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
+				CSoundMgr::Get_Instance()->PlaySound(L"death.mp3", SOUND_MONSTER, 1.f);
 
 				int iRing = dynamic_cast<CPlayer*>(Player)->Get_Ring();
 				float fX = Player->Get_Info().fX;

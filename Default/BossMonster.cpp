@@ -2,6 +2,7 @@
 #include "BossMonster.h"
 #include "BmpMgr.h"
 #include "Camera.h"
+#include "SoundMgr.h"
 
 CBossMonster::CBossMonster()
 {
@@ -134,6 +135,8 @@ void CBossMonster::RollingAttack()
 	{
 		float distX = m_pTarget->Get_Info().fX - m_tInfo.fX;
 		m_eCurState = BOSS_ATTACK;
+		CSoundMgr::Get_Instance()->PlaySound(L"electric-double-jump.mp3", SOUND_EFFECT, 1.f);
+
 		
 		if (m_bIsIDLE)
 		{
@@ -180,6 +183,8 @@ void CBossMonster::BackAttack()
 	{
 		float distX = m_pTarget->Get_Info().fX - m_tInfo.fX;
 		m_eCurState = BOSS_BACKATTACK;
+		CSoundMgr::Get_Instance()->PlaySound(L"mechanical-whirr.mp3", SOUND_MONSTER, 1.f);
+
 
 		if (m_bIsIDLE)
 		{
@@ -234,6 +239,7 @@ void CBossMonster::Die()
 {
 	if (m_iHP <= 0)
 	{
+		CSoundMgr::Get_Instance()->PlaySound(L"explosion.mp3", SOUND_MONSTER, 1.f);
 		m_eCurState = BOSS_DEAD;
 		m_bIsKnockDown = true;
 	}
