@@ -9,6 +9,7 @@
 #include "ObjMgr.h"
 #include "InGameEnd.h"
 #include "UIScore.h"
+#include "BossMonster.h"
 
 bool	CCollisionMgr::bIsPoint = false;
 float	CCollisionMgr::fRingAngle = 101.25f;
@@ -236,6 +237,94 @@ void CCollisionMgr::Collision_Pixel(CObj* _Dest)
 	}
 }
 
+void CCollisionMgr::Collision_Pixel_Boss(CObj * _Dest)
+{
+	bool(*bIsPixel)[TILECX * TILEX] = nullptr;
+	bIsPixel = CTileMgr::Get_Instance()->Get_TotalPixel();
+	bool bIsGround = false;
+
+	int iBottom = _Dest->Get_Rect().bottom;
+	int iTop = _Dest->Get_Rect().top;
+	int iRight = _Dest->Get_Rect().right;
+	int iLeft = _Dest->Get_Rect().left;
+	int iMiddleX = (int)_Dest->Get_Info().fX;
+
+
+
+	// 하단 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 0)
+		{
+			for (int i = _Dest->Get_Rect().top; i < iBottom; ++i)
+			{
+				if ((*(bIsPixel[i] + iMiddleX)) == true)
+				{
+					dynamic_cast<CBossMonster*>(_Dest)->Set_Falling(false);
+					dynamic_cast<CBossMonster*>(_Dest)->Set_Jumping(false);
+					float Floor = (float)_Dest->Get_Rect().bottom - i;
+					dynamic_cast<CBossMonster*>(_Dest)->Set_PosAddY(-Floor);
+					return;
+				}
+			}
+		}
+	}
+
+	//상단 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 64)
+		{
+			for (int i = _Dest->Get_Rect().left; i < iRight; ++i)
+			{
+
+				if ((*(bIsPixel[iTop] + i)) == true)
+				{
+					dynamic_cast<CBossMonster*>(_Dest)->Set_Jumping(false);
+					dynamic_cast<CBossMonster*>(_Dest)->Set_Falling(true);
+
+					return;
+				}
+			}
+		}
+	}
+	float fAngle = 0;
+
+	//우측 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 0)
+		{
+			for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
+			{
+				if ((*(bIsPixel[i] + (iRight - 13))) == true)
+				{
+					_Dest->Set_Speed(0.f);
+					_Dest->Set_PosX(_Dest->Get_Info().fX - 1);
+				}
+			}
+		}
+	}
+
+	//좌측 충돌
+	if (_Dest->Get_Rect().bottom < BACKGROUNDY)
+	{
+		if (_Dest->Get_Rect().top > 0)
+		{
+
+			for (int i = _Dest->Get_Rect().bottom - 32; i > iTop; --i)
+			{
+				if ((*(bIsPixel[i] + (iLeft + 13))) == true)
+				{
+					_Dest->Set_Speed(0.f);
+					_Dest->Set_PosX(_Dest->Get_Info().fX);
+				}
+			}
+
+		}
+	}
+}
+
 void CCollisionMgr::Collision_Tile(CObj * _Dest)
 {
 	int		x = (int)_Dest->Get_Info().fX / TILECX;
@@ -294,7 +383,6 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 			dynamic_cast<CPlayer*>(_Dest)->Set_CirclePos(GetTile->Get_Rect().left, GetTile->Get_Rect().top);
 			m_bCircleCircle = true;
 		}
-
 	}
 	else
 	{
@@ -376,7 +464,7 @@ void CCollisionMgr::Collision_Player_Spike(CObj * _Dest, list<CObj*>* _Sour)
 					float fSpeed = dynamic_cast<CPlayer*>(_Dest)->Get_Speed();
 					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
 					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(HIT);
-					dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 2));
+					dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 5));
 					CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
 
 					int iRing = dynamic_cast<CPlayer*>(_Dest)->Get_Ring();
@@ -429,7 +517,7 @@ void CCollisionMgr::Collision_Player_Spike(CObj * _Dest, list<CObj*>* _Sour)
 				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
 				dynamic_cast<CPlayer*>(_Dest)->Set_CurState(HIT);
 				dynamic_cast<CPlayer*>(_Dest)->Set_PosAddX(-2);
-				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 2));
+				dynamic_cast<CPlayer*>(_Dest)->Set_Speed(-(fSpeed / 5));
 				CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
 
 				int iRing = dynamic_cast<CPlayer*>(_Dest)->Get_Ring();
@@ -558,6 +646,7 @@ void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
 
 	for (iter = _Sour->begin(); iter != iterEnd; ++iter)
 	{
+		//if(Check_Rect())
 		if (IntersectRect(&rc, &(_Dest->Get_Rect()), &((*iter)->Get_Rect())))
 		{
 			if (CollisionTime)
@@ -587,5 +676,149 @@ void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
 		else
 		{
 		}
+	}
+}
+
+void CCollisionMgr::Collision_Player_Boss()
+{
+	RECT rc{};
+
+	CObj* Player = CObjMgr::Get_Instance()->Get_Player();
+	CObj* Boss = CObjMgr::Get_Instance()->Get_OBJType(OBJ_MONSTER)->front();
+
+	if (dynamic_cast<CBossMonster*>(Boss)->Get_KnockDown())
+	{
+		return;
+	}
+
+	if (IntersectRect(&rc, &Player->Get_Rect(), &Boss->Get_Rect()))
+	{
+		if (CollisionTime)
+		{
+			DWORD CheckTime = GetTickCount() - CollisionTime;
+
+			if (CheckTime > 500)
+			{
+				if (dynamic_cast<CPlayer*>(Player)->Get_Player_State() == ROLLING)
+				{
+					CollisionTime = GetTickCount();
+					dynamic_cast<CBossMonster*>(Boss)->Hit();
+					float fSpeed = dynamic_cast<CPlayer*>(Player)->Get_Speed();
+					dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
+					dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
+					dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
+
+				}
+				else
+				{
+					CollisionTime = GetTickCount();
+					float fSpeed = dynamic_cast<CPlayer*>(Player)->Get_Speed();
+					dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
+					dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
+					dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
+					CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
+
+					int iRing = dynamic_cast<CPlayer*>(Player)->Get_Ring();
+					float fX = Player->Get_Info().fX;
+					float fY = Player->Get_Info().fY;
+
+					while (iRingCount < iRing)
+					{
+						CSoundMgr::Get_Instance()->PlaySound(L"ring-lose.mp3", SOUND_EFFECT, 1.f);
+
+						CObj* pObj = CAbstractFactory<CRing>::Create(fX, fY);
+						CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pObj);
+						dynamic_cast<CRing*>(pObj)->Set_Losing(true);
+						dynamic_cast<CRing*>(pObj)->Set_Ground(Player->Get_Rect().bottom - 16.f);
+						dynamic_cast<CRing*>(pObj)->SetAngle(fRingAngle);
+
+						if (iRingCount == 16)
+						{
+							dynamic_cast<CRing*>(pObj)->Set_Speed(2.f);
+							dynamic_cast<CRing*>(pObj)->SetAngle(fRingAngle);
+						}
+
+						dynamic_cast<CRing*>(pObj)->MoveRing();
+
+						if (bFlip == true)
+						{
+							dynamic_cast<CRing*>(pObj)->ToggleSpeed();
+							fRingAngle += 22.5f;
+						}
+
+
+						bFlip = !bFlip;
+						iRingCount += 1;
+					}
+
+					dynamic_cast<CPlayer*>(Player)->Reset_Ring();
+					CObj* pUI = CObjMgr::Get_Instance()->Get_OBJType(OBJ_UI)->back();
+					dynamic_cast<CUIScore*>(pUI)->Rest_Ring();
+					iRingCount = 0;
+				}
+			}
+		}
+		else
+		{
+			if (dynamic_cast<CPlayer*>(Player)->Get_Player_State() == ROLLING)
+			{
+				CollisionTime = GetTickCount();
+				dynamic_cast<CBossMonster*>(Boss)->Hit();
+				float fSpeed = dynamic_cast<CPlayer*>(Player)->Get_Speed();
+				dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
+				dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
+				dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
+
+			}
+			else
+			{
+				CollisionTime = GetTickCount();
+				float fSpeed = dynamic_cast<CPlayer*>(Player)->Get_Speed();
+				dynamic_cast<CPlayer*>(Player)->Set_Jumping(true);
+				dynamic_cast<CPlayer*>(Player)->Set_CurState(HIT);
+				dynamic_cast<CPlayer*>(Player)->Set_PosAddX(-2);
+				dynamic_cast<CPlayer*>(Player)->Set_Speed(-(fSpeed / 5));
+				CSoundMgr::Get_Instance()->PlaySound(L"spiked.mp3", SOUND_EFFECT, 1.f);
+
+				int iRing = dynamic_cast<CPlayer*>(Player)->Get_Ring();
+				float fX = Player->Get_Info().fX;
+				float fY = Player->Get_Info().fY;
+
+				while (iRingCount < iRing)
+				{
+					CSoundMgr::Get_Instance()->PlaySound(L"ring-lose.mp3", SOUND_EFFECT, 1.f);
+					CObj* pObj = CAbstractFactory<CRing>::Create(fX, fY);
+					CObjMgr::Get_Instance()->Add_Object(OBJ_ITEM, pObj);
+					dynamic_cast<CRing*>(pObj)->Set_Losing(true);
+					dynamic_cast<CRing*>(pObj)->Set_Ground(Player->Get_Rect().bottom - 16.f);
+					dynamic_cast<CRing*>(pObj)->SetAngle(fRingAngle);
+
+					if (iRingCount == 16)
+					{
+						dynamic_cast<CRing*>(pObj)->Set_Speed(2.f);
+						dynamic_cast<CRing*>(pObj)->SetAngle(fRingAngle);
+					}
+
+					dynamic_cast<CRing*>(pObj)->MoveRing();
+
+					if (bFlip == true)
+					{
+						dynamic_cast<CRing*>(pObj)->ToggleSpeed();
+						fRingAngle += 22.5f;
+					}
+
+
+					bFlip = !bFlip;
+					iRingCount += 1;
+
+				}
+
+				dynamic_cast<CPlayer*>(Player)->Reset_Ring();
+				CObj* pUI = CObjMgr::Get_Instance()->Get_OBJType(OBJ_UI)->back();
+				dynamic_cast<CUIScore*>(pUI)->Rest_Ring();
+				iRingCount = 0;
+			}
+		}
+
 	}
 }

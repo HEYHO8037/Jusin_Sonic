@@ -23,7 +23,7 @@
 #define		TOTALTILEX 1024
 #define		TOTALTILEY 1536
 
-#define		BACKGROUNDX 4036
+#define		BACKGROUNDX 9921
 #define		BACKGROUNDY 768
 
 #define		RADIAN		PI / 180
@@ -40,9 +40,12 @@
 #define ROLLINGDOWN 0.3125 // 슬로프 하강 값
 #define FALL 2.5 // 낙하속도
 
+#define ROLLINGDEC 0.1484375
+#define ROLLINGSPD 16
+
 //Sonic's Airborne Speed Constants ( 공중 스피드 관련값 )
 #define AIR 0.09375 // 공기저항계수
-#define JUMP 15 // 점프력
+#define JUMP 17 // 점프력
 #define GRAVITY 0.21875 // 중력값
 
 

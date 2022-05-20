@@ -18,7 +18,6 @@ void CMouse::Initialize(void)
 
 int CMouse::Update(void)
 {
-
 	POINT	pt{};
 
 	GetCursorPos(&pt);	// 현재 마우스의 위치 좌표를 얻어오는 함수

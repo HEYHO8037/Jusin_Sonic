@@ -31,9 +31,6 @@
     <Filter Include="98. Design\AbstractFactory">
       <UniqueIdentifier>{46a30c8b-c1ef-4525-821a-e09f38f11e8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\02. Monster">
-      <UniqueIdentifier>{e0ab47df-43ed-4ed6-be54-3523b7b16a3a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Obj\03. Mouse">
       <UniqueIdentifier>{8a388e49-470b-4695-bcb9-a7ce03e5c47d}</UniqueIdentifier>
     </Filter>
@@ -120,6 +117,9 @@
     </Filter>
     <Filter Include="04. UI">
       <UniqueIdentifier>{ef3a15a8-1dea-4b28-9417-fe0b0dc640a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\02. Boss">
+      <UniqueIdentifier>{6b7d640e-abb4-400c-a6e9-d701abbc98e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -249,16 +249,7 @@
     <ClInclude Include="SoundMgr.h">
       <Filter>98. Design\SoundMgr</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>01. Obj\03. Mouse</Filter>
-    </ClInclude>
-    <ClInclude Include="UIScore.h">
-      <Filter>04. UI</Filter>
-    </ClInclude>
     <ClInclude Include="UILife.h">
-      <Filter>04. UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UINum.h">
       <Filter>04. UI</Filter>
     </ClInclude>
     <ClInclude Include="BGMushroom_1.h">
@@ -269,6 +260,15 @@
     </ClInclude>
     <ClInclude Include="BGMushroom_3.h">
       <Filter>01. Obj\14. BackGroundObj</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonster.h">
+      <Filter>01. Obj\02. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="UIScore.h">
+      <Filter>04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UINum.h">
+      <Filter>04. UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -286,9 +286,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>01. Obj\00. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>01. Obj\02. Monster</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
       <Filter>01. Obj\03. Mouse</Filter>
@@ -374,13 +371,7 @@
     <ClCompile Include="SoundMgr.cpp">
       <Filter>98. Design\SoundMgr</Filter>
     </ClCompile>
-    <ClCompile Include="UIScore.cpp">
-      <Filter>04. UI</Filter>
-    </ClCompile>
     <ClCompile Include="UILife.cpp">
-      <Filter>04. UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UINum.cpp">
       <Filter>04. UI</Filter>
     </ClCompile>
     <ClCompile Include="BGMushroom_1.cpp">
@@ -391,6 +382,15 @@
     </ClCompile>
     <ClCompile Include="BGMushroom_3.cpp">
       <Filter>01. Obj\14. BackGroundObj</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMonster.cpp">
+      <Filter>01. Obj\02. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="UINum.cpp">
+      <Filter>04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIScore.cpp">
+      <Filter>04. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

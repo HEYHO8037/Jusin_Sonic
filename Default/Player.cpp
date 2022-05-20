@@ -22,7 +22,7 @@ CPlayer::~CPlayer()
 void CPlayer::Initialize(void)
 {
 	m_tInfo.fX = 100.f;
-	m_tInfo.fY = 500.f;
+	m_tInfo.fY = 400.f;
 
 	m_tInfo.fCX = 64.f;
 	m_tInfo.fCY = 64.f;
@@ -48,6 +48,8 @@ void CPlayer::Initialize(void)
 	m_bIsRollingStart = false;
 	m_bIsRolling = false;
 	m_bIsQuatorCircle = false;
+	m_bIsCharging = false;
+	m_bIsLR = false;
 
 
 	m_fCircleX = 0;
@@ -336,7 +338,7 @@ void CPlayer::QuaterCircling(void)
 	m_tInfo.fY += 3 * cosf(RADIAN * m_fAngle);
 
 
-	m_fAngle += 5;
+	m_fAngle += (m_fSpeed + 5);
 
 	if ((int)m_fAngle % 180 == 0)
 	{
@@ -456,8 +458,7 @@ void CPlayer::Circling(void)
 	m_tInfo.fX += 7 * sinf(RADIAN * m_fAngle);
 	m_tInfo.fY += 6 * cosf(RADIAN * m_fAngle);
 
-
-	m_fAngle += 5;
+	m_fAngle += (m_fSpeed + 5);
 
 	if ((int)m_fAngle % 450 == 0)
 	{
@@ -474,7 +475,7 @@ void CPlayer::Key_Input(void)
 	// GetKeyState
 	if (GetAsyncKeyState(VK_LEFT))
 	{
-
+		m_bIsLR = true;
 		if (m_eGravity == UP_VERTICAL)
 		{
 			m_pFrameKey = L"SonicL90";
@@ -486,7 +487,15 @@ void CPlayer::Key_Input(void)
 
 		if (m_fSpeed > 0) //스피드가 양수 즉 우측일때
 		{
-			m_fSpeed -= DEC;  // 감속
+			if (m_eCurState == ROLLING)
+			{
+				m_fSpeed -= ROLLINGDEC;
+			}
+			else
+			{
+				m_fSpeed -= DEC;  // 감속
+			}
+
 			if (m_fSpeed <= 0)
 				m_fSpeed = 0.0;  //스피드가 남아있을경우 빠르게 감속을 시켜버림
 		}
@@ -508,7 +517,7 @@ void CPlayer::Key_Input(void)
 	}
 	else if (GetAsyncKeyState(VK_RIGHT))
 	{
-
+		m_bIsLR = false;
 		if (m_eGravity == UP_VERTICAL)
 		{
 			m_pFrameKey = L"SonicR90";
@@ -520,7 +529,15 @@ void CPlayer::Key_Input(void)
 
 		if (m_fSpeed < 0) //위 코드의 반대
 		{
-			m_fSpeed += DEC;
+			if (m_eCurState == ROLLING)
+			{
+				m_fSpeed += ROLLINGDEC;
+			}
+			else
+			{
+				m_fSpeed += DEC;  // 감속
+			}
+
 			if (m_fSpeed >= 0)
 				m_fSpeed = 0.0;
 		}
@@ -552,6 +569,7 @@ void CPlayer::Key_Input(void)
 	else if (CKeyMgr::Get_Instance()->Key_Down(VK_DOWN))
 	{
 		CSoundMgr::Get_Instance()->PlaySound(L"spindash_1.mp3", SOUND_EFFECT, 1.f);
+		m_fSpeed = 0.f;
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
 	{
@@ -568,11 +586,24 @@ void CPlayer::Key_Input(void)
 		else if (m_bIsRollingStart)
 		{
 			m_eCurState = CHARGEROLLING;
+			m_bIsCharging = true;
 		}
 	}
-	else if (CKeyMgr::Get_Instance()->Key_Up(VK_DOWN))
+	else if (GetKeyState(VK_DOWN) & 0x0001)
 	{
-
+		if (m_bIsCharging)
+		{
+			if (!m_bIsLR)
+			{
+				m_fSpeed = ROLLINGSPD;
+			}
+			else
+			{
+				m_fSpeed = -ROLLINGSPD;
+			}
+			m_eCurState = ROLLING;
+			m_bIsCharging = false;
+		}
 	}
 	else
 	{
@@ -586,10 +617,6 @@ void CPlayer::Key_Input(void)
 		{
 			m_eCurState = IDLE;
 		}
-
-		
-
-
 	}
 
 

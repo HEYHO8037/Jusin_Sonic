@@ -172,6 +172,10 @@ void CMyEdit::Key_Input(void)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDEUP);
 		}
+		else if (m_fY == 9 && m_fX == 5)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		}
 		else
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
@@ -182,17 +186,18 @@ void CMyEdit::Key_Input(void)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_Mask(false);
 		}
+		else if (m_fY == 9 && m_fX == 5)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_Mask(false);
+		}
 		else
 		{
 			dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 		}
-
-
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Down('W'))
 	{
-
 		m_fY++;
 
 		if (m_fY > 11)
@@ -215,7 +220,6 @@ void CMyEdit::Key_Input(void)
 		int	iIndex = y * TILEX + x;
 
 		CObj* pTile = CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex);
-
 		if (m_fY == 10)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
@@ -228,13 +232,21 @@ void CMyEdit::Key_Input(void)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_SLIDEUP);
 		}
+		else if (m_fY == 9 && m_fX == 5)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
+		}
 		else
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
 		}
-		
+
 
 		if (m_fY == 10 && m_fX == 6)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_Mask(false);
+		}
+		else if (m_fY == 9 && m_fX == 5)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_Mask(false);
 		}
@@ -242,7 +254,6 @@ void CMyEdit::Key_Input(void)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_Mask(true);
 		}
-
 	}
 
 

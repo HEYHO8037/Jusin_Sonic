@@ -26,7 +26,7 @@ public:
 	void	Set_JumpPower(float fPower) { m_fJumpPower = fPower; }
 	void	Set_QuatorCircle(bool bCircle) { m_bIsQuatorCircle = bCircle; }
 	void	Set_SaveSpeed() { m_fSaveSpeed = m_fSpeed; }
-	void	Set_CurState(STATE eState) { m_eCurState = eState; }
+	void	Set_CurState(PLAYERSTATE eState) { m_eCurState = eState; }
 
 public:
 	bool	Get_QuatorCircle() { return m_bIsQuatorCircle; }
@@ -34,6 +34,7 @@ public:
 	float	Get_Ground() { return m_fGroundY; }
 	bool	Get_Circle() { return m_bIsCircle; }
 	GRAVITY_STATE Get_Gravity() { return m_eGravity; }
+	PLAYERSTATE Get_Player_State() { return m_eCurState; }
 	float	Get_CirclePosX() { return m_fCircleX;  }
 	int		Get_Ring() { return m_iRing; }
 	void	Get_SaveSpeed() { m_fSpeed = m_fSaveSpeed;  }
@@ -61,6 +62,7 @@ private:
 	bool					m_bIsRollingStart; // 구르기를 시작하는가?
 
 	bool					m_bIsRolling; // 구르기를 하는중인가?
+	bool					m_bIsCharging;
 
 	float					m_fJumpPower;	// 점프 힘
 	float					m_fJumpTime;	// 점프 중 진행 시간
@@ -75,10 +77,13 @@ private:
 
 	int						m_iRing; // 링 개수
 
+	bool					m_bIsLR; // 방향
+
+
 	float					m_fSoundVol;
 
 	GRAVITY_STATE			m_eGravity;
-	STATE					m_ePreState;
-	STATE					m_eCurState;
+	PLAYERSTATE					m_ePreState;
+	PLAYERSTATE					m_eCurState;
 
 };
