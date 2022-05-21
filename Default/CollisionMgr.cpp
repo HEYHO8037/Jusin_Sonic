@@ -359,6 +359,17 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 		m_bCircleCircle = false;
 
 	}
+	else if (m_eID == TILE_VERTICAL)
+	{
+		iIndex = (y + 1) * TILEX + x;
+		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
+
+		if (GetDownTile->Get_TileID() == TILE_VERTICAL)
+		{
+			bool bMask = GetDownTile->Get_Mask();
+			GetDownTile->Set_Mask(!bMask);
+		}
+	}
 	else if (m_eID == TILE_CIRCLE)
 	{
 		iIndex = (y + 1) * TILEX + x;
@@ -374,6 +385,12 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 				saveTile = GetDownTile;
 				GetDownTile->Set_Mask(!bMask);
 			}
+		}
+
+		if (GetDownTile->Get_TileID() == TILE_VERTICAL)
+		{
+			bool bMask = GetDownTile->Get_Mask();
+			GetDownTile->Set_Mask(!bMask);
 		}
 
 		if (GetTile->Get_Mask() == false && m_bCircleCircle == false)

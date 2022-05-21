@@ -176,6 +176,30 @@ void CMyEdit::Key_Input(void)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
 		}
+		else if (m_fY == 9 && m_fX == 0)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 9 && m_fX == 1)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 0)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 1)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 2)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 3)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
 		else
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);
@@ -236,6 +260,31 @@ void CMyEdit::Key_Input(void)
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_CIRCLE);
 		}
+		else if (m_fY == 9 && m_fX == 0)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 9 && m_fX == 1)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 0)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 1)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 2)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+		else if (m_fY == 11 && m_fX == 3)
+		{
+			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_VERTICAL);
+		}
+
 		else
 		{
 			dynamic_cast<CTile*>(pTile)->Set_TileID(TILE_NORMAL);

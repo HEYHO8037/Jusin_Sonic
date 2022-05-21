@@ -17,6 +17,10 @@ public:
 	virtual void Release(void) override;
 
 public:
+	int Get_Score() { return m_iScore; }
+	int Get_Ring() { return m_iRing; }
+
+public:
 	void Add_Score() { m_iScore += 10; }
 	void Add_Ring() { m_iRing++; }
 	void Rest_Ring() { m_iRing = 0; }
