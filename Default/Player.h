@@ -38,6 +38,8 @@ public:
 	float	Get_CirclePosX() { return m_fCircleX;  }
 	int		Get_Ring() { return m_iRing; }
 	void	Get_SaveSpeed() { m_fSpeed = m_fSaveSpeed;  }
+	void	Set_MaxAngle(float fAngle) { m_fMaxAngle = fAngle; }
+	float	Get_MaxAngle() { return m_fMaxAngle; }
 	void	Reset_Ring() { m_iRing = 0; }
 
 private:
@@ -78,6 +80,7 @@ private:
 	int						m_iRing; // 링 개수
 
 	bool					m_bIsLR; // 방향
+	float					m_fMaxAngle;
 
 
 	float					m_fSoundVol;

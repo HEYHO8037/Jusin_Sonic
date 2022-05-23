@@ -14,5 +14,12 @@ public:
 	virtual void Render(HDC hDC) override;
 	virtual void Release(void) override;
 
+public:
+	bool Get_SetRender() { return m_bIsRender;  }
+	void EnableRender();
+
+private:
+	bool m_bIsRender;
+
 };
 

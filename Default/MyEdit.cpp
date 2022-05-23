@@ -99,7 +99,7 @@ void CMyEdit::Key_Input(void)
 		pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		pt.y -= (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		CTileMgr::Get_Instance()->Picking_Tile(pt, 0, 0);
+		CTileMgr::Get_Instance()->Picking_Tile(pt, m_fX, m_fY);
 		
 		int		x = pt.x / TILECX;
 		int		y = pt.y / TILECY;

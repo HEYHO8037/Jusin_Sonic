@@ -42,6 +42,7 @@ void CPlayer::Initialize(void)
 	m_bIsCircle = false;
 	m_tPivot = POSITION(0.5, 0.5);
 	m_fAngle = 90.f;
+	m_fMaxAngle = 450.f;
 
 	m_bIsGetPoint = false;
 	m_bIsRunStart = false;
@@ -161,7 +162,6 @@ void CPlayer::Render(HDC hDC)
 
 	if (bInClient)
 	{
-
 		GdiTransparentBlt(hDC, 					// 복사 받을, 최종적으로 그림을 그릴 DC
 			tPos.x,	// 2,3 인자 :  복사받을 위치 X, Y
 			tPos.y,
@@ -334,11 +334,26 @@ void CPlayer::QuaterCircling(void)
 		}
 	}
 
-	m_tInfo.fX += 2 * sinf(RADIAN * m_fAngle);
-	m_tInfo.fY += 3 * cosf(RADIAN * m_fAngle);
+	if (m_fSaveSpeed < 5)
+	{
+		m_tInfo.fX += 2 * sinf(RADIAN * m_fAngle);
+		m_tInfo.fY += 3 * cosf(RADIAN * m_fAngle);
+	}
+	else
+	{
+		m_tInfo.fX += 4 * sinf(RADIAN * m_fAngle);
+		m_tInfo.fY += 6 * cosf(RADIAN * m_fAngle);
+	}
 
 
-	m_fAngle += (m_fSpeed + 5);
+	if (m_fSaveSpeed < 5)
+	{
+		m_fAngle += 5;
+	}
+	else
+	{
+		m_fAngle += 10;
+	}
 
 	if ((int)m_fAngle % 180 == 0)
 	{
@@ -455,14 +470,33 @@ void CPlayer::Circling(void)
 		}
 	}
 
-	m_tInfo.fX += 7 * sinf(RADIAN * m_fAngle);
-	m_tInfo.fY += 6 * cosf(RADIAN * m_fAngle);
-
-	m_fAngle += (m_fSpeed + 5);
-
-	if ((int)m_fAngle % 450 == 0)
+	if (m_fSaveSpeed < 5)
 	{
-		m_fSpeed = m_fSaveSpeed;
+		m_tInfo.fX += 7 * sinf(m_fAngle * RADIAN);
+		m_tInfo.fY += 6 * cosf(m_fAngle * RADIAN);
+	}
+	else
+	{
+		m_tInfo.fX += 14 * sinf(m_fAngle * RADIAN);
+		m_tInfo.fY += 12 * cosf(m_fAngle * RADIAN);
+	}
+
+
+	if (m_fSaveSpeed < 5)
+	{
+		m_fAngle += 5;
+	}
+	else
+	{
+		m_fAngle += 10;
+	}
+
+	if ((int)m_fAngle % (int)m_fMaxAngle == 0)
+	{
+		if(m_fMaxAngle != 360.f)
+		{ 
+			m_fSpeed = m_fSaveSpeed;
+		}
 		m_fAngle = 90.f;
 		m_fCircleX = 0.f;
 		m_fCircleY = 0.f;
@@ -630,12 +664,23 @@ void CPlayer::Jumping(void)
 	{
 		if (m_fJumpPower >= m_fPower)
 		{
+			if (m_fSpeed > 5)
+			{
+				m_fSpeed /= 2;
+			}
 			m_tInfo.fY -= m_fPower;
 			m_fPower += 0.7f;
 		}
 		else
 		{
-			m_eCurState = RUN;
+			if(m_eCurState == ROLLING)
+			{ 
+				m_eCurState = ROLLING;
+			}
+			else
+			{
+				m_eCurState = RUN;
+			}
 			m_fJumpPower = JUMP;
 			m_fPower = 0;
 			m_bJump = false;

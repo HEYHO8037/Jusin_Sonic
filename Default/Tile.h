@@ -29,6 +29,8 @@ public:
 	void		Set_Mask(bool bIsMask) { m_bIsCheck = false;  m_bIsMask = bIsMask; }
 	bool		Get_Mask() { return m_bIsMask; }
 
+	void		Add_DrawID() { m_bIsCheck = false;  m_iDrawID++; }
+
 
 public:
 	const TILEID		Get_TileID() { return m_eTileID; }

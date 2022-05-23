@@ -17,16 +17,25 @@ public:
 
 
 public:
-	void Set_Score(int iScore) { m_iScore = iScore; }
+	void Set_Score(int iScore)
+	{
+		m_iScore = iScore; 
+		m_iTotal = m_iScore * m_iRing;
+	}
 	void Set_Ring(int iRing) { m_iRing = iRing; }
 private:
 	void Update_ScoreVector();
 	void Update_RingVector();
+	void Update_TotalVector();
+
 
 private:
 	int m_iScore;
 	int m_iRing;
+	int m_iTotal;
+
 	vector<CUINum*> m_vecRingBonus;
 	vector<CUINum*> m_vecScoreBonus;
+	vector<CUINum*> m_vecTotal;
 };
 

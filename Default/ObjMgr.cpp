@@ -89,7 +89,7 @@ void CObjMgr::Late_Update(void)
 		{
 			iter->Late_Update();
 
-			if (m_ObjList[i].empty())
+			if (m_ObjList[OBJ_PLAYER].empty())
 				break;
 		}
 	}

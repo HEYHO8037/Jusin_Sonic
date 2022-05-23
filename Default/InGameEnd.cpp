@@ -13,6 +13,7 @@ InGameEnd::InGameEnd()
 
 InGameEnd::~InGameEnd()
 {
+	Release();
 }
 
 void InGameEnd::Initialize(void)
@@ -27,9 +28,13 @@ void InGameEnd::Initialize(void)
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/End1.bmp", L"End");
 
-	m_vecRingBonus.push_back(new CUINum(m_tInfo.fX + 103, m_tInfo.fY + 55));
-	m_vecScoreBonus.push_back(new CUINum(m_tInfo.fX + 103, m_tInfo.fY + 75));
+	m_iTotal = 0;
+	m_iRing = 0;
+	m_iScore = 0;
 
+	m_vecRingBonus.push_back(new CUINum(m_tInfo.fX + 133, m_tInfo.fY + 55));
+	m_vecScoreBonus.push_back(new CUINum(m_tInfo.fX + 133, m_tInfo.fY + 75));
+	m_vecTotal.push_back(new CUINum(m_tInfo.fX + 133, m_tInfo.fY + 106));
 }
 
 int InGameEnd::Update(void)
@@ -43,6 +48,8 @@ int InGameEnd::Update(void)
 	Update_Rect();
 	Update_ScoreVector();
 	Update_RingVector();
+	Update_TotalVector();
+
 
 	for (auto& iter : m_vecRingBonus)
 	{
@@ -50,6 +57,11 @@ int InGameEnd::Update(void)
 	}
 
 	for (auto& iter : m_vecScoreBonus)
+	{
+		iter->Update();
+	}
+
+	for (auto& iter : m_vecTotal)
 	{
 		iter->Update();
 	}
@@ -64,6 +76,8 @@ void InGameEnd::Late_Update(void)
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_RETURN))
 	{
 		m_bDead = true;
+
+		CSoundMgr::Get_Instance()->PlayBGM(L"TitleBGM.mp3", 1.f);
 		CSceneMgr::Get_Instance()->Scene_Change(SC_MENU);
 	}
 
@@ -95,6 +109,11 @@ void InGameEnd::Render(HDC hDC)
 		iter->Render(hDC);
 	}
 
+	for (auto& iter : m_vecTotal)
+	{
+		iter->Render(hDC);
+	}
+
 }
 
 void InGameEnd::Release(void)
@@ -111,6 +130,13 @@ void InGameEnd::Release(void)
 	}
 
 	m_vecScoreBonus.clear();
+
+	for (auto& iter : m_vecTotal)
+	{
+		delete iter;
+	}
+
+	m_vecTotal.clear();
 }
 
 void InGameEnd::Update_ScoreVector()
@@ -171,4 +197,34 @@ void InGameEnd::Update_RingVector()
 
 	m_iRing = saveRing;
 
+}
+
+void InGameEnd::Update_TotalVector()
+{
+	int _iNumLong = 0;
+	int saveTotal = m_iTotal;
+
+	if (m_iTotal == 0)
+	{
+		m_vecTotal.front()->Set_Num(0);
+		return;
+	}
+
+	while (m_iTotal != 0)
+	{
+		++_iNumLong;
+		if (_iNumLong > m_vecTotal.size())
+		{
+			m_vecTotal.push_back(dynamic_cast<CUINum*>(CAbstractFactory<CUINum>::Create(m_vecTotal[m_vecTotal.size() - 1]->Get_Info().fX - (m_vecTotal[m_vecTotal.size() - 1]->Get_Info().fCX * 0.5f) - 7.f, m_vecTotal[m_vecTotal.size() - 1]->Get_Info().fY)));
+			m_vecTotal.back()->Set_Num(m_iTotal % 10);
+		}
+		else
+		{
+			m_vecTotal[_iNumLong - 1]->Set_Num(m_iTotal % 10);
+		}
+
+		m_iTotal /= 10;
+	}
+
+	m_iTotal = saveTotal;
 }

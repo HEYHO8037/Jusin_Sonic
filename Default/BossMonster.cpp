@@ -3,6 +3,8 @@
 #include "BmpMgr.h"
 #include "Camera.h"
 #include "SoundMgr.h"
+#include "Goal.h"
+#include "ObjMgr.h"
 
 CBossMonster::CBossMonster()
 {
@@ -18,7 +20,7 @@ void CBossMonster::Initialize(void)
 	m_tInfo.fCX = 66.f;
 	m_tInfo.fCY = 66.f;
 
-	m_tInfo.fX = 600.f;
+	m_tInfo.fX = 9400.f;
 	m_tInfo.fY = 400.f;
 
 	m_fSpeed = 5.f;
@@ -56,6 +58,7 @@ void CBossMonster::Initialize(void)
 	m_fMaxMove = WINCX;
 	m_fSoundVol = 1.f;
 	m_iHP = 5;
+	m_bDeadSound = false;
 
 }
 
@@ -239,9 +242,16 @@ void CBossMonster::Die()
 {
 	if (m_iHP <= 0)
 	{
-		CSoundMgr::Get_Instance()->PlaySound(L"explosion.mp3", SOUND_MONSTER, 1.f);
+		if (!m_bDeadSound)
+		{
+			CSoundMgr::Get_Instance()->PlaySound(L"explosion.mp3", SOUND_MONSTER, 1.f);
+		}
+
 		m_eCurState = BOSS_DEAD;
 		m_bIsKnockDown = true;
+
+		CObj* pObj = CObjMgr::Get_Instance()->Get_OBJType(OBJ_POINT)->front();
+		dynamic_cast<CGoal*>(pObj)->EnableRender();
 	}
 }
 

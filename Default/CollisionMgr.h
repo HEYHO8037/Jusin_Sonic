@@ -28,11 +28,13 @@ public:
 	static void		Collision_Player_Boss();
 
 private:
+	static bool		bIsFirstVertical;
 	static bool		bIsPoint;
 	static float	fRingAngle;
 	static int		iRingCount;
 	static bool		bFlip;
 	static DWORD    CollisionTime;
+	static DWORD	VerticalTime;
 	static TILEID	m_eID;
 	static bool		m_bCircleCircle;
 	static CTile*	saveTile;

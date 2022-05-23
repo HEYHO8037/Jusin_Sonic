@@ -10,7 +10,11 @@
 #include "InGameEnd.h"
 #include "UIScore.h"
 #include "BossMonster.h"
+#include "Goal.h"
 
+
+bool	CCollisionMgr::bIsFirstVertical = false;
+DWORD	CCollisionMgr::VerticalTime = 0;
 bool	CCollisionMgr::bIsPoint = false;
 float	CCollisionMgr::fRingAngle = 101.25f;
 int		CCollisionMgr::iRingCount = 0;
@@ -361,20 +365,38 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 	}
 	else if (m_eID == TILE_VERTICAL)
 	{
-		iIndex = (y + 1) * TILEX + x;
-		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
-
-		if (GetDownTile->Get_TileID() == TILE_VERTICAL)
+		if (!bIsFirstVertical)
 		{
-			bool bMask = GetDownTile->Get_Mask();
-			GetDownTile->Set_Mask(!bMask);
+			if (!VerticalTime)
+			{
+				VerticalTime = GetTickCount();
+			}
+			else
+			{
+				DWORD time = GetTickCount() - VerticalTime;
+				if (time > 500)
+				{
+					bIsFirstVertical = true;
+					VerticalTime = GetTickCount();
+					dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR270");
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(RUN);
+				}
+			}
+		}
+		else
+		{
+			dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR270");
+			dynamic_cast<CPlayer*>(_Dest)->Set_CurState(RUN);
+
 		}
 	}
 	else if (m_eID == TILE_CIRCLE)
 	{
 		iIndex = (y + 1) * TILEX + x;
+
 		CTile* GetDownTile = dynamic_cast<CTile*>(CTileMgr::Get_Instance()->Get_VecTile()->at(iIndex));
 
+			
 		if (saveTile != GetDownTile)
 		{
 			saveTile = nullptr;
@@ -389,8 +411,11 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 
 		if (GetDownTile->Get_TileID() == TILE_VERTICAL)
 		{
-			bool bMask = GetDownTile->Get_Mask();
-			GetDownTile->Set_Mask(!bMask);
+			if (dynamic_cast<CPlayer*>(_Dest)->Get_MaxAngle() != 360.f)
+			{
+				dynamic_cast<CPlayer*>(_Dest)->Set_MaxAngle(360.f);
+				GetDownTile->Add_DrawID();
+			}
 		}
 
 		if (GetTile->Get_Mask() == false && m_bCircleCircle == false)
@@ -433,6 +458,8 @@ void CCollisionMgr::Collision_Tile(CObj * _Dest)
 
 
 		m_bCircleCircle = false;
+		dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR0");
+		dynamic_cast<CPlayer*>(_Dest)->Set_MaxAngle(450.f);
 
 	}
 }
@@ -600,7 +627,14 @@ void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
 					dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
 					dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
-					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
+					if (dynamic_cast<CPlayer*>(_Dest)->Get_Player_State() == ROLLING)
+					{
+						dynamic_cast<CPlayer*>(_Dest)->Set_CurState(ROLLING);
+					}
+					else
+					{
+						dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
+					}
 					dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
 					CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 
@@ -613,8 +647,14 @@ void CCollisionMgr::Collision_Player_Spring(CObj * _Dest, list<CObj*>* _Sour)
 				dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
 				dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
-				dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
-				dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
+				if (dynamic_cast<CPlayer*>(_Dest)->Get_Player_State() == ROLLING)
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(ROLLING);
+				}
+				else
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
+				}				dynamic_cast<CSpring*>(*iter)->Add_iDrawID();
 				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 			}
 		}
@@ -640,13 +680,26 @@ void CCollisionMgr::Collision_Player_Point(CObj * _Dest, list<CObj*>* _Sour)
 			dynamic_cast<CPlayer*>(_Dest)->Set_IsGetPoint(true);
 			dynamic_cast<CPlayer*>(_Dest)->Set_CurState(IDLE);
 
-			if (!bIsPoint)
+			if (dynamic_cast<CGoal*>(*iter)->Get_SetRender() != false)
 			{
-				CObj* pObj = CAbstractFactory<InGameEnd>::Create();
-				CObjMgr::Get_Instance()->Add_Object(OBJ_UI, pObj);
-				bIsPoint = true;
-				CSoundMgr::Get_Instance()->StopSound(SOUND_BGM);
-				CSoundMgr::Get_Instance()->PlaySound(L"Clear.wav", SOUND_EFFECT, 1.f);
+				if (!bIsPoint)
+				{
+					CObj* pUI = CObjMgr::Get_Instance()->Get_OBJType(OBJ_UI)->back();
+
+					CObj* pObj = CAbstractFactory<InGameEnd>::Create();
+					CObjMgr::Get_Instance()->Add_Object(OBJ_UI, pObj);
+
+					int iRing = dynamic_cast<CUIScore*>(pUI)->Get_Ring();
+					int iScore = dynamic_cast<CUIScore*>(pUI)->Get_Score();
+
+					dynamic_cast<InGameEnd*>(pObj)->Set_Ring(iRing);
+					dynamic_cast<InGameEnd*>(pObj)->Set_Score(iScore);
+
+					bIsPoint = true;
+
+					CSoundMgr::Get_Instance()->StopSound(SOUND_BGM);
+					CSoundMgr::Get_Instance()->PlaySound(L"Clear.wav", SOUND_EFFECT, 1.f);
+				}
 			}
 
 		}
@@ -676,7 +729,14 @@ void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
 					dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 					dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
 					dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
-					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
+					if (dynamic_cast<CPlayer*>(_Dest)->Get_Player_State() == ROLLING)
+					{
+						dynamic_cast<CPlayer*>(_Dest)->Set_CurState(ROLLING);
+					}
+					else
+					{
+						dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
+					}
 					CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 				}
 			}
@@ -686,8 +746,14 @@ void CCollisionMgr::Collision_Player_MushRoom(CObj * _Dest, list<CObj*>* _Sour)
 				dynamic_cast<CPlayer*>(_Dest)->Set_JumpPower(JUMP + 10);
 				dynamic_cast<CPlayer*>(_Dest)->Set_Jumping(true);
 				dynamic_cast<CPlayer*>(_Dest)->Set_FrameKey(L"SonicR");
-				dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
-				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
+				if (dynamic_cast<CPlayer*>(_Dest)->Get_Player_State() == ROLLING)
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(ROLLING);
+				}
+				else
+				{
+					dynamic_cast<CPlayer*>(_Dest)->Set_CurState(JUMPING);
+				}				CSoundMgr::Get_Instance()->PlaySound(L"spring.mp3", SOUND_EFFECT, 1.f);
 			}
 		}
 		else

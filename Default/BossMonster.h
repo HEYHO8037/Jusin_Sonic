@@ -47,6 +47,7 @@ private:
 
 	bool					m_bIsLR; // πÊ«‚
 	bool					m_bIsKnockDown;
+	bool					m_bDeadSound;
 
 	float					m_fSoundVol;
 
